@@ -1,0 +1,19 @@
+@import '../../assets/scss/colors.scss';
+
+span.badge {
+  padding: 4px 6px;
+  background-color: $color-blue-lighten-3;
+  color: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+  min-width: 2rem;
+  margin: 3px 2px;
+}
+
+span.badge.active, span.badge:hover {
+  background-color: $main-color;
+}
+
+span.badge.active {
+  cursor: default;
+}

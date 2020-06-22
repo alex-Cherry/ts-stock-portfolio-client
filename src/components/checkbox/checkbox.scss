@@ -1,0 +1,50 @@
+@import '../../index.scss';
+
+.input-checkbox {
+
+  margin: 24px 0;
+
+  input[type="checkbox"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  label {
+    padding-left: 15px;
+    font-size: 1rem;
+    color: $color-grey-darken-2;
+    cursor: pointer;
+  }
+
+  span {
+    position: relative;
+  }
+
+  input[type="checkbox"]+span::before {
+      content: '';
+      position: absolute;
+      left: -30px;
+      top: -2px;
+      width: 18px;
+      height: 18px;
+      border: 2px solid $color-grey-darken-2;
+      cursor: pointer;
+      transition: border 0.2s ease, transform 0.2s ease;
+  }
+
+  input[type="checkbox"]:checked+span::before {
+
+      left: -25px;
+      top: -6px;
+      width: 10px;
+      height: 18px;
+      border-bottom: 2px solid #26a69a;
+      border-right: 2px solid #26a69a;
+      border-top: none;
+      border-left: none;
+      cursor: pointer;
+      transform: rotate(40deg);
+      transition: border 0.2s ease, transform 0.2s ease;
+  }
+
+}

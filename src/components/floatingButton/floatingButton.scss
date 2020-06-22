@@ -1,0 +1,25 @@
+@import '../../index.scss';
+
+.fixed-action-btn {
+  position: fixed;
+  right: 23px;
+  bottom: 23px;
+  z-index: 997;
+}
+
+// Floating Button
+.btn-floating1 {
+  background-color: $main-color;
+  color: #fff;
+  width: 56px;
+  height: 56px;
+  display: block;
+  border-radius: 50%;
+  line-height: 56px;
+
+  i {
+    line-height: 56px;
+    text-align: center;
+    width: 100%;
+  }
+}
