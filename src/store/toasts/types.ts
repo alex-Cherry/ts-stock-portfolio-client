@@ -28,4 +28,4 @@ export interface ToastRemoveAction {
 }
 
 export type ToastsActions = ToastAddAction
-  & ToastRemoveAction;
+  | ToastRemoveAction;
