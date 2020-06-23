@@ -20,7 +20,7 @@ import Loader from '../spinner';
 // import store
 import { AppState } from '../../store'
 import { fetchSectors, saveStock } from '../../store/stocks/action';
-import { IStock, IEconomicSector } from '../../types';
+import { Stock, EconomicSector } from '../../types';
 // import utils
 import { getQueryParams } from '../../utils/getQueryParams';
 // import store
@@ -46,14 +46,14 @@ const mapState = (state: AppState) => {
 const mapDispatch = (dispatch: any) => {
   return {
     fetchSectors: () => dispatch(fetchSectors()),
-    saveStock: (stock: IStock) => dispatch(saveStock(stock)),
+    saveStock: (stock: Stock) => dispatch(saveStock(stock)),
     getStockById: (id: string) => dispatch(getStockById(id))
   }
 }
 
 // type Props
 type StockEditorComponentExtraProps = {
-  stock?: IStock
+  stock?: Stock
 }
 const connector = connect(mapState, mapDispatch);
 type StockEditorComponentProps = ConnectedProps<typeof connector>
@@ -241,20 +241,22 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     } = this.state;
     const { saveStock } = this.props;
 
-    const sector: IEconomicSector = {
-      id: sectorId,
-      name: ''
-    }
+    const sector: EconomicSector = new EconomicSector();
+    sector.init(
+      sectorId, // id
+      '' // name
+    );
 
     // create stock object
-    const stock: IStock = {
-      id,
-      shortName,
-      ticker,
-      bluetip,
-      price,
-      sector
-    };
+    const stock: Stock = new Stock();
+    stock.init(
+      id, // id
+      ticker, // ticker
+      shortName, // shortName
+      price, // price
+      sector, // sector
+      bluetip, // bluetip
+    );
     
     this.setState({ loading: true });
     try {

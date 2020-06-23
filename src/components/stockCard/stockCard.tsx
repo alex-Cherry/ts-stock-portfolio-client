@@ -17,7 +17,7 @@ import { ToastWithoutId } from '../../store/toasts/types';
 import { toRubles } from '../../utils/toRubles';
 import { setClass, removeClass } from '../../utils/checkClassesForRefObjects';
 // import types
-import { IExtendedStock } from '../../types';
+import { ExtendedStock } from '../../types';
 
 // import css
 import './stockCard.scss';
@@ -38,7 +38,7 @@ const mapDispatch = (dispatch: any) => {
 const connector = connect(null, mapDispatch);
 
 type StockCardProps = {
-  stock: IExtendedStock
+  stock: ExtendedStock
 }
   & RouteComponentProps
   & ConnectedProps<typeof connector>;

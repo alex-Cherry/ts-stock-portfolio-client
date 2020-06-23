@@ -8,7 +8,7 @@ import React from 'react';
 // import custom components
 import StockCard from './stockCard';
 // import types
-import { IExtendedStock } from '../types';
+import { ExtendedStock } from '../types';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ import { IExtendedStock } from '../types';
 ////////////////////////////////////////////////////////////////////////////////
 
 type StocksBoardProps = {
-  stocks: IExtendedStock[]
+  stocks: ExtendedStock[]
 }
 
 
@@ -34,7 +34,7 @@ const StocksBoard = (props: StocksBoardProps) => {
   // 
   const generateContent = () => {
     return stocks.map(
-      (stock: IExtendedStock) => (
+      (stock: ExtendedStock) => (
         <StockCard
           key={stock.id}
           stock={stock}

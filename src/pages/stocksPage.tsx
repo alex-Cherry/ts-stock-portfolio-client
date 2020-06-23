@@ -20,7 +20,7 @@ import ErrorIndicator from '../components/errorIndicator';
 // import utils
 import { getQueryParams } from '../utils/getQueryParams';
 // import types
-import { IExtendedStock } from '../types';
+import { ExtendedStock } from '../types';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ type StocksPageProps = ConnectedProps<typeof connector>
   & RouteComponentProps;
 // State
 type StocksPageState = {
-  stocks: IExtendedStock[],
+  stocks: ExtendedStock[],
   loading: boolean,
   hasError: boolean,
   filter: StockGroupFilterOperations
@@ -129,7 +129,7 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
 
     fetchStocks(bluetip)
       .then(
-        (stocks: IExtendedStock[]) => { this.setState({ stocks }); }
+        (stocks: ExtendedStock[]) => { this.setState({ stocks }); }
       )
       .catch(
         () => { this.mounted && this.setState({ hasError: true }) }

@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
-import { IStock, IExtendedStock } from '../../types';
+import { Stock, ExtendedStock } from '../../types';
 // import utils
 import { useFetch } from '../../utils/useFetch';
 
@@ -35,7 +35,7 @@ export const fetchSectors = (
 
 // SAVE STOCK
 export const saveStock = (
-  stock: IStock
+  stock: Stock
 ): ThunkAction<Promise<void>, void, unknown, Action<any>> => async (dispatch) => {
   try {
     const data = {
@@ -58,7 +58,7 @@ export const saveStock = (
 // FETCH STOCKS
 export const fetchStocks = (
   bluetip: boolean = false
-): ThunkAction<Promise<IExtendedStock[] | undefined>, void, unknown, Action<any>> => async (dispatch) => {
+): ThunkAction<Promise<ExtendedStock[] | undefined>, void, unknown, Action<any>> => async (dispatch) => {
   try {
     // execute request
     let fetchResult;
@@ -79,7 +79,7 @@ export const fetchStocks = (
         ...item,
         isFavorite: false
       })
-    ) as IExtendedStock[];
+    ) as ExtendedStock[];
     // return data
     return stocks
   } catch (err) {
@@ -91,7 +91,7 @@ export const fetchStocks = (
 // GET STOCK BY ID
 export const getStockById = (
   id: string
-): ThunkAction<Promise<IStock | undefined>, void, unknown, Action<any>> => async dispatch => {
+): ThunkAction<Promise<Stock | undefined>, void, unknown, Action<any>> => async dispatch => {
   try {
     const fetchResult = await useFetch(`/api/stocks/stocks/${id}`);
     const { data, status } = fetchResult;
@@ -102,7 +102,7 @@ export const getStockById = (
       throw new Error(msg);
     }
     // get data
-    const stock = data.stock as IStock;
+    const stock = data.stock as Stock;
     // return results
     return stock;
   } catch (err) {
