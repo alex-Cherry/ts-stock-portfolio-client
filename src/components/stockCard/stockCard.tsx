@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 // import custom elements
 import Tooltip from '../tooltip';
 import AddFavorite from './addFavorite';
-import ActionPanel, { ActionPanelItem } from './actionPanel';
+import ActionPanel from './actionPanel';
 // import store
 import { addToast } from '../../store/toasts/actions';
 import { ToastWithoutId } from '../../store/toasts/types';
@@ -43,6 +43,7 @@ type StockCardProps = {
   & RouteComponentProps
   & ConnectedProps<typeof connector>;
 
+export const StockContext = React.createContext(new ExtendedStock());
 
 ////////////////////////////////////////////////////////////////////////////////
 // 
@@ -61,7 +62,6 @@ const StockCard = (props: StockCardProps) => {
   // state
   const [ favorite, setFavorite ] = useState(stock.isFavorite);
   const [ favoriteLoading, setFavoriteLoading ] = useState(false);
-  const [ actionPanelLoading, setActionPanelLoading ] = useState(false);
 
   // EVENT HANDLERS
   const onMouseEnterHandler = () => {
@@ -75,22 +75,22 @@ const StockCard = (props: StockCardProps) => {
     removeClass(divFavoriteRef, 'active');
   }
   const addStockToPortfolio = () => {
-    const { stock: { ticker } } = props;
-    // create message for toast
-    const text = `Акция ${ticker} добавлена в портфель.`;
+    // const { stock: { ticker } } = props;
+    // // create message for toast
+    // const text = `Акция ${ticker} добавлена в портфель.`;
 
-    setActionPanelLoading(true);
-    // push a toast
-    toast(text);
+    // setActionPanelLoading(true);
+    // // push a toast
+    // toast(text);
   }
   const removeStockFromPortfolio = () => {
-    const { stock: { ticker } } = props;
-    // create message for toast
-    const text = `Акция ${ticker} удалена из портфеля.`;
+    // const { stock: { ticker } } = props;
+    // // create message for toast
+    // const text = `Акция ${ticker} удалена из портфеля.`;
 
-    setActionPanelLoading(true);
-    // push a toast
-    toast(text);
+    // setActionPanelLoading(true);
+    // // push a toast
+    // toast(text);
   }
   const onClickAddFavoriteHandler = () => {
     // plug
@@ -101,37 +101,26 @@ const StockCard = (props: StockCardProps) => {
       clearTimeout(timeoutId);
     }, 1000);
   }
-  const onClickEditStockHandler = () => {
-    const { history : { push }, stock: { id } } = props;
-    push(`/editStock?id=${id}`);
-  }
 
   // UTILS
   const toast = (message: string) => {
-    // get addToast() from props
-    const { addToast } = props;
-    // 
-    const timeoutId = setTimeout(() => {
-      const newToast: ToastWithoutId = {
-        text: message
-      };
-      addToast(newToast);
-      setActionPanelLoading(false);
-      // clear timeout resource
-      clearTimeout(timeoutId);
-    }, 1000);
+    // // get addToast() from props
+    // const { addToast } = props;
+    // // 
+    // const timeoutId = setTimeout(() => {
+    //   const newToast: ToastWithoutId = {
+    //     text: message
+    //   };
+    //   addToast(newToast);
+    //   setActionPanelLoading(false);
+    //   // clear timeout resource
+    //   clearTimeout(timeoutId);
+    // }, 1000);
   }
-
-  // define items for action panel
-  const actionPanelItems: ActionPanelItem[] = [
-    { ref: iPlusRef, iconName: 'add_circle_outline', onClickHandler: addStockToPortfolio },
-    { ref: iMinusRef, iconName: 'remove_circle_outline', onClickHandler: removeStockFromPortfolio },
-    { ref: iEditRef, iconName: 'edit', onClickHandler: onClickEditStockHandler }
-  ];
 
   // RENDER
   return (
-    <>
+    <StockContext.Provider value={stock}>
       <div
         className="stock-card"
         onMouseEnter={onMouseEnterHandler}
@@ -141,11 +130,7 @@ const StockCard = (props: StockCardProps) => {
         <span>{toRubles(stock.price)}</span>
 
         <div className="action" ref={divRef}>
-          <ActionPanel
-            items={actionPanelItems}
-            loading={actionPanelLoading}
-            // loading={true}
-          />
+          <ActionPanel />
         </div>
 
         {/* icon "Favorite" */}
@@ -173,7 +158,7 @@ const StockCard = (props: StockCardProps) => {
         elementRef={iEditRef}
       />
 
-    </>
+    </StockContext.Provider>
   );
 }
 

@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 // 
 import { ElementRef } from '../../utils/checkClassesForRefObjects';
 
 import MaterialIcon from '../materialIcon';
+import { StockContext } from './stockCard';
+// import types
+import { ExtendedStock } from '../../types';
 
 
 
@@ -13,13 +17,11 @@ export type ActionPanelItem = {
 }
 
 type ActionPanelProps = {
-  items: ActionPanelItem[],
-  loading: boolean
-}
+} & RouteComponentProps;
 
 const ActionPanel = (props: ActionPanelProps) => {
 
-  const { items, loading } = props;
+  const [ loading, setLoading ] = useState(false);
 
   if (loading) {
     return (
@@ -29,33 +31,48 @@ const ActionPanel = (props: ActionPanelProps) => {
     );
   }
 
+  const onClickAddStockToPortfolioHandler = (stock: ExtendedStock) => {
+    setLoading(true);
+    const timeId = setTimeout(() => {
+      setLoading(false);
+      console.log('stock was added to portfolio')
+      clearTimeout(timeId);
+    }, 2000);
+  }
+  const onClickRemoveStockFromPortfolio = (stock: ExtendedStock) => {
+    setLoading(true);
+    const timeId = setTimeout(() => {
+      setLoading(false);
+      console.log('stock was removed from portfolio')
+      clearTimeout(timeId);
+    }, 2000);
+  }
+  const onClickEditStockHandler = (stock: ExtendedStock) => {
+    const { history: { push } } = props;
+    const {id} = stock;
+    push(`/editStock?id=${id}`);
+  }
+
   return (
-    <span>
-      {/* {
-        items.map(item => {
-          return (
-            <i
-              key={item.iconName}
-              ref={item.ref}
-              className="material-icons"
-              onClick={item.onClickHandler}
-            >
-              { item.iconName }
-            </i>
-          )
-        })
-      } */}
-      <MaterialIcon
-        iconName="add_circle_outline"
-      />
-      <MaterialIcon
-        iconName="remove_circle_outline"
-      />
-      <MaterialIcon
-        iconName="edit"
-      />
-    </span>
+    <StockContext.Consumer>
+      {(stock: ExtendedStock) => (
+          <span>
+            <MaterialIcon
+              iconName="add_circle_outline"
+              onClick={() => onClickAddStockToPortfolioHandler(stock)}
+            />
+            <MaterialIcon
+              iconName="remove_circle_outline"
+              onClick={() => onClickRemoveStockFromPortfolio(stock)}
+            />
+            <MaterialIcon
+              iconName="edit"
+              onClick={() => onClickEditStockHandler(stock)}
+            />
+        </span>
+      )}
+    </StockContext.Consumer>
   );
 }
 
-export default ActionPanel;
+export default withRouter(ActionPanel);
