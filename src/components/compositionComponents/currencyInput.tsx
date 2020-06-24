@@ -117,6 +117,16 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
       })
       // 
       .then(stringSum => {
+        const strPrevValue = this.formatValue(this.prevValue);
+        const diff = this.differenceBetweenArrays(strPrevValue.split(''), stringSum.split(''));
+        if (diff.length > 0 && diff[0] === decimalSeparator) {
+          stringSum = strPrevValue;
+        }
+
+        return stringSum;
+      })
+      // 
+      .then(stringSum => {
         // check, whether a user entered an unacceptable symbol
         const regexNotDigit = new RegExp(`[^0-9${decimalSeparator}]`, 'gi');
         if (regexNotDigit.test(sign)) {
@@ -309,6 +319,9 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
     });
 
     return { valid, msg };
+  }
+  differenceBetweenArrays = (arr1: Array<string>, arr2: Array<string>): Array<string> => {
+    return arr1.filter(elem => !arr2.includes(elem));
   }
 
   // RENDER
