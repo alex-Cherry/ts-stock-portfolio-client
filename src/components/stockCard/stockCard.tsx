@@ -61,7 +61,6 @@ const StockCard = (props: StockCardProps) => {
   const divFavoriteRef = useRef<HTMLDivElement>(null);
   // state
   const [ favorite, setFavorite ] = useState(stock.isFavorite);
-  const [ favoriteLoading, setFavoriteLoading ] = useState(false);
 
   // EVENT HANDLERS
   const onMouseEnterHandler = () => {
@@ -94,12 +93,7 @@ const StockCard = (props: StockCardProps) => {
   }
   const onClickAddFavoriteHandler = () => {
     // plug
-    setFavoriteLoading(true);
-    const timeoutId = setTimeout(() => {
-      setFavorite(state => !state)
-      setFavoriteLoading(false);
-      clearTimeout(timeoutId);
-    }, 1000);
+    setFavorite(state => !state)
   }
 
   // UTILS
@@ -129,17 +123,23 @@ const StockCard = (props: StockCardProps) => {
         <span className="title">{stock.ticker}</span>
         <span>{toRubles(stock.price)}</span>
 
-        <div className="action" ref={divRef}>
+        <div
+          className="action"
+          ref={divRef}
+        >
           <ActionPanel />
         </div>
 
         {/* icon "Favorite" */}
-        <AddFavorite
-          elementRef={divFavoriteRef}
-          loading={favoriteLoading}
-          active={favorite}
-          onClick={onClickAddFavoriteHandler}
-        />
+        <div
+          className="stock-card-favorite"
+          ref={divFavoriteRef}
+        >
+          <AddFavorite
+            active={favorite}
+            onClick={onClickAddFavoriteHandler}
+          />
+        </div>
 
       </div>
 
