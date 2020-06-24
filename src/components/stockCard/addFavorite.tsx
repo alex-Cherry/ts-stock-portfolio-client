@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from '../circleSpinner';
 // import utils
 import { ElementRef } from '../../utils/checkClassesForRefObjects';
 // import svg
@@ -24,7 +25,7 @@ const AddFavorite = (props: AddFavoriteProps) => {
 
   const svg = active ? yellowStarSvg : starSvg;
 
-  let content = <div className="favorite-loader"></div>;
+  let content = <Spinner />;
   if (!loading) {
     content = (
       <img

@@ -4,6 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { ElementRef } from '../../utils/checkClassesForRefObjects';
 
 import MaterialIcon from '../materialIcon';
+import Spinner from '../circleSpinner';
 import { StockContext } from './stockCard';
 // import types
 import { ExtendedStock } from '../../types';
@@ -25,9 +26,9 @@ const ActionPanel = (props: ActionPanelProps) => {
 
   if (loading) {
     return (
-      <span className="action-item-wrapper">
-        <span className="favorite-loader"></span>
-      </span>
+      <div className="action-item-wrapper">
+        <Spinner />
+      </div>
     );
   }
 
@@ -56,7 +57,7 @@ const ActionPanel = (props: ActionPanelProps) => {
   return (
     <StockContext.Consumer>
       {(stock: ExtendedStock) => (
-          <span>
+          <div>
             <MaterialIcon
               iconName="add_circle_outline"
               onClick={() => onClickAddStockToPortfolioHandler(stock)}
@@ -69,7 +70,7 @@ const ActionPanel = (props: ActionPanelProps) => {
               iconName="edit"
               onClick={() => onClickEditStockHandler(stock)}
             />
-        </span>
+        </div>
       )}
     </StockContext.Consumer>
   );
