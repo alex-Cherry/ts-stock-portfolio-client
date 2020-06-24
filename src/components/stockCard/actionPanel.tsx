@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { connect, ConnectedProps } from 'react-redux';
 // 
-import { ElementRef } from '../../utils/checkClassesForRefObjects';
 
 import MaterialIcon from '../materialIcon';
 import Spinner from '../circleSpinner';
 import { StockContext } from './stockCard';
+// 
+import { addToast } from '../../store/toasts/actions';
+import { ToastWithoutId } from '../../store/toasts/types';
 // import types
 import { ExtendedStock } from '../../types';
 
 
-
-export type ActionPanelItem = {
-  iconName: string,
-  ref: ElementRef<HTMLElement>,
-  onClickHandler: () => void
+const mapDispatch = (dispatch: any) => {
+  return {
+    toast: (newToast: ToastWithoutId) => dispatch(addToast(newToast))
+  }
 }
 
+const connector = connect(null, mapDispatch);
+
 type ActionPanelProps = {
-} & RouteComponentProps;
+}
+  & RouteComponentProps
+  & ConnectedProps<typeof connector>;
+
 
 const ActionPanel = (props: ActionPanelProps) => {
 
@@ -33,25 +40,40 @@ const ActionPanel = (props: ActionPanelProps) => {
   }
 
   const onClickAddStockToPortfolioHandler = (stock: ExtendedStock) => {
+    const { ticker } = stock;
+    // create message for toast
+    const text = `Акция ${ticker} добавлена в портфель.`;
+
     setLoading(true);
-    const timeId = setTimeout(() => {
-      setLoading(false);
-      console.log('stock was added to portfolio')
-      clearTimeout(timeId);
-    }, 2000);
+    // push a toast
+    doToast(text);
   }
   const onClickRemoveStockFromPortfolio = (stock: ExtendedStock) => {
+    const { ticker } = stock;
+    // create message for toast
+    const text = `Акция ${ticker} удалена из портфеля.`;
+
     setLoading(true);
-    const timeId = setTimeout(() => {
-      setLoading(false);
-      console.log('stock was removed from portfolio')
-      clearTimeout(timeId);
-    }, 2000);
+    // push a toast
+    doToast(text);
   }
   const onClickEditStockHandler = (stock: ExtendedStock) => {
     const { history: { push } } = props;
     const {id} = stock;
     push(`/editStock?id=${id}`);
+  }
+  const doToast = (message: string) => {
+    const { toast } = props;
+    
+    const timeId = setTimeout(() => {
+      setLoading(false);
+      const newToast: ToastWithoutId = {
+            text: message
+          };
+      toast(newToast);
+      clearTimeout(timeId);
+    }, 2000);
+
   }
 
   return (
@@ -76,4 +98,8 @@ const ActionPanel = (props: ActionPanelProps) => {
   );
 }
 
-export default withRouter(ActionPanel);
+export default connector(
+  withRouter(
+    ActionPanel
+  )
+);
