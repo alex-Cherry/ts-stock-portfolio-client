@@ -1,8 +1,11 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
-import { Stock, ExtendedStock } from '../../types';
+import { ExtendedStock, EconomicSector } from '../../types';
 // import utils
 import { useFetch } from '../../utils/useFetch';
+// 
+import { StocksActionTypes } from './types';
+import { AppState } from '..';
 
 interface IKeyName {
   id: string,
@@ -35,7 +38,7 @@ export const fetchSectors = (
 
 // SAVE STOCK
 export const saveStock = (
-  stock: Stock
+  stock: ExtendedStock
 ): ThunkAction<Promise<void>, void, unknown, Action<any>> => async (dispatch) => {
   try {
     const data = {
@@ -43,12 +46,16 @@ export const saveStock = (
     }
     // execute request
     const fetchResult = await useFetch('/api/stocks/savestock', 'POST', data);
-    const { status } = fetchResult;
+    const { status, data: id } = fetchResult;
     // if http-status doesn't have code 2**,
     //    throw an error
     if (status !== 200 && status !== 201) {
       throw new Error('При сохранении данных возникла ошибка');
     }
+    // dispatch
+    stock.id = id;
+    dispatch(actionCreatorStockSave(stock));
+
   } catch (err) {
     throw new Error(err.message);
   }
@@ -58,7 +65,7 @@ export const saveStock = (
 // FETCH STOCKS
 export const fetchStocks = (
   bluetip: boolean = false
-): ThunkAction<Promise<ExtendedStock[] | undefined>, void, unknown, Action<any>> => async (dispatch) => {
+): ThunkAction<Promise<void>, void, unknown, Action<any>> => async (dispatch) => {
   try {
     // execute request
     let fetchResult;
@@ -75,13 +82,32 @@ export const fetchStocks = (
       throw new Error(msg);
     }
     // transform data
-    const stocks = data.stocks.map((item: any) => ({
-        ...item,
-        isFavorite: false
-      })
+    const stocks = data.stocks.map((item: any) => {
+        
+        const sector = new EconomicSector();
+        sector.init(
+          item.sector.id,
+          item.sector.name
+        );
+
+        const stock = new ExtendedStock();
+        stock.init(
+          item.id,
+          item.ticker,
+          item.shortName,
+          item.price,
+          sector,
+          item.bluetip,
+          false
+        );
+
+        return stock;
+      }
     ) as ExtendedStock[];
-    // return data
-    return stocks
+    
+    // dispatch
+    dispatch(actionCreatorStocksFetch(stocks));
+
   } catch (err) {
       throw new Error(err.message);
   }
@@ -91,7 +117,14 @@ export const fetchStocks = (
 // GET STOCK BY ID
 export const getStockById = (
   id: string
-): ThunkAction<Promise<Stock | undefined>, void, unknown, Action<any>> => async dispatch => {
+): ThunkAction<Promise<ExtendedStock | undefined>, AppState, unknown, Action<any>> => async (dispatch, getState) => {
+  
+  const { stocks: { stocks } } = getState();
+  const stockInStore = stocks.find(el => el.id === id);
+  if (stockInStore) {
+    return stockInStore;
+  }
+  
   try {
     const fetchResult = await useFetch(`/api/stocks/stocks/${id}`);
     const { data, status } = fetchResult;
@@ -102,10 +135,72 @@ export const getStockById = (
       throw new Error(msg);
     }
     // get data
-    const stock = data.stock as Stock;
+    const rawStock = data.stock;
+
+    // create sector
+    const sector = new EconomicSector();
+    sector.init(
+      rawStock.sector.id,
+      rawStock.sector.name
+    );
+
+    // create stock
+    const stock = new ExtendedStock();
+    stock.init(
+      rawStock.id,
+      rawStock.ticker,
+      rawStock.shortName,
+      rawStock.price,
+      sector,
+      rawStock.bluetip,
+      false // favorite
+    );
+
     // return results
     return stock;
+
   } catch (err) {
     throw new Error(err.message);
+  }
+}
+
+// SET STOCK TO FAVORITE
+export const setStockFavorite = (
+  stock: ExtendedStock
+): ThunkAction<Promise<void>, void, unknown, Action<any>> => async dispatch => {
+  try {
+    // here must be a call to REST
+
+    // do in a case of successful REST-call
+    const newStock = stock.copy();
+    newStock.isFavorite = !newStock.isFavorite;
+
+    dispatch(actionCreatorStockSave(newStock));
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// ACTION CREATORS
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+// FETCH STOCKS
+const actionCreatorStocksFetch = (stocks: ExtendedStock[]) => {
+  return {
+    type: StocksActionTypes.STOCK_FETCH,
+    payload: { stocks }
+  }
+}
+
+// SAVE STOCK
+const actionCreatorStockSave = (stock: ExtendedStock) => {
+  return {
+    type: StocksActionTypes.STOCK_SAVE,
+    payload: { stock }
   }
 }

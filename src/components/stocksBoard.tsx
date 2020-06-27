@@ -29,10 +29,10 @@ type StocksBoardProps = {
 ////////////////////////////////////////////////////////////////////////////////
 
 const StocksBoard = (props: StocksBoardProps) => {
-
-  const { stocks } = props;
   // 
   const generateContent = () => {
+    const { stocks } = props;
+
     return stocks.map(
       (stock: ExtendedStock) => (
         <StockCard

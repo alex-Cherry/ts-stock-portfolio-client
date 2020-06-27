@@ -3,7 +3,7 @@
 // IMPORT
 // 
 ////////////////////////////////////////////////////////////////////////////////
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 // import custom elements
 import AddFavorite from './addFavorite';
 import ActionPanel from './actionPanel';
@@ -40,8 +40,6 @@ const StockCard = (props: StockCardProps) => {
   // refs
   const divRef = useRef<HTMLDivElement>(null);
   const divFavoriteRef = useRef<HTMLDivElement>(null);
-  // state
-  const [ favorite, setFavorite ] = useState(stock.isFavorite);
 
   // EVENT HANDLERS
   const onMouseEnterHandler = () => {
@@ -53,10 +51,6 @@ const StockCard = (props: StockCardProps) => {
     // setClass(refDiv, 'd-none');
     removeClass(divRef, 'opacity_1');
     removeClass(divFavoriteRef, 'active');
-  }
-  const onClickAddFavoriteHandler = () => {
-    // plug
-    setFavorite(state => !state)
   }
 
   // RENDER
@@ -82,10 +76,7 @@ const StockCard = (props: StockCardProps) => {
           className="stock-card-favorite"
           ref={divFavoriteRef}
         >
-          <AddFavorite
-            active={favorite}
-            onClick={onClickAddFavoriteHandler}
-          />
+          <AddFavorite />
         </div>
 
       </div>

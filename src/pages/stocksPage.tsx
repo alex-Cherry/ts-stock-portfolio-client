@@ -31,7 +31,8 @@ import { ExtendedStock } from '../types';
 
 const mapState = (state: AppState) => {
   return {
-    isAdmin: !!state.auth.user?.isAdmin
+    isAdmin: !!state.auth.user?.isAdmin,
+    stocks: state.stocks.stocks
   }
 }
 const mapDispatch = (dispatch: any) => {
@@ -128,9 +129,6 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
     this.setState({ loading: true });
 
     fetchStocks(bluetip)
-      .then(
-        (stocks: ExtendedStock[]) => { this.setState({ stocks }); }
-      )
       .catch(
         () => { this.mounted && this.setState({ hasError: true }) }
       )
@@ -142,12 +140,16 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
   // RENDER
   render() {
     // throw new Error('dsaadsd')
-    const { isAdmin } = this.props;
-    const { stocks, loading, hasError, filter } = this.state;
+    const { isAdmin, stocks } = this.props;
+    const { loading, hasError, filter } = this.state;
 
     // component has an error
     if (hasError || !stocks) {
       return <ErrorIndicator />;
+    }
+
+    if (loading) {
+      return <Spinner />;
     }
 
     // Main content
@@ -161,29 +163,19 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
           onChangeFilter={this.onChangeFilterHandler}
         />
 
-        {/* Data is loading */}
-        {/* Preloader */}
-        { loading && <Spinner /> }
+        {/* Render Stocks */}
+        <StocksBoard
+          stocks={stocks}
+        />
 
-        {/* Render when data is loaded */}
-        {/* Main content */}
-        { !loading && (
-          <>
-            {/* Render Stocks */}
-            <StocksBoard
-              stocks={stocks}
-            />
-
-            {/* Add Stock button */}
-            {isAdmin && (
-              <FloatingButton
-                buttonType="add"
-                isFixed={true}
-                onClick={this.onClickAddStockHandler}
-              />
-            )}
-          </>
-        ) }
+        {/* Add Stock button */}
+        {isAdmin && (
+          <FloatingButton
+            buttonType="add"
+            isFixed={true}
+            onClick={this.onClickAddStockHandler}
+          />
+        )}
 
       </MainContainer>
     );

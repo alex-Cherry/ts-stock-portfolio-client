@@ -9,7 +9,7 @@ export type ToastWithoutId = {
   text: string
 }
 
-export type Toast = ToastWithoutId &{
+export type Toast = ToastWithoutId & {
   id: string
 };
 

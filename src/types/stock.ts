@@ -65,4 +65,28 @@ export class ExtendedStock extends Stock {
     this.isFavorite = isFavorite || false;
   }
 
+  copy(): ExtendedStock {
+    // const newStock = JSON.parse(JSON.stringify(this)) as ExtendedStock;
+    // newStock.prototype = this;
+    
+    const newSector = new EconomicSector();
+    newSector.init(
+      this.sector.id,
+      this.sector.name
+    );
+
+    const newStock = new ExtendedStock();
+    newStock.init(
+      this.id,
+      this.ticker,
+      this.shortName,
+      this.price,
+      newSector,
+      this.bluetip,
+      this.isFavorite
+    );
+
+    return newStock;
+  }
+
 }
