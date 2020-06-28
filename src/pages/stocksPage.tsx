@@ -136,20 +136,26 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
         () => { this.mounted && this.setState({ loading: false }) }
       );
   }
+  renderContent = () => {
+    const { stocks } = this.props;
+    const { loading } = this.state;
+
+    if (loading) {
+      return <Spinner />;
+    } else {
+      return <StocksBoard stocks={stocks} />;
+    }
+  }
 
   // RENDER
   render() {
     // throw new Error('dsaadsd')
     const { isAdmin, stocks } = this.props;
-    const { loading, hasError, filter } = this.state;
+    const { hasError, filter } = this.state;
 
     // component has an error
     if (hasError || !stocks) {
       return <ErrorIndicator />;
-    }
-
-    if (loading) {
-      return <Spinner />;
     }
 
     // Main content
@@ -159,15 +165,13 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
         <h1>Акции</h1>
         {/* Filter */}
         <StockGroupFilter
-          activeId={filter}
+          initialFilter={filter}
           onChangeFilter={this.onChangeFilterHandler}
         />
 
         {/* Render Stocks */}
-        <StocksBoard
-          stocks={stocks}
-        />
-
+        { this.renderContent() }
+        
         {/* Add Stock button */}
         {isAdmin && (
           <FloatingButton

@@ -4,7 +4,7 @@ import './badge.scss';
 
 type BadgeProps = {
   text: string
-  className?: string,
+  active?: boolean,
   onClick?: () => void
 };
 
@@ -12,13 +12,13 @@ const Badge = (props: BadgeProps) => {
 
   const {
     text,
-    className = '',
+    active = false,
     onClick = () => {}
   } = props;
 
   const classes = ['badge'];
-  if (className) {
-    classes.push(className);
+  if (active) {
+    classes.push('active');
   }
 
   return (

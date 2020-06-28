@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter,  RouteComponentProps } from 'react-router-dom';
 // import custom elements
 import Badge from '../badge';
@@ -12,7 +12,7 @@ export enum StockGroupFilterOperations {
 };
 
 type StockGroupFilterExtraProps = {
-  activeId: StockGroupFilterOperations,
+  initialFilter?: StockGroupFilterOperations,
   onChangeFilter?: (filter: StockGroupFilterOperations) => void
 };
 
@@ -23,32 +23,50 @@ type StockGroupFilterProps = StockGroupFilterExtraProps
 const StockGroupFilter = (props: StockGroupFilterProps) => {
 
   const {
-    activeId,
-    onChangeFilter = (filter: StockGroupFilterOperations) => {}
+    initialFilter = StockGroupFilterOperations.ALL
   } = props;
+  const [ componentFilter, setFilter ] = useState(initialFilter);
 
-  const onClickItemHandler = (id: StockGroupFilterOperations) => {
-    onChangeFilter(id);
+  const onClickAllStocksHandler = () => {
+    changeFilter(StockGroupFilterOperations.ALL);
   }
+  const onClickBluetipsHandler = () => {
+    changeFilter(StockGroupFilterOperations.BLUETIPS);
+  }
+  const onClickBySectorsHandler = () => {
+    changeFilter(StockGroupFilterOperations.BY_SECTORS);
+  }
+  const emptyHandler = () => {}
 
-  const items = [
-    { id: StockGroupFilterOperations.ALL, text: 'Все акции', handler: () => onClickItemHandler(StockGroupFilterOperations.ALL) },
-    { id: StockGroupFilterOperations.BLUETIPS, text: 'Голубые фишки', handler: () => onClickItemHandler(StockGroupFilterOperations.BLUETIPS) },
-    { id: StockGroupFilterOperations.BY_SECTORS, text: 'По отраслям', handler: () => onClickItemHandler(StockGroupFilterOperations.BY_SECTORS) }
-  ];
+  // UTILS
+  const changeFilter = (filter: StockGroupFilterOperations) => {
+    const {
+      onChangeFilter = (filter: StockGroupFilterOperations) => {}
+    } = props;
+    setFilter(filter);
+    onChangeFilter(filter);
+  }
+  const isFilter = (filter: StockGroupFilterOperations) => {
+    return componentFilter === filter;
+  }
 
   return (
     <div className="stock-group-filter">
-      {
-        items.map(item => {
-          return <Badge
-            key={item.id}
-            text={item.text}
-            className={ item.id === activeId ? 'active' : '' }
-            onClick={ item.id === activeId ? () => {} : item.handler}
-          />;
-        })
-      }
+      <Badge
+        text='Все акции'
+        active={isFilter(StockGroupFilterOperations.ALL)}
+        onClick={isFilter(StockGroupFilterOperations.ALL) ? emptyHandler : onClickAllStocksHandler}
+      />
+      <Badge
+        text='Голубые фишки'
+        active={isFilter(StockGroupFilterOperations.BLUETIPS)}
+        onClick={isFilter(StockGroupFilterOperations.BLUETIPS) ? emptyHandler : onClickBluetipsHandler}
+      />
+      <Badge
+        text='По отраслям'
+        active={isFilter(StockGroupFilterOperations.BY_SECTORS)}
+        onClick={isFilter(StockGroupFilterOperations.BY_SECTORS) ? emptyHandler : onClickBySectorsHandler}
+      />
     </div>
   );
 }
