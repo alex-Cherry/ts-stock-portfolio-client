@@ -6,15 +6,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: $color-error;
 
-  img {
+  // modificator
+  &_theme_base {
+    color: $color-error;
+  }
+
+  // element
+  &__img {
     margin: 1rem 0;
     max-width: 150px;
     max-height: 125px;
   }
 
-  .boom {
+  // element
+  // &__header {}
+
+  // modificator
+  &_size_base {
     font-size: 1.7rem;
   }
 

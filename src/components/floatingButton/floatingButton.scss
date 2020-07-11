@@ -1,23 +1,29 @@
 @import '../../index.scss';
 
-.fixed-action-btn {
-  position: fixed;
-  right: 23px;
-  bottom: 23px;
-  z-index: 997;
-}
-
 // Floating Button
-.btn-floating1 {
-  background-color: $main-color;
-  color: #fff;
+.btn-floating {  
+
   width: 56px;
   height: 56px;
   display: block;
   border-radius: 50%;
   line-height: 56px;
+  cursor: pointer;
 
-  i {
+  &_theme_base {
+    background-color: $color-main;
+    color: $color-font-base;
+  }
+
+  // How is it right? element of modificator
+  &_fixed {
+    position: fixed;
+    right: 23px;
+    bottom: 23px;
+    z-index: 997;
+  }
+
+  &__icon {
     line-height: 56px;
     text-align: center;
     width: 100%;

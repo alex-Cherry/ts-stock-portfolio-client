@@ -1,33 +1,42 @@
 @import '../../index.scss';
 
 // Card
-.card1 {
+.card {
   position: relative;
-  margin: 0.5 rem 0 1rem 0;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
   border-radius: 3px;
+  min-width: 100px;
 
-  &-content {
-    padding: 24px;
+  &__content {
+    padding: 10px 24px;
     position: relative;
   }
 
-  &-action {
+  &__action {
     padding: 16px 24px;
     position: relative;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
   }
 
-  h3 {
-    color: $main-color;
+  &_border_base {
+    border: 1px solid $color-card-border;
   }
 
-  p {
-    color: $color-grey-darken-3;
+  &_shadow {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
   }
 
-  a {
-    color: $color-active-menu;
+  &__header {
+    color: $color-main;
+    padding: 10px 24px;
+    margin: 0;
   }
+
+  &__link_theme_base {
+    color: $color-main;
+  }
+
+  // p {
+  //   color: $color-grey-darken-3;
+  // }
 
 }

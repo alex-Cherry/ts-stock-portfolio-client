@@ -171,7 +171,7 @@ export const setStockFavorite = (
   try {
     // here must be a call to REST
 
-    // do in a case of successful REST-call
+    // do in a case of a successful REST-call
     const newStock = stock.copy();
     newStock.isFavorite = !newStock.isFavorite;
 

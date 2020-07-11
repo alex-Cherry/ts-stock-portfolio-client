@@ -228,7 +228,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Regisete
     // define button "Submit"
     const btnSubmit = (
       <Button
-        className="ml-auto"
+        // className="ml-auto"
         text="Регистрация"
         disabled={loading}
         onClick={this.onClickSubmitHandler}

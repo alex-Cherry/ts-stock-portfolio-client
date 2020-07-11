@@ -4,9 +4,9 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 import React, { MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
-
-// import css
+// custom components
+import MaterialIcon from '../materialIcon';
+// css
 import './floatingButton.scss';
 
 
@@ -15,46 +15,67 @@ import './floatingButton.scss';
 // EXTRA
 // 
 ////////////////////////////////////////////////////////////////////////////////
+
 type FloatingButtonProps = {
-  buttonType: string,
-  onClick?: () => void,
-  isFixed?: boolean
+  // material icon's name
+  iconName: string,
+  // define, whether display button in the bottom-left corner or not
+  isFixed?: boolean,
+  onClick?: () => void
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // COMPONENT
 // 
 ////////////////////////////////////////////////////////////////////////////////
+
 const FloatingButton = (props: FloatingButtonProps) => {
 
-  const { buttonType = '', onClick = () => {}, isFixed = false } = props;
+  const {
+    iconName = '',
+    onClick = () => {}
+  } = props;
+
+
+  // UTILS
+  /**
+   * function returns a string, including classes for the root element
+   */
+  const getClasses = (): string => {
+    const { isFixed = false } = props;
+    // define default classes
+    const classes = ["btn-floating", "btn-floating_theme_base"];
+    // if isFixed, add to the root element
+    // extra class, setting fixed position
+    if (isFixed) {
+      classes.push('btn-floating_fixed');
+    }
+
+    return classes.join(' ');
+  }
+
 
   // EVENT HANDLERS
-  const clickHandler = (e: MouseEvent<HTMLAnchorElement>) => {
+  const clickHandler = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     onClick();
   }
 
+  
   // RENDER
-  // button element
-  const btn = (
-    <Link className='btn-floating1' to="/" onClick={clickHandler} >
-      <i className="material-icons">{buttonType}</i>
-    </Link>
+  return (
+    <div
+      className={ getClasses() }
+      onClick={clickHandler}
+    >
+      <MaterialIcon
+        iconName={iconName}
+        className="btn-floating__icon"
+      />
+    </div>
   );
-
-  // define whether put button in the left-down corner or not
-  let element = btn;
-  if (isFixed) {
-    element = (
-      <div className="fixed-action-btn">
-        {btn}
-      </div>
-    );
-  }
-
-  return element;
 }
 
 export default FloatingButton;

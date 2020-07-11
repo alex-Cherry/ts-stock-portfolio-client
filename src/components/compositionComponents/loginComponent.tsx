@@ -132,15 +132,15 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
     return isEmailValid && isPasswordValid;
   }
   doSubmit = (): void => {
-    // all fields must be completed
-    if (!this.hasData()) {
-      this.setState({ touched: true });
-      return;
-    }
-    // all fields must be valid
-    if (!this.isValid()) {
-      return;
-    }
+    // // all fields must be completed
+    // if (!this.hasData()) {
+    //   this.setState({ touched: true });
+    //   return;
+    // }
+    // // all fields must be valid
+    // if (!this.isValid()) {
+    //   return;
+    // }
     // if all is correct, do login
     const { email, password } = this.state;
     const { login, history } = this.props;

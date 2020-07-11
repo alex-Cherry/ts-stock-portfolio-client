@@ -1,17 +1,43 @@
 import React from 'react';
-// import css
+// css
 import './card.scss';
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// EXTRA
+// 
+////////////////////////////////////////////////////////////////////////////////
 
 type CardProps = {
   children: React.ReactNode,
+  headerText?: string,
+  className?: string,
   actionContent?: React.ReactNode,
+  actionContentPosition?: 'left' | 'right' | 'center',
   error?: string
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// COMPONENT
+// 
+////////////////////////////////////////////////////////////////////////////////
 
 const Card = (props: CardProps) => {
 
   const { children, actionContent = null, error = '' } = props;
   
+  const getClasses = (): string => {
+    const classes = [
+      'card',
+      'card_shadow',
+      'card_border_base'
+    ];
+    return classes.join(' ');
+  }
+
   const getErrorContent = (error: string) => {
     let errorContent = null;
     if (error) {
@@ -23,7 +49,7 @@ const Card = (props: CardProps) => {
 
   const getErrorContentArray = (errors: string[]) => {
     const errorContent = (
-      <div className="card1-action">
+      <div className="card__action">
         <ul>
           {
             errors
@@ -37,16 +63,35 @@ const Card = (props: CardProps) => {
     return errorContent;
   }
 
+  const getHeader = () => {
+    const { headerText = '' } = props;
+    if (!headerText) {
+      return null;
+    }
+
+    return (
+      <h3 className="card__header">
+        { headerText }
+      </h3>
+    );
+  }
+
+
+  // RENDER
   return (
-    <div className="card1">
+    <div className={ getClasses() }>
+      {/* Header */}
+      { getHeader() }
       {/* Content */}
-      <div className="card1-content">
+      <div className="card__content">
         { children }
       </div>
       {/* Action */}
       {actionContent && (
-        <div className="card1-action">
-          { actionContent }
+        <div className="card__action">
+          <div className="ml-auto">
+            { actionContent }
+          </div>
         </div>
       )}
       {/* Error */}

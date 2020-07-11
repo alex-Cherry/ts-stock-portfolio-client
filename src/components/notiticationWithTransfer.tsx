@@ -64,10 +64,12 @@ const NotificationWithTransfer = (props: NotificationWithTransferProps) => {
   }
 
   return (
-    <Card>
-      <h3>{header}</h3>
-      <p>{text}</p>
-      <p>Переход на страницу <Link to={path}>{pathText}</Link> будет выполнен через {time} секунд.</p>
+    <Card
+      headerText={header}
+    >
+      { text }
+      <br />
+      Переход на страницу <Link className="card__link_theme_base" to={path}>{pathText}</Link> будет выполнен через {time} секунд.
     </Card>
   );
 

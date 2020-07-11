@@ -1,19 +1,27 @@
 @import '../../assets/scss/colors.scss';
 
-span.badge {
+.badge {
+  // block
   padding: 4px 6px;
-  background-color: $color-blue-lighten-3;
-  color: #fff;
   border-radius: 2px;
   cursor: pointer;
   min-width: 2rem;
-  margin: 3px 2px;
-}
 
-span.badge.active, span.badge:hover {
-  background-color: $main-color;
-}
+  // modificator
+  &_theme_base {
+    background-color: $color-main-not-active;
+    color: $color-font-base;
+  }
 
-span.badge.active {
-  cursor: default;
+  // modificator
+  &_theme_active {
+    background-color: $color-main;
+    color: $color-font-base;
+    cursor: default;
+  }
+
+  &:hover {
+    background-color: $color-main;
+    color: $color-font-base;
+  }
 }

@@ -123,6 +123,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     isFavorite: false,
     options: [],
     done: false,
+    // done: true,
     startLoading: true,
     loading: false,
     hasError: false,
@@ -310,6 +311,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
           text="Сохранение акции выполнено успешно!"
           path="/stocks"
           pathText="Акции"
+          seconds={15000}
         />
       );
     }
@@ -317,6 +319,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     // define btn "Save"
     const btnSave = <Button
       text="Сохранить"
+      iconName="send"
       disabled={loading}
       onClick={this.onClickSaveHandler}
     />;

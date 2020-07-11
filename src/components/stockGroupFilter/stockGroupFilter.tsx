@@ -36,15 +36,18 @@ const StockGroupFilter = (props: StockGroupFilterProps) => {
   const onClickBySectorsHandler = () => {
     changeFilter(StockGroupFilterOperations.BY_SECTORS);
   }
-  const emptyHandler = () => {}
 
   // UTILS
   const changeFilter = (filter: StockGroupFilterOperations) => {
+    
     const {
-      onChangeFilter = (filter: StockGroupFilterOperations) => {}
+      onChangeFilter = () => {}
     } = props;
-    setFilter(filter);
-    onChangeFilter(filter);
+
+    if (!isFilter(filter)) {
+      setFilter(filter);
+      onChangeFilter(filter);
+    }
   }
   const isFilter = (filter: StockGroupFilterOperations) => {
     return componentFilter === filter;
@@ -54,18 +57,21 @@ const StockGroupFilter = (props: StockGroupFilterProps) => {
     <div className="stock-group-filter">
       <Badge
         text='Все акции'
+        className="stock-group-filter__badge"
         active={isFilter(StockGroupFilterOperations.ALL)}
-        onClick={isFilter(StockGroupFilterOperations.ALL) ? emptyHandler : onClickAllStocksHandler}
+        onClick={onClickAllStocksHandler}
       />
       <Badge
         text='Голубые фишки'
+        className="stock-group-filter__badge"
         active={isFilter(StockGroupFilterOperations.BLUETIPS)}
-        onClick={isFilter(StockGroupFilterOperations.BLUETIPS) ? emptyHandler : onClickBluetipsHandler}
+        onClick={onClickBluetipsHandler}
       />
       <Badge
         text='По отраслям'
+        className="stock-group-filter__badge"
         active={isFilter(StockGroupFilterOperations.BY_SECTORS)}
-        onClick={isFilter(StockGroupFilterOperations.BY_SECTORS) ? emptyHandler : onClickBySectorsHandler}
+        onClick={onClickBySectorsHandler}
       />
     </div>
   );

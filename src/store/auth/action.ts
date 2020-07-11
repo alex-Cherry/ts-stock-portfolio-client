@@ -22,18 +22,25 @@ export const login = (
       // do authorization
       const fetchResult = await useFetch('/api/auth/login', 'POST', authData);
       const { data, status } = fetchResult;
+      
       // if http-status doesn't have code 200,
       //    throw an error
       if (status !== 200) {
         throw new Error(data.message);
       }
       // get data from response
-      let { user, token } = data;
-      user = user as User;
+      const { user, token } = data;
+      // create an user
+      const loggedUser = new User();
+      loggedUser.init(
+        user.id,
+        user.username,
+        user.isAdmin
+      );
       // set redux-state
-      dispatch(authSuccess(user, token));
+      dispatch(authSuccess(loggedUser, token));
       // save data in local storage
-      setAuth(token, user);
+      setAuth(token, loggedUser);
 
     } catch (err) {
       const msg = err.message || 'При авторизации возникла ошибка';
@@ -52,7 +59,7 @@ export const register = (
       const { data, status } = fetchResult;
       // if http-status doesn't have code 2**,
       //    throw an error
-      if (status !== 200) {
+      if (Math.floor(status / 100) !== 2) {
         throw new Error(data.message);
       }
     } catch (err) {

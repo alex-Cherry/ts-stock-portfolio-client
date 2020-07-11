@@ -175,7 +175,7 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
         {/* Add Stock button */}
         {isAdmin && (
           <FloatingButton
-            buttonType="add"
+            iconName="add"
             isFixed={true}
             onClick={this.onClickAddStockHandler}
           />

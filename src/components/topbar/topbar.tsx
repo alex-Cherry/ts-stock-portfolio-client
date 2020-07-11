@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 // import redux state
 import { AppState } from '../../store';
 // import custom components
-import ProfileLogo from './profileLogo';
+// import ProfileLogo from './profileLogo';
 // 
 import { authLogout } from '../../store/auth/action';
 // import css
@@ -56,30 +56,40 @@ const Topbar = (props: TopbarProps) => {
   }
 
   return (
-    <header>
+    <header className="header">
       <div className="d-flex justify-content-between">
         <div className="d-flex">
-          <Link className="brand-logo mx-1" to="/">Stock Portfolio</Link>
-          <ul className="d-flex">
-            <li><NavLink to="/companies">Компании</NavLink></li>
-            <li><NavLink to="/brokers">Брокеры</NavLink></li>
-            <li><NavLink to="/stocks">Акции</NavLink></li>
-            <li><NavLink to="/bonds">Облигации</NavLink></li>
+          <Link className="header__logo-text mx-1" to="/">Stock Portfolio</Link>
+          {/* Main Menu */}
+          <ul className="main-menu d-flex">
+            <li className="main-menu__item">
+              <NavLink className="main-menu__link" to="/companies">Компании</NavLink>
+            </li>
+            <li className="main-menu__item">
+              <NavLink className="main-menu__link" to="/brokers">Брокеры</NavLink>
+            </li>
+            <li className="main-menu__item">
+              <NavLink className="main-menu__link" to="/stocks">Акции</NavLink>
+            </li>
+            <li className="main-menu__item">
+              <NavLink className="main-menu__link" to="/bonds">Облигации</NavLink>
+            </li>
           </ul>
+
         </div>
         <div className="mr-2">
           {/* if user isn't logged */}
           {!isLoggedIn && (
-            <ul className="d-flex">
-              <li><Link to="/signin">Войти</Link></li>
+            <ul className="main-menu d-flex">
+              <li><Link className="main-menu__link" to="/signin">Войти</Link></li>
             </ul>
           )}
           {/* if user is logged */}
           {isLoggedIn && (
             <>
               {/* <ProfileLogo /> */}
-              <ul className="d-flex">
-                <li><a href="/" onClick={onClickLogoutHandler}>Выйти</a></li>
+              <ul className="main-menu d-flex">
+                <li><a className="main-menu__link" href="/" onClick={onClickLogoutHandler}>Выйти</a></li>
               </ul>
             </>
           )

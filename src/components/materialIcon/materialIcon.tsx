@@ -2,6 +2,7 @@ import React from 'react';
 
 type MaterialIconProps = {
   iconName: string,
+  className?: string,
   onClick?: () => void
 }
 
@@ -13,10 +14,19 @@ const MaterialIcon = (props: MaterialIconProps) => {
     onClick();
   }
 
+  const getClasses = () => {
+    const { className } = props;
+    const classes = ['material-icons'];
+    if (className) {
+      classes.push(className);
+    }
+
+    return classes.join(' ');
+  }
+
   return (
     <i
-      // ref={item.ref}
-      className="material-icons"
+      className={getClasses()}
       onClick={onClickHandler}
     >
       { iconName }

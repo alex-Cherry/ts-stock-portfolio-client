@@ -1,69 +1,71 @@
 @import '../../index.scss';
 
-header {
+.header {
   height: 64px;
   line-height: 64px;
-  background-color: $main-color;
+  width: 100%;
+  background-color: $color-main;
   color: #fff;
 
-  .brand-logo {
+  &__logo-text {
     font-size: 2rem;
     display: inline-block;
     color: #fff;
-    // margin: 0;
   }
 
-  ul {
-    list-style: none;
-    margin: 0;
-
-    li {
-      font-size: 1rem;
-      transition: background-color 0.5s ease;
-    }
-
-    li:hover {
-      transition: background-color 0.5s ease;
-      background-color: rgba($color: #000, $alpha: 0.1);
-    }
-
-    a {
-      color: #fff;
-      padding: 0 1rem;
-      display: block;
-    }
-
-  }
-
-  img {
+  &__link {
+    color: #fff;
+    padding: 0 1rem;
     display: block;
   }
 
-  .header-profile {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    line-height: 16px;
-    align-items: center;
-    height: 100%;
-    cursor: pointer;
+}
+
+.main-menu {
+  list-style: none;
+  margin: 0;
+
+  &__item {
+    font-size: 1rem;
     transition: background-color 0.5s ease;
-    padding: 0 5px;
-
-    &:hover {
-      transition: background-color 0.5s ease;
-      background-color: rgba($color: #000, $alpha: 0.1);
-    }
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-
-    &__username {
-      margin-top: 5px;
-      font-weight: 500;
-    }
   }
 
+  &__item:hover {
+    transition: background-color 0.5s ease;
+    background-color: rgba($color: #000, $alpha: 0.1);
+  }
+
+  &__link {
+    color: #fff;
+    padding: 0 1rem;
+    display: block;
+  }
 }
+
+  // .header-profile {
+  //   display: flex;
+  //   justify-content: center;
+  //   flex-direction: column;
+  //   line-height: 16px;
+  //   align-items: center;
+  //   height: 100%;
+  //   cursor: pointer;
+  //   transition: background-color 0.5s ease;
+  //   padding: 0 5px;
+
+  //   &:hover {
+  //     transition: background-color 0.5s ease;
+  //     background-color: rgba($color: #000, $alpha: 0.1);
+  //   }
+
+  //   img {
+  //     width: 20px;
+  //     height: 20px;
+  //   }
+
+  //   &__username {
+  //     margin-top: 5px;
+  //     font-weight: 500;
+  //   }
+  // }
+

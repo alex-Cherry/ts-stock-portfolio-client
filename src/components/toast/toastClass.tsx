@@ -67,7 +67,7 @@ class ToastElement extends React.Component<ToastProps, ToastState> {
 
     const {
       active,
-      removed
+      // removed
     } = this.state;
 
     // if (removed) {
