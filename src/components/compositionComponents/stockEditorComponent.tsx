@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // import 
 // import custom components
-import Card from '../card';
+import Card, { CardContent, CardActions, CardErrors } from '../card';
 import { Select } from '../inputs';
 import TextInput from './textInput';
 import Button from '../button';
@@ -274,6 +274,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     }
   }
 
+
   // RENDER
   render() {
 
@@ -316,66 +317,73 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
       );
     }
 
-    // define btn "Save"
-    const btnSave = <Button
-      text="Сохранить"
-      iconName="send"
-      disabled={loading}
-      onClick={this.onClickSaveHandler}
-    />;
-
     // Main content
     return (
-        <Card
-          actionContent={btnSave}
-          error={error}
-        >
-          <TextInput
-            id="companyShortName"
-            label="Краткое наименование компании"
-            type="text"
-            value={shortName}
-            touched={touched}
-            validate={true}
-            validations={this.shortNameValidations}
-            onChange={this.onChangeCompanyShortNameHandler}
-            onPressEnter={this.onPressEnterCompanyShortNameHandler}
-          />
-          <TextInput
-            id="ticker"
-            label="Тикер"
-            type="text"
-            value={ticker}
-            touched={touched}
-            validate={true}
-            validations={this.tickerValidations}
-            onChange={this.onChangeTickerHandler}
-            onPressEnter={this.onPressEnterTickerHandler}
-          />
-          <CurrencyInput
-            id="price"
-            label="Цена"
-            value={price}
-            touched={touched}
-            validate={true}
-            validations={this.priceValidations}
-            onChange={this.onChangePriceHandler}
-            onPressEnter={this.onPressEnterPriceHandler}
-          />
-          <Checkbox
-            id="bluetip"
-            value={bluetip}
-            text={`"Голубая фишка"`}
-            onChange={this.onChangeBlueTipHandler}
-          />
-          <Select
-            id="selectSector"
-            label="Отрасль"
-            value={sectorId}
-            options={options}
-            listHeader="Выберите отрасль ..."
-            onChange={this.onChangeSectorHandler}
-          />
+        <Card>
+          {/* CONTENT */}
+          <CardContent>
+            <TextInput
+              id="companyShortName"
+              label="Краткое наименование компании"
+              type="text"
+              value={shortName}
+              touched={touched}
+              validate={true}
+              validations={this.shortNameValidations}
+              onChange={this.onChangeCompanyShortNameHandler}
+              onPressEnter={this.onPressEnterCompanyShortNameHandler}
+            />
+            <TextInput
+              id="ticker"
+              label="Тикер"
+              type="text"
+              value={ticker}
+              touched={touched}
+              validate={true}
+              validations={this.tickerValidations}
+              onChange={this.onChangeTickerHandler}
+              onPressEnter={this.onPressEnterTickerHandler}
+            />
+            <CurrencyInput
+              id="price"
+              label="Цена"
+              value={price}
+              touched={touched}
+              validate={true}
+              validations={this.priceValidations}
+              onChange={this.onChangePriceHandler}
+              onPressEnter={this.onPressEnterPriceHandler}
+            />
+            <Checkbox
+              id="bluetip"
+              value={bluetip}
+              text={`"Голубая фишка"`}
+              onChange={this.onChangeBlueTipHandler}
+            />
+            <Select
+              id="selectSector"
+              label="Отрасль"
+              value={sectorId}
+              options={options}
+              listHeader="Выберите отрасль ..."
+              onChange={this.onChangeSectorHandler}
+            />
+          </CardContent>
+          
+          {/* ACTION */}
+          <CardActions position="right">
+            <Button
+              text="Сохранить"
+              iconName="send"
+              disabled={loading}
+              onClick={this.onClickSaveHandler}
+            />
+          </CardActions>
+
+          {/* ERRORS */}
+          <CardErrors>
+            { error }
+          </CardErrors>
           
         </Card>
     );

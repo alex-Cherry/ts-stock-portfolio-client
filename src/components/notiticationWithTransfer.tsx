@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 // import custom components
-import Card from './card';
+import Card, { CardHeader, CardContent } from './card';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,12 +64,17 @@ const NotificationWithTransfer = (props: NotificationWithTransferProps) => {
   }
 
   return (
-    <Card
-      headerText={header}
-    >
-      { text }
-      <br />
-      Переход на страницу <Link className="card__link_theme_base" to={path}>{pathText}</Link> будет выполнен через {time} секунд.
+    <Card>
+      {/* Header */}
+      <CardHeader>
+        { header }
+      </CardHeader>
+      {/* Content */}
+      <CardContent>
+        { text }
+        <br />
+        Переход на страницу <Link className="card__link_theme_base" to={path}>{pathText}</Link> будет выполнен через {time} секунд.
+      </CardContent>
     </Card>
   );
 

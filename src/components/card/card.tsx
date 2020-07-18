@@ -1,4 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+// 
+import CardHeader from './cardHeader';
+import CardContent from './cardContent';
+import CardActions from './cardActions';
+import CardError from './cardError';
 // css
 import './card.scss';
 
@@ -12,10 +17,7 @@ import './card.scss';
 type CardProps = {
   children: React.ReactNode,
   headerText?: string,
-  className?: string,
-  actionContent?: React.ReactNode,
-  actionContentPosition?: 'left' | 'right' | 'center',
-  error?: string
+  className?: string
 }
 
 
@@ -27,8 +29,18 @@ type CardProps = {
 
 const Card = (props: CardProps) => {
 
-  const { children, actionContent = null, error = '' } = props;
-  
+  // STATE
+  // every state is apt part of the card
+  const [ header, setHeader ] = useState(null);
+  const [ content, setContent ] = useState(null);
+  const [ actions, setActions ] = useState(null);
+  const [ errors, setErrors ] = useState(null);
+
+
+  // UTILS
+  /**
+   * Returns the string, containing classes for the root element
+   */
   const getClasses = (): string => {
     const classes = [
       'card',
@@ -38,64 +50,71 @@ const Card = (props: CardProps) => {
     return classes.join(' ');
   }
 
-  const getErrorContent = (error: string) => {
-    let errorContent = null;
-    if (error) {
-      const data: string[] = error.split(';');
-      errorContent = getErrorContentArray(data);
+
+  // HOOKS
+  useEffect(() => {
+
+    const isReactElement = (obj: React.ReactElement<{}>): boolean => {
+      return obj.hasOwnProperty('type');
     }
-    return errorContent;
-  }
-
-  const getErrorContentArray = (errors: string[]) => {
-    const errorContent = (
-      <div className="card__action">
-        <ul>
-          {
-            errors
-              .filter(item => !!item)
-              .map((item, index) => (<li key={index} className="color-invalid">{item}</li>))
-          }
-        </ul>
-      </div>
-    );
-
-    return errorContent;
-  }
-
-  const getHeader = () => {
-    const { headerText = '' } = props;
-    if (!headerText) {
-      return null;
+    // next functions check, what part of the card react element is
+    //
+    // Card Header
+    const isCardHeader = (obj: React.ReactElement<{}>): boolean => {
+      return isReactElement(obj) && obj.type === CardHeader;
+    }
+    // Card Content
+    const isCardContent = (obj: React.ReactElement<{}>): boolean => {
+      return isReactElement(obj) && obj.type === CardContent;
+    }
+    // Card Actions
+    const isCardActions = (obj: React.ReactElement<{}>): boolean => {
+      return isReactElement(obj) && obj.type === CardActions;
+    }
+    // Card Error
+    const isCardError = (obj: React.ReactElement<{}>): boolean => {
+      return isReactElement(obj) && obj.type === CardError;
     }
 
-    return (
-      <h3 className="card__header">
-        { headerText }
-      </h3>
-    );
-  }
+
+    // get children from props
+    const { children } = props;
+    // 
+    React.Children.forEach(children, (item: any) => {
+      
+      // Header
+      if (isCardHeader(item)) {
+        setHeader(item);
+
+      // Content
+      } else if (isCardContent(item)) {
+        setContent(item);
+
+      // Actions
+      } else if (isCardActions(item)) {
+        setActions(item);
+
+      // Errors
+      } else if (isCardError(item)) {
+        setErrors(item);
+
+      }
+    });
+
+  }, [props]);
 
 
   // RENDER
   return (
     <div className={ getClasses() }>
       {/* Header */}
-      { getHeader() }
+      { header}
       {/* Content */}
-      <div className="card__content">
-        { children }
-      </div>
+      { content }
       {/* Action */}
-      {actionContent && (
-        <div className="card__action">
-          <div className="ml-auto">
-            { actionContent }
-          </div>
-        </div>
-      )}
+      { actions }
       {/* Error */}
-      { getErrorContent(error) }
+      { errors }
     </div>
   );
 }

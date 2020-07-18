@@ -6,37 +6,44 @@
   border-radius: 3px;
   min-width: 100px;
 
-  &__content {
-    padding: 10px 24px;
-    position: relative;
-  }
-
-  &__action {
-    padding: 16px 24px;
-    position: relative;
-    border-top: 1px solid rgba(160, 160, 160, 0.2);
-  }
-
+  // modificator
   &_border_base {
     border: 1px solid $color-card-border;
   }
 
+  // modificator
   &_shadow {
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
   }
 
+  // element
   &__header {
     color: $color-main;
     padding: 10px 24px;
     margin: 0;
   }
 
+  // element
+  &__content {
+    padding: 10px 24px;
+    position: relative;
+  }
+
+  // element
+  &__actions {
+    padding: 16px 24px;
+    position: relative;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+  }
+
+  // modificator for an element
   &__link_theme_base {
     color: $color-main;
   }
 
-  // p {
-  //   color: $color-grey-darken-3;
-  // }
-
+  // modificator
+  &_error {
+    color: $color-error;
+  }
+  
 }

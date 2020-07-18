@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // import custom components
-import Card from '../card';
+import Card, { CardContent, CardActions, CardErrors } from '../card';
 import { Input } from '../inputs';
 import Button from '../button';
 import TextInput from './textInput';
@@ -224,67 +224,72 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Regisete
       username, usernameValidations,
       password, passwordValidations
     } = this.state;
-
-    // define button "Submit"
-    const btnSubmit = (
-      <Button
-        // className="ml-auto"
-        text="Регистрация"
-        disabled={loading}
-        onClick={this.onClickSubmitHandler}
-      />
-    );
     
 
     return (
-      <Card
-        actionContent={btnSubmit}
-        error={error}
-      >
-        {/* Email */}
-        <TextInput
-          id='email'
-          label='Email'
-          value={email}
-          type='email'
-          touched={touched}
-          validate={true}
-          validations={emailValidations}
-          onChange={this.onChangeEmailHandler}
-          onPressEnter={this.onPressEnterEmailHandler}
-        />
-        {/* Username */}
-        <TextInput
-          id='Username'
-          label='Email'
-          value={username}
-          type='text'
-          touched={touched}
-          validate={true}
-          validations={usernameValidations}
-          onChange={this.onChangeUsernameHandler}
-          onPressEnter={this.onPressEnterUsernameHandler}
-        />
-        {/* Password */}
-        <TextInput
-          id='password'
-          label='Password'
-          value={password}
-          type='password'
-          touched={touched}
-          validate={true}
-          validations={passwordValidations}
-          onChange={this.onChangePasswordHandler}
-          onPressEnter={this.onPressEnterPasswordHandler}
-        />
-        {/* Confirm Password */}
-        <Input
-          id="confirm"
-          type="password"
-          label="Confirm password"
-          value={this.state.confirmPassword}
-          onChange={this.onChangeConfirmPasswordHandler}
-        />
+      <Card>
+        
+        {/* CONTENT */}
+        <CardContent>
+          {/* Email */}
+          <TextInput
+            id='email'
+            label='Email'
+            value={email}
+            type='email'
+            touched={touched}
+            validate={true}
+            validations={emailValidations}
+            onChange={this.onChangeEmailHandler}
+            onPressEnter={this.onPressEnterEmailHandler}
+          />
+          {/* Username */}
+          <TextInput
+            id='Username'
+            label='Email'
+            value={username}
+            type='text'
+            touched={touched}
+            validate={true}
+            validations={usernameValidations}
+            onChange={this.onChangeUsernameHandler}
+            onPressEnter={this.onPressEnterUsernameHandler}
+          />
+          {/* Password */}
+          <TextInput
+            id='password'
+            label='Password'
+            value={password}
+            type='password'
+            touched={touched}
+            validate={true}
+            validations={passwordValidations}
+            onChange={this.onChangePasswordHandler}
+            onPressEnter={this.onPressEnterPasswordHandler}
+          />
+          {/* Confirm Password */}
+          <Input
+            id="confirm"
+            type="password"
+            label="Confirm password"
+            value={this.state.confirmPassword}
+            onChange={this.onChangeConfirmPasswordHandler}
+          />
+        </CardContent>
+
+        {/* ACTIONS */}
+        <CardActions>
+          <Button
+            text="Регистрация"
+            disabled={loading}
+            onClick={this.onClickSubmitHandler}
+          />
+        </CardActions>
+        
+        {/* ERROR */}
+        <CardErrors>
+          { error }
+        </CardErrors>
 
       </Card>
     );

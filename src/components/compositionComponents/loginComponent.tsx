@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // import custom components
-import Card from '../card';
+import Card, { CardContent, CardActions, CardErrors } from '../card';
 import Button from '../button';
 import TextInput from './textInput';
 // import actions
@@ -163,47 +163,50 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
     // get data from state
     const { loading, error, touched, email, password } = this.state;
 
-    // define button "Submit"
-    const btnSubmit = (
-      <Button
-        className="ml-auto"
-        text="Войти"
-        disabled={loading}
-        onClick={this.onClickSubmitHandler}
-      />
-    );
-    
-
     return (
-      <Card
-        actionContent={btnSubmit}
-        error={error}
-      >
-        {/* Email */}
-        <TextInput
-          id='email'
-          label='Email'
-          value={email}
-          type='email'
-          touched={touched}
-          validate={true}
-          validations={this.emailValidations}
-          onChange={this.onChangeEmailHandler}
-          onPressEnter={this.onPressEnterEmailHandler}
-        />
-        {/* Password */}
-        <TextInput
-          id='password'
-          label='Password'
-          value={password}
-          type='password'
-          touched={touched}
-          validate={true}
-          validations={this.passwordValidations}
-          onChange={this.onChangePasswordHandler}
-          onPressEnter={this.onPressEnterPasswordHandler}
-        />
+      <Card>
+        {/* CONTENT */}
+        <CardContent>
+          {/* Email */}
+          <TextInput
+            id='email'
+            label='Email'
+            value={email}
+            type='email'
+            touched={touched}
+            validate={true}
+            validations={this.emailValidations}
+            onChange={this.onChangeEmailHandler}
+            onPressEnter={this.onPressEnterEmailHandler}
+          />
+          {/* Password */}
+          <TextInput
+            id='password'
+            label='Password'
+            value={password}
+            type='password'
+            touched={touched}
+            validate={true}
+            validations={this.passwordValidations}
+            onChange={this.onChangePasswordHandler}
+            onPressEnter={this.onPressEnterPasswordHandler}
+          />
+        </CardContent>
 
+        {/* ACTIONS */}
+        <CardActions position="left">
+          <Button
+            text="Войти"
+            disabled={loading}
+            onClick={this.onClickSubmitHandler}
+          />
+        </CardActions>
+
+        {/* ERROR */}
+        <CardErrors>
+          { error }
+        </CardErrors>
+        
       </Card>
     );
   }

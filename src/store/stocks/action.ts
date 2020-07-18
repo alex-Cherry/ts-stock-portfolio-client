@@ -42,7 +42,7 @@ export const saveStock = (
 ): ThunkAction<Promise<void>, void, unknown, Action<any>> => async (dispatch) => {
   try {
     const data = {
-      stock: { ...stock, sectorId: stock.sector.id}
+      stock: { ...stock }
     }
     // execute request
     const fetchResult = await useFetch('/api/stocks/savestock', 'POST', data);
