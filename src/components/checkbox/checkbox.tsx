@@ -10,10 +10,18 @@ import './checkbox.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type CheckboxProps = {
+  // id of the element
   id: string,
+  // text of the label of the checkbox
   text: string
+  // value of the checkbox
   value: boolean,
+  // extra classes, that you can apply to the root element,
+  // when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  // positioning of the component
   className?: string,
+  // 
   onChange?: () => void
 }
 
@@ -28,12 +36,18 @@ const Checkbox = (props: CheckboxProps) => {
 
   const { id, text, value, onChange } = props;
 
+  // UTILS
+  /**
+   * func defines classes, that need to apply to the root element
+   */
   const getClasses = (): string => {
 
     const { className } = props;
 
+    // define default classes
     const classes = ['input-checkbox'];
 
+    // extra classes
     if (className) {
       classes.push(className);
     }
@@ -41,9 +55,11 @@ const Checkbox = (props: CheckboxProps) => {
     return classes.join(' ');
   }
 
+
+  // RENDER
   return (
     <div className={ getClasses() }>
-      <label className="input-checkbox__label input-checkbox__label_theme_base">
+      <label className="input-checkbox__label">
         <input
           id={id}
           type="checkbox"

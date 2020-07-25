@@ -16,7 +16,7 @@ import Button from '../button';
 import Checkbox from '../checkbox';
 import NotificationWithTransfer from '../notiticationWithTransfer';
 import CurrencyInput from './currencyInput';
-import Loader from '../spinner';
+import Loader from '../loader';
 // import store
 import { AppState } from '../../store'
 import { fetchSectors, saveStock } from '../../store/stocks/action';

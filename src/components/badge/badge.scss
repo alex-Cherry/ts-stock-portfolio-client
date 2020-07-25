@@ -6,22 +6,18 @@
   border-radius: 2px;
   cursor: pointer;
   min-width: 2rem;
+  background-color: $color-main--not-active;
+  color: $color-font;
 
   // modificator
-  &_theme_base {
-    background-color: $color-main-not-active;
-    color: $color-font-base;
-  }
-
-  // modificator
-  &_theme_active {
+  &--active {
     background-color: $color-main;
-    color: $color-font-base;
+    color: $color-font;
     cursor: default;
   }
 
   &:hover {
     background-color: $color-main;
-    color: $color-font-base;
+    color: $color-font;
   }
 }

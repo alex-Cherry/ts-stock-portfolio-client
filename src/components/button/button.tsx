@@ -57,14 +57,10 @@ const Button = (props: ButtonProps) => {
     // define default classes
     const classes = [ 'btn' ];
 
-    // define the color scheme
+    // define the color scheme for the element, if it's disabled
     if (disabled) {
       // if the element is disabled
-      classes.push('btn_disabled');
-    } else {
-      // "the base color scheme"
-      classes.push('btn_theme_base');
-      classes.push('btn_shadow');
+      classes.push('btn--disabled');
     }
 
     // extra classes
@@ -97,9 +93,9 @@ const Button = (props: ButtonProps) => {
   // RENDER
   return (
     <button
-      className={getClasses()}
-      disabled={disabled}
-      onClick={onClick}
+      className={ getClasses() }
+      disabled={ disabled }
+      onClick={ onClick }
     >
       <div className="d-flex">
         {/* text */}

@@ -15,7 +15,7 @@ import MainContainer from '../components/mainContainer';
 import StocksBoard from '../components/stocksBoard';
 import StockGroupFilter, { StockGroupFilterOperations } from '../components/stockGroupFilter';
 import FloatingButton from '../components/floatingButton';
-import Spinner from '../components/spinner';
+import Loader from '../components/loader';
 import ErrorIndicator from '../components/errorIndicator';
 // import utils
 import { getQueryParams } from '../utils/getQueryParams';
@@ -141,7 +141,7 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
     const { loading } = this.state;
 
     if (loading) {
-      return <Spinner />;
+      return <Loader />;
     } else {
       return <StocksBoard stocks={stocks} />;
     }

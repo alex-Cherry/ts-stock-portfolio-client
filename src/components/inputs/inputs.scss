@@ -43,7 +43,7 @@
   }
 
   span {
-    color: $color-error;
+    color: $color-font--error;
     font-size: 0.8rem;
   }
 
@@ -62,10 +62,10 @@
   &.invalid {
 
     input {
-      border-bottom: 1px solid $color-error;
+      border-bottom: 1px solid $color-font--error;
       &:focus {
-        border-bottom: 1px solid $color-error;
-        box-shadow: 0 1px 0 0 $color-error;
+        border-bottom: 1px solid $color-font--error;
+        box-shadow: 0 1px 0 0 $color-font--error;
         transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
       }
     }

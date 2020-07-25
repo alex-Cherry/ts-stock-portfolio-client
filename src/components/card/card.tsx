@@ -44,8 +44,7 @@ const Card = (props: CardProps) => {
   const getClasses = (): string => {
     const classes = [
       'card',
-      'card_shadow',
-      'card_border_base'
+      'card--shadow'
     ];
     return classes.join(' ');
   }
@@ -54,6 +53,8 @@ const Card = (props: CardProps) => {
   // HOOKS
   useEffect(() => {
 
+    // function checks, whether obj is React element or not
+    //
     const isReactElement = (obj: React.ReactElement<{}>): boolean => {
       return obj.hasOwnProperty('type');
     }

@@ -1,13 +1,34 @@
 import React from 'react';
+// css
 import './errorIndicator.scss';
+// png
 import errorImg from '../../assets/images/error.png';
 
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// EXTRA
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 type ErrorIndicatorProps = {
+  // string that defines the text of the error
   text?: string
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// COMPONENT
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const ErrorIndicator = (props: ErrorIndicatorProps) => {
 
+  // UTILS
+  /**
+   * func returns the description of the error
+   */
   const getContent = () => {
     const { text } = props;
 
@@ -27,6 +48,8 @@ const ErrorIndicator = (props: ErrorIndicatorProps) => {
     }
   }
 
+
+  // RENDER
   return (
     <div className="error-indicator error-indicator_theme_base">
       {/* img */}

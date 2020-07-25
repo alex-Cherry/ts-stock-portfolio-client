@@ -1,8 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
 import React, { MouseEvent } from 'react';
 // custom components
 import MaterialIcon from '../materialIcon';
@@ -46,11 +41,11 @@ const FloatingButton = (props: FloatingButtonProps) => {
   const getClasses = (): string => {
     const { isFixed = false } = props;
     // define default classes
-    const classes = ["btn-floating", "btn-floating_theme_base"];
+    const classes = ["btn-floating"];
     // if isFixed, add to the root element
     // extra class, setting fixed position
     if (isFixed) {
-      classes.push('btn-floating_fixed');
+      classes.push('btn-floating--fixed');
     }
 
     return classes.join(' ');

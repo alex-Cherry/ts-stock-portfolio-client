@@ -6,11 +6,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  // modificator
-  &_theme_base {
-    color: $color-error;
-  }
+  color: $color-font--error;
+  font-size: 1.7rem;
 
   // element
   &__img {
@@ -21,10 +18,5 @@
 
   // element
   // &__header {}
-
-  // modificator
-  &_size_base {
-    font-size: 1.7rem;
-  }
 
 }

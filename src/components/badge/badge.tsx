@@ -12,7 +12,7 @@ import './badge.scss';
 type BadgeProps = {
   // text of the notification
   text: string,
-  // extra classes, that you can apply to the root element
+  // extra classes, that you can apply to the root element,
   // when you use this component inside other ones.
   // It's assumed that will be used classes that define
   // positioning of the component
@@ -53,13 +53,9 @@ const Badge = (props: BadgeProps) => {
     // define default classes
     const classes = ['badge'];
 
-    // define the color scheme
-    // if "active" we use "special" class
+    // define the color scheme for the element, if it's active
     if (active) {
-      classes.push('badge_theme_active');
-    } else {
-    // otherwise we use "base" class
-      classes.push('badge_theme_base');
+      classes.push('badge--active');
     }
 
     // extra classes

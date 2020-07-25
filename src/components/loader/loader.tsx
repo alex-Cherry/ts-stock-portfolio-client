@@ -1,6 +1,6 @@
 import React from 'react';
 // css
-import './circleSpinner.scss';
+import './loader.scss';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -9,11 +9,11 @@ import './circleSpinner.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CircleSpinner = () => {
+const Loader = () => {
   // RENDER
   return (
-    <div className="circle-spinner"></div>
+    <div className="loader"></div>
   );
 }
 
-export default CircleSpinner;
+export default Loader;

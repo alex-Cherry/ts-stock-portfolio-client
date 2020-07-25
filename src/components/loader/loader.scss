@@ -1,6 +1,8 @@
-$color1: #456caa;
-$color2: #88a2ce;
-$color3: #c2d2ee;
+@import '../../assets/scss/colors.scss';
+
+$color1: $color-loader--first;
+$color2: $color-loader--second;
+$color3: $color-loader--third;
 
 .loader {
   color: #000;

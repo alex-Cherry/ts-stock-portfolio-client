@@ -4,20 +4,20 @@
   // вынести в элемент
   margin: 24px 0;
 
+  // element
   &__label {
     padding-left: 15px;
     font-size: 1rem;
+    color: $color-grey-darken-2;
     cursor: pointer;
   }
 
-  &__label_theme_base {
-    color: $color-grey-darken-2;
-  }
-
+  // element
   &__text {
     position: relative;
   }
 
+  // element
   &__input {
     opacity: 0;
     pointer-events: none;
@@ -42,8 +42,8 @@
       top: -6px;
       width: 10px;
       height: 18px;
-      border-bottom: 2px solid $color-focus;
-      border-right: 2px solid $color-focus;
+      border-bottom: 2px solid $color-font--focus;
+      border-right: 2px solid $color-font--focus;
       border-top: none;
       border-left: none;
       cursor: pointer;
