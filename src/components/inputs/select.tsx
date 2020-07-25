@@ -1,15 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
 import React, { useState, useRef } from 'react';
-// import custom components
+// custom components
 import Backdrop from '../backdrop';
-import ListForSelect from './listForSelect';
-// import svg
+import SelectList from './listForSelect';
+// svg
 import arrowDown from '../../assets/svg/arrowDown.svg';
-// import css
+// css
 import './inputs.scss';
 
 
@@ -90,7 +85,7 @@ const Select = (props: SelectProps) => {
   if (showModal) {
     // list
     list = (
-      <ListForSelect
+      <SelectList
         options={options}
         activeId={value}
         listHeader={listHeader}

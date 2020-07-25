@@ -13,6 +13,7 @@ type CheckboxProps = {
   id: string,
   text: string
   value: boolean,
+  className?: string,
   onChange?: () => void
 }
 
@@ -27,8 +28,21 @@ const Checkbox = (props: CheckboxProps) => {
 
   const { id, text, value, onChange } = props;
 
+  const getClasses = (): string => {
+
+    const { className } = props;
+
+    const classes = ['input-checkbox'];
+
+    if (className) {
+      classes.push(className);
+    }
+
+    return classes.join(' ');
+  }
+
   return (
-    <div className="input-checkbox">
+    <div className={ getClasses() }>
       <label className="input-checkbox__label input-checkbox__label_theme_base">
         <input
           id={id}

@@ -1,15 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
-
 import React, { ChangeEvent, KeyboardEvent, useRef } from 'react';
-// import utils
+// utils
 import { setClass, removeClass } from '../../utils/checkClassesForRefObjects';
-// import types
+// types
 import { inputType } from '../../types/inputTypes';
-// import css
+// css
 import './inputs.scss';
 
 

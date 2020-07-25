@@ -1,0 +1,46 @@
+@import '../../../index.scss';
+
+.select-list {
+
+  list-style: none;
+  border: 1px solid black;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 990;
+  background-color: #fff;
+  
+  // element
+  &__item {
+    padding: 15px;
+    cursor: pointer;
+    color: $color-active-menu;
+    font-size: 1rem;
+    position: relative;
+  }
+
+  &__item_header {
+    background-color: $color-grey-lighten-2;
+    cursor: auto;
+    font-weight: 500;
+    color: $color-grey-darken-2;
+  }
+
+  &__item_selected, &__item:hover:not(&__item_header) {
+    background-color: rgba($color: $color-blue-lighten-3, $alpha: 0.3);
+  }
+
+  // element
+  &__tick {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    border-bottom: 2px solid $color-active-menu;
+    border-right: 2px solid $color-active-menu;
+    width: 12px;
+    height: 18px;
+    display: inline-block;
+    transform: rotate(40deg);
+  }
+
+}
