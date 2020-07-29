@@ -9,7 +9,7 @@ import './index.scss';
 // import routes
 import Routes from './routes';
 // import custom components
-import Topbar from './components/topbar';
+import Header from './components/header';
 import { ToastContainer } from './components/toast';
 // import CurrentUserChecker
 import CurrentUserChecker from './components/currentUserChecker';
@@ -32,7 +32,7 @@ const App = () => {
       <CurrentUserChecker>
         <Router>
           <ErrorBoundary>
-            <Topbar />
+            <Header />
             <Routes />
             <ToastContainer />
           </ErrorBoundary>

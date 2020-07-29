@@ -1,8 +1,10 @@
 import React from 'react';
 // third-party libs
 import classNames from 'classnames';
+// custom components
+import MenuItem, { MenuItemProps } from './menuItem';
 // css
-import './badge.scss';
+import './menu.scss';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -11,19 +13,20 @@ import './badge.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-type BadgeProps = {
-  // text of the notification
-  text: string,
+type MenuProps = {
+  // items of a menu
+  items: MenuItemProps[],
   // extra classes, that you can apply to the root element,
   // when you use this component inside other ones.
   // It's assumed that will be used classes that define
   // positioning of the component
   className?: string,
-  // mark, that special class will be applied
-  active?: boolean,
-  // 
-  onClick?: () => void
-};
+  // component "Menu" uses component "MenuItem",
+  // which uses "NavLink" (from react-router-dom) for its rendering.
+  // "NavLink" has "activeClassName"-property.
+  // "useActiveClass" is a flag, whether should use this property or not
+  useActiveClass?: boolean
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,49 +35,42 @@ type BadgeProps = {
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-const Badge = (props: BadgeProps) => {
-
-  // desctructure props
-  const {
-    text,
-    onClick = () => {}
-  } = props;
-
+const Menu = (props: MenuProps) => {
 
   // UTILS
+  /**
+   * func maps each element of items array
+   * to react component "MenuItem"
+   * and render these components
+   */
+  const renderItems = () => {
+    const { items, useActiveClass = false } = props;
+    return items.map((item, idx) => <MenuItem key={ idx } { ...item } useActiveClass={ useActiveClass }  />)
+  }
   /**
    * defines classes, that need to apply to the root element
    */
   const getClasses = (): string => {
 
-    const {
-      active = false,
-      className = ''
-    } = props;
+    const { className } = props;
 
     const classes = classNames(
       // default classes
-      'badge',
-      // if the element is active, add a spec class
-      { 'badge--active': active },
+      'menu',
       // classes from props
       { [`${className}`]: !!className }
     );
 
     return classes;
   }
-  
-  
+
+
   // RENDER
   return (
-    <span
-      className={getClasses()}
-      onClick={onClick}
-    >
-      { text }
-    </span>
+    <ul className={ getClasses() }>
+      { renderItems() }
+    </ul>
   );
-
 }
 
-export default Badge;
+export default Menu;

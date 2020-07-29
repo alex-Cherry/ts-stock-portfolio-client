@@ -1,0 +1,23 @@
+.logo {
+  display: flex;
+  // align-items: center;
+  height: 64px;
+
+  &__link {
+    display: flex;
+    color: #fff;
+    font-size: 2rem;
+  }
+
+  &__img {
+    height: 60px;
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+  &__text {
+    display: inline-block;
+    margin-left: 5px;
+  }
+
+}

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-// 
+// custom components
 import CardHeader from './cardHeader';
 import CardContent from './cardContent';
 import CardActions from './cardActions';
 import CardError from './cardError';
+// third-party libs
+import classNames from 'classnames';
 // css
 import './card.scss';
 
@@ -42,11 +44,11 @@ const Card = (props: CardProps) => {
    * Returns the string, containing classes for the root element
    */
   const getClasses = (): string => {
-    const classes = [
+    const classes = classNames(
       'card',
       'card--shadow'
-    ];
-    return classes.join(' ');
+    );
+    return classes;
   }
 
 

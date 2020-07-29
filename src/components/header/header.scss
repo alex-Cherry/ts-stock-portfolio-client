@@ -1,45 +1,39 @@
 @import '../../index.scss';
 
 .header {
+  
   height: 64px;
   line-height: 64px;
   width: 100%;
   background-color: $color-main;
   color: #fff;
 
-  &__logo-text {
-    font-size: 2rem;
-    display: inline-block;
-    color: #fff;
+  // element
+  &__inner {
+    display: flex;
+    justify-content: space-between;
   }
 
-  &__link {
-    color: #fff;
-    padding: 0 1rem;
-    display: block;
+  // element
+  &__main {
+    display: flex;
   }
 
-}
-
-.main-menu {
-  list-style: none;
-  margin: 0;
-
-  &__item {
-    font-size: 1rem;
-    transition: background-color 0.5s ease;
+  // element
+  &__menu {
+    margin-left: 40px;
   }
 
-  &__item:hover {
-    transition: background-color 0.5s ease;
-    background-color: rgba($color: #000, $alpha: 0.1);
+  // element
+  &__logo {
+    margin-left: 40px;
   }
 
-  &__link {
-    color: #fff;
-    padding: 0 1rem;
-    display: block;
+  // element
+  &__profile {
+    margin-right: 2rem;
   }
+  
 }
 
   // .header-profile {

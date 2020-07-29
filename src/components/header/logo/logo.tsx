@@ -2,7 +2,9 @@ import React from 'react';
 // third-party libs
 import classNames from 'classnames';
 // css
-import './badge.scss';
+import './logo.scss';
+// img
+import logoImg from '../../../assets/images/buy1.png';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -11,19 +13,13 @@ import './badge.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-type BadgeProps = {
-  // text of the notification
-  text: string,
+type LogoProps = {
   // extra classes, that you can apply to the root element,
   // when you use this component inside other ones.
   // It's assumed that will be used classes that define
   // positioning of the component
-  className?: string,
-  // mark, that special class will be applied
-  active?: boolean,
-  // 
-  onClick?: () => void
-};
+  className?: string
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,49 +28,38 @@ type BadgeProps = {
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-const Badge = (props: BadgeProps) => {
-
-  // desctructure props
-  const {
-    text,
-    onClick = () => {}
-  } = props;
-
+const Logo = (props: LogoProps) => {
 
   // UTILS
   /**
    * defines classes, that need to apply to the root element
    */
-  const getClasses = (): string => {
-
+  const getClasses = () => {
+    
     const {
-      active = false,
       className = ''
     } = props;
 
     const classes = classNames(
-      // default classes
-      'badge',
-      // if the element is active, add a spec class
-      { 'badge--active': active },
-      // classes from props
-      { [`${className}`]: !!className }
+      // define default classes
+      'logo',
+      // extra classes
+      { [`${className}`]: !!className }  
     );
 
     return classes;
   }
-  
-  
+
+
   // RENDER
   return (
-    <span
-      className={getClasses()}
-      onClick={onClick}
-    >
-      { text }
-    </span>
+    <div className={ getClasses() }>
+      <a className="logo__link" href="/">
+        <img className="logo__img" src={ logoImg } alt="" />
+        <span className="logo__text">StockPortfolio</span>
+      </a>
+    </div>
   );
-
 }
 
-export default Badge;
+export default Logo;

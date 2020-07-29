@@ -1,4 +1,6 @@
 import React from 'react';
+// third-party libs
+import classNames from 'classnames';
 // custom components
 import MaterialIcon from '../materialIcon';
 // css
@@ -54,27 +56,22 @@ const Button = (props: ButtonProps) => {
       className = ''
     } = props;
 
-    // define default classes
-    const classes = [ 'btn' ];
+    const classes = classNames(
+      // default classes
+      'btn',
+      // if the button is disabled
+      { 'btn--disabled': disabled },
+      // classes from props
+      { [`${className}`]: !!className }
+    );
 
-    // define the color scheme for the element, if it's disabled
-    if (disabled) {
-      // if the element is disabled
-      classes.push('btn--disabled');
-    }
-
-    // extra classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
+    return classes;
   }
   /**
    * if iconName isn't set, return null;
    * if iconName is set, return MaterialIcon
    */
-  const getIcon = () => {
+  const renderIcon = () => {
     const { iconName = '' } = props;
     // return null
     if (!iconName) {
@@ -101,7 +98,7 @@ const Button = (props: ButtonProps) => {
         {/* text */}
         { text }
         {/* icon */}
-        { getIcon() }
+        { renderIcon() }
       </div>
     </button>
   );

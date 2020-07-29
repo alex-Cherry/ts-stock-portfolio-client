@@ -1,4 +1,6 @@
 import React, { MouseEvent } from 'react';
+// third-party libs
+import classNames from 'classnames';
 // custom components
 import MaterialIcon from '../materialIcon';
 // css
@@ -14,6 +16,11 @@ import './floatingButton.scss';
 type FloatingButtonProps = {
   // material icon's name
   iconName: string,
+  // extra classes, that you can apply to the root element,
+  // when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  // positioning of the component
+  className?: string,
   // define, whether display button in the bottom-left corner or not
   isFixed?: boolean,
   onClick?: () => void
@@ -39,16 +46,23 @@ const FloatingButton = (props: FloatingButtonProps) => {
    * function returns a string, including classes for the root element
    */
   const getClasses = (): string => {
-    const { isFixed = false } = props;
-    // define default classes
-    const classes = ["btn-floating"];
-    // if isFixed, add to the root element
-    // extra class, setting fixed position
-    if (isFixed) {
-      classes.push('btn-floating--fixed');
-    }
 
-    return classes.join(' ');
+    const {
+      isFixed = false,
+      className = ''
+    } = props;
+
+    const classes = classNames(
+      // define default classes
+      'btn-floating',
+      // extra classes
+      { [`${className}`]: !!className },
+      // if isFixed, add to the root element
+      // extra class, setting fixed position
+      { 'btn-floating--fixed': isFixed }
+    );
+
+    return classes;
   }
 
 
@@ -63,7 +77,7 @@ const FloatingButton = (props: FloatingButtonProps) => {
   return (
     <div
       className={ getClasses() }
-      onClick={clickHandler}
+      onClick={ clickHandler }
     >
       <MaterialIcon
         iconName={iconName}

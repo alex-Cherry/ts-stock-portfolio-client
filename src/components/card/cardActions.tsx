@@ -1,4 +1,6 @@
 import React from 'react';
+// third-party libs
+import classNames from 'classnames';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,18 +35,16 @@ const CardActions = (props: CardActionsProps) => {
 
     const { position = 'left' } = props;
 
-    // class "w-content" = width: fit-content
-    const classes = ['w-content'];
-    // define the position of the content
-    if (position === 'left') {
-      classes.push('ml-auto');
-    } else if (position === 'right') {
-      classes.push('mr-auto');
-    } else {
-      classes.push('mx-auto');
-    }
+    const classes = classNames(
+      // class "w-content" = width: fit-content
+      'w-content',
+      // define the position of the content
+      { 'ml-auto': position === 'right' },
+      { 'mr-auto': position === 'left' },
+      { 'mx-auto': position === 'center' }
+    );
 
-    return classes.join(' ');
+    return classes;
   }
 
 

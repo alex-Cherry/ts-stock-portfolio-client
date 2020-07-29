@@ -371,7 +371,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
           </CardContent>
           
           {/* ACTION */}
-          <CardActions position="right">
+          <CardActions position="left">
             <Button
               text="Сохранить"
               iconName="send"
