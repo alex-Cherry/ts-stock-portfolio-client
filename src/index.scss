@@ -3,6 +3,9 @@
 // import colors
 @import './assets/scss/colors.scss';
 
+
+// COMMON SELECTORS
+
 * {
   box-sizing: border-box;
 }
@@ -22,6 +25,9 @@ ul, li {
   list-style: none;
 }
 
+
+
+// 
 .d-flex {
   display: flex;
 }
@@ -61,17 +67,17 @@ ul, li {
   position: relative;
 }
 
-.color-focus {
-  color: $focus-field !important;
-}
+// .color-focus {
+//   color: $focus-field !important;
+// }
 
-.color-invalid {
-  color: $color-font--error !important;
-}
+// .color-invalid {
+//   color: $color-font--error !important;
+// }
 
-.color-valid {
-  color: $color-valid !important;
-}
+// .color-valid {
+//   color: $color-valid !important;
+// }
 
 .row1 {
   margin-left: auto;

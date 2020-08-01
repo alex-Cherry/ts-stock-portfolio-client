@@ -1,4 +1,6 @@
 import React, { ChangeEvent, KeyboardEvent, useRef } from 'react';
+// third-party libs
+import classNames from 'classnames';
 // utils
 import { setClass, removeClass } from '../../utils/checkClassesForRefObjects';
 // types
@@ -18,6 +20,7 @@ type InputProps = {
   label?: string,
   type?: inputType,
   value: string,
+  className?: string,
   errorMsg?: string,
   validate?: boolean,
   valid?: boolean,
@@ -52,35 +55,45 @@ const Input = (props: InputProps) => {
     onBlur = () => {},
     onPressEnter = () => {}
   } = props;
+  // 
+  // classes for label
+  const classLabelActive = 'input-field__label--active';
+  const classLabelValid = 'input-field__label--valid';
+  const classLabelInvalid = 'input-field__label--invalid';
+  const classLabelFocused = 'input-field__label--focused';
+  // classes for input
+  const classInputValid = 'input-field__input--valid';
+  const classInputInvalid = 'input-field__input--invalid';
   // define refs
   const divRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
 
+
   // EVENT HANDLERS
   //  => onFocus
   const onFocusInputHandler = () => {
-    setClass(labelRef, 'active');
+    setClass(labelRef, classLabelActive);
 
     if (validate) {
       if (valid) {
-        setClass(labelRef, 'color-valid');
+        setClass(labelRef, classLabelValid);
       } else {
-        setClass(labelRef, 'color-invalid');
+        setClass(labelRef, classLabelInvalid);
       }
     } else {
-      setClass(labelRef, 'color-focus');
+      setClass(labelRef, classLabelFocused);
     }
     // onFocus from props
     onFocus();
   }
   //  => onBlur
   const onBlurInputHandler = () => {
-    if (!value.trim()) {
-      removeClass(labelRef, 'active');
+    if (!isValueSet()) {
+      removeClass(labelRef, classLabelActive);
     }
-    removeClass(labelRef, 'color-valid');
-    removeClass(labelRef, 'color-invalid');
-    removeClass(labelRef, 'color-focus');
+    removeClass(labelRef, classLabelValid);
+    removeClass(labelRef, classLabelInvalid);
+    removeClass(labelRef, classLabelFocused);
     onBlur();
   }
   //  => onChange
@@ -94,57 +107,111 @@ const Input = (props: InputProps) => {
     }
   }
 
-  // let pattern = null;
-  // if (type === 'number') {
-  //   pattern = '\d+';
-  // }
 
-  // define css-classes for the element
-  const classNames = ["input-field1"];
-  if (validate) {
-    if (valid) {
-      classNames.push('valid');
-    } else {
-      classNames.push('invalid');
+  // UTILS
+  /**
+   * func defines, whether there is a value in the input or not
+   */
+  const isValueSet = (): boolean => {
+    const { value } = props;
+    return !!value.trim();
+  }
+  /**
+   * defines classes, that need to apply to the root element
+   */
+  const getClasses = (): string => {
+
+    const {
+      className = ''
+    } = props;
+
+    const classes = classNames(
+      // default classes
+      'input-field',
+      // classes from props
+      { [`${className}`]: !!className }
+    );
+
+    return classes;
+  }
+  /**
+   * defines classes for the input
+   */
+  const getClassesForInput = (): string => {
+
+    const classes = classNames(
+      // default classes
+      'input-field__input',
+      // class, if a value in the input is valid
+      { [`${classInputValid}`]: validate && valid  },
+      // class, if a value in the input isn't valid
+      { [`${classInputInvalid}`]: validate && !valid  }
+    );
+
+    return classes;
+  }
+  /**
+   * defines classes for the label
+   */
+  const getClassesForLabel = (): string => {
+    
+    const classes = classNames(
+      // default classes
+      'input-field__label',
+      // class, when there is a value in the input.
+      // we apply '--active' modificator
+      { [`${classLabelActive}`]: isValueSet() }
+    );
+
+    return classes;
+  }
+  /**
+   * func returns a block with an error description
+   */
+  const renderErrors = () => {
+    if (validate && !valid && errorMsg) {
+      return (
+        <span className="input-field__error">{ errorMsg }</span>  
+      );
     }
+
+    return null;
   }
 
-  let labelClassname = '';
-  if (value.trim()) {
-    labelClassname = 'active';
-  }
   
   // RENDER
   return (
-    // <div className="input-field1 error">
     <div
-      className={classNames.join(' ')}
-      ref={divRef}
+      className={ getClasses() }
+      ref={ divRef }
     >
-      {/* input */}
+
+      {/* Input */}
       <input
-        type={type}
-        id={id}
-        value={value}
-        ref={inputRef}
+        id={ id }
+        type={ type }
+        value={ value }
+        ref={ inputRef }
+        className={ getClassesForInput() }
         
-        onFocus={onFocusInputHandler}
-        onBlur={onBlurInputHandler}
-        onChange={onChangeInputHandler}
-        onKeyPress={onKeyPressInputHandler}
+        onFocus={ onFocusInputHandler }
+        onBlur={ onBlurInputHandler }
+        onChange={ onChangeInputHandler }
+        onKeyPress={ onKeyPressInputHandler }
       />
-      {/* label */}
+
+      {/* Label */}
       <label
-        htmlFor={id}
-        ref={labelRef}
-        className={labelClassname}
+        htmlFor={ id }
+        ref={ labelRef }
+        className={ getClassesForLabel() }
       >
-        {label}
+        { label }
       </label> 
-      {/* error */}
-      {validate && !valid && errorMsg && (
-        <span>{errorMsg}</span>
-      )}
+
+      {/* Error */}
+      { renderErrors() }
+
     </div>
   );
 }

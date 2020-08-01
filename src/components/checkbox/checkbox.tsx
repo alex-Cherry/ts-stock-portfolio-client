@@ -1,4 +1,6 @@
 import React from 'react';
+// third-party libs
+import classNames from 'classnames';
 // css
 import './checkbox.scss';
 
@@ -44,15 +46,14 @@ const Checkbox = (props: CheckboxProps) => {
 
     const { className } = props;
 
-    // define default classes
-    const classes = ['input-checkbox'];
+    const classes = classNames(
+      // define default classes
+      'input-checkbox',
+      // extra classes
+      { [`${className}`]: !!className }
+    );
 
-    // extra classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
+    return classes;
   }
 
 

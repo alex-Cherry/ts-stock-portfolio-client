@@ -1,11 +1,12 @@
 @import '../../index.scss';
 
-.input-field1 {
+.input-field {
 
   position: relative;
   margin: 1rem 0;
   
-  input {
+  // element "Input"
+  &__input {
     width: 100%;
     outline: none;
     border: none;
@@ -23,68 +24,78 @@
       transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
     }
 
+    // modificator
+    // when input is valid
+    &--valid {
+      border-bottom: 1px solid $color-valid;
+    }
+    &--valid:focus {
+      border-bottom: 1px solid $color-valid;
+      box-shadow: 0 1px 0 0 $color-valid;
+      transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
+    }
+
+    // modificator
+    // when input is not valid
+    &--invalid {
+      border-bottom: 1px solid $color-font--error;
+    }
+    &--invalid:focus {
+      border-bottom: 1px solid $color-font--error;
+      box-shadow: 0 1px 0 0 $color-font--error;
+      transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
+    }
   }
 
-  label {
+  // element "Label"
+  &__label {
+
     font-size: 1rem;
     color: $inactive-field;
     position: absolute;
-    left: 0.75rem;
+    left: 0;
     top: 0;
     cursor: text;
     transform: translateY(12px);
     transition: transform 0.3s ease;
 
-    &.active {
-      transform: translateY(-14px) scale(0.8);
+    // modificator
+    &--active {
+      font-size: 0.8rem;
+      transform: translateY(-14px);
       transition: transform 0.3s ease;
     }
-
+    // modificator
+    &--focused {
+      color: $focus-field;
+    }
+    // modificator
+    &--valid {
+      color: $color-valid;
+    }
+    // modificator
+    &--invalid {
+      color: $color-font--error;
+    }
   }
 
-  span {
+
+  // Error
+  &__error {
     color: $color-font--error;
     font-size: 0.8rem;
   }
 
-  .select-wrapper > input {
+  &__select {
     cursor: pointer;
   }
 
-  .caret {
+
+  // element
+  &__caret {
     position: absolute;
     right: 0;
     top: 12px;
     cursor: pointer;
   }
-
-  // when input is invalid
-  &.invalid {
-
-    input {
-      border-bottom: 1px solid $color-font--error;
-      &:focus {
-        border-bottom: 1px solid $color-font--error;
-        box-shadow: 0 1px 0 0 $color-font--error;
-        transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
-      }
-    }
-    
-  }
-
-  // when input is valid
-  &.valid {
-
-    input {
-      border-bottom: 1px solid $color-valid;
-      &:focus {
-        border-bottom: 1px solid $color-valid;
-        box-shadow: 0 1px 0 0 $color-valid;
-        transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
-      }
-    }
-    
-  }
-
-  
 }

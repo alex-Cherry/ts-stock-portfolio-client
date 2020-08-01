@@ -1,33 +1,28 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
-
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-// import 
-// import custom components
-import Card, { CardContent, CardActions, CardErrors } from '../card';
-import { Select } from '../inputs';
-import TextInput from './textInput';
-import Button from '../button';
-import Checkbox from '../checkbox';
-import NotificationWithTransfer from '../notiticationWithTransfer';
-import CurrencyInput from './currencyInput';
-import Loader from '../loader';
-// import store
-import { AppState } from '../../store'
-import { fetchSectors, saveStock } from '../../store/stocks/action';
-import { ExtendedStock, EconomicSector } from '../../types';
-// import utils
-import { getQueryParams } from '../../utils/getQueryParams';
-// import store
-import { getStockById } from '../../store/stocks/action';
+// custom components
+import Card, { CardContent, CardActions, CardErrors } from '../../card';
+import { Select } from '../../inputs';
+import TextInput from '../textInput';
+import Button from '../../button';
+import Checkbox from '../../checkbox';
+import NotificationWithTransfer from '../../notiticationWithTransfer';
+import CurrencyInput from '../currencyInput';
+import Loader from '../../loader';
+// store
+import { AppState } from '../../../store'
+import { fetchSectors, saveStock } from '../../../store/stocks/action';
+import { ExtendedStock, EconomicSector } from '../../../types';
+// utils
+import { getQueryParams } from '../../../utils/getQueryParams';
+// store
+import { getStockById } from '../../../store/stocks/action';
 // 
-import { ValidationsRuleType } from '../../utils/inputChecker/validate';
-import { required, nonZero } from '../../utils/inputChecker/validators';
+import { ValidationsRuleType } from '../../../utils/inputChecker/validate';
+import { required, nonZero } from '../../../utils/inputChecker/validators';
+// css
+import './stockEditorComponent.scss';
 
 
 ////////////////////////////////////////////////////////////////////////////////

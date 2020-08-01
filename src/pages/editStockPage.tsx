@@ -10,7 +10,7 @@ import { AppState } from '../store'
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 // import custom components
 import MainContainer from '../components/mainContainer';
-import StockEditorComponent from '../components/compositionComponents/stockEditorComponent';
+import StockEditorComponent from '../components/compositionComponents/stockEditorComponent/stockEditorComponent';
 import ErrorIndicator from '../components/errorIndicator';
 // import utils
 import { getQueryParams } from '../utils/getQueryParams';

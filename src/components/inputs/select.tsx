@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 // custom components
 import Backdrop from '../backdrop';
-import SelectList from './listForSelect';
+import SelectList from './selectList';
+// third-party libs
+import classNames from 'classnames';
 // svg
-import arrowDown from '../../assets/svg/arrowDown.svg';
+import imgArrowDown from '../../assets/svg/arrowDown.svg';
 // css
 import './inputs.scss';
 
@@ -23,6 +25,7 @@ type SelectProps = {
   errorMsg?: string,
   validate?: boolean,
   valid?: boolean,
+  className?: string,
   onChange?: (data: string) => void
 }
 
@@ -37,9 +40,6 @@ const Select = (props: SelectProps) => {
 
   const [showModal, setShowModal] = useState(false);
 
-  // refs
-  const divRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLLabelElement>(null);
   // desctructure props
   const {
     id = '',
@@ -49,15 +49,21 @@ const Select = (props: SelectProps) => {
     options,
     listHeader = 'Выберите вариант ...'
   } = props;
+  // 
+  const classLabelActive = 'input-field__label--active';
+  // refs
+  const divRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
+
 
   // EVENT HANDLERS
   const onClickOptionHandler = (id: string) => {
     onChange(id);
     setShowModal(false);
   }
-  const onClickInputHandler = () => {
-    setShowModal(true);
-  }
+  // const onClickInputHandler = () => {
+  //   setShowModal(true);
+  // }
   const onClickArrowHandler = () => {
     setShowModal(true);
   }
@@ -65,76 +71,111 @@ const Select = (props: SelectProps) => {
     setShowModal(false);
   }
   
+
   // UTILS
+  /**
+   * 
+   * @param id: string
+   * 
+   * returns a value from the list by a given id
+   */
   const valueById = (id: string): string => {
     return options.find(option => option.id === id)?.name || '';
   }
-  const classesForLabel = () => {
-    const { value = '' } = props;
-    let labelClassName = '';
-    if (value) {
-      labelClassName = 'active';
+  /**
+   * defines classes, that need to apply to the root element
+   */
+  const getClasses = (): string => {
+
+    const {
+      className = ''
+    } = props;
+
+    const classes = classNames(
+      // default classes
+      'input-field',
+      // classes from props
+      { [`${className}`]: !!className }
+    );
+
+    return classes;
+  }
+  /**
+   * defines classes for the label
+   */
+  const getClassesForLabel = (): string => {
+
+    const classes = classNames(
+      // default classes
+      'input-field__label',
+      // class, when there is a value in the input.
+      // we apply '--active' modificator
+      { [`${classLabelActive}`]: !!value }
+    );
+
+    return classes;
+  }
+  /**
+   * func returns modal window with the list of the options
+   */
+  const renderModalSelectList = () => {
+    if (showModal) {
+      return (
+        <>
+          {/* Backdrop */}
+          <Backdrop
+            onClick={ onClickBackdropHandler }
+          />
+          {/* Select List */}
+          <SelectList
+            options={ options }
+            activeId={ value }
+            listHeader={ listHeader }
+            onClick={ onClickOptionHandler }
+          />
+        </>
+      );
     }
 
-    return labelClassName;
+    return null;
   }
 
-  // define <list> and <backdrop>
-  let list = null;
-  let backdrop = null;
-  if (showModal) {
-    // list
-    list = (
-      <SelectList
-        options={options}
-        activeId={value}
-        listHeader={listHeader}
-        onClick={onClickOptionHandler}
-      />
-    );
-    // backdrop
-    backdrop = (
-      <Backdrop
-        onClick={onClickBackdropHandler}
-      />
-    );
-  }
 
   // RENDER
   return (
     <div
-      className="input-field1"
-      ref={divRef}
+      className={ getClasses() }
+      ref={ divRef }
     >
-      <div className="select-wrapper">
-        {/* input */}
+        {/* Input */}
         <input
           readOnly
-          id={id}
-          value={valueById(value)}
-          onClick={onClickInputHandler}
+          id={ id }
+          className="input-field__input"
+          value={ valueById(value) }
+          // onClick={ onClickInputHandler }
         />
-        {/* list */}
-        {list}
-        {/* backdrop */}
-        {backdrop}
+
         {/* arrow svg */}
         <img
-          src={arrowDown}
+          src={ imgArrowDown }
           alt=''
-          className="caret"
-          onClick={onClickArrowHandler}
+          className="input-field__caret"
+          onClick={ onClickArrowHandler }
         />
-        {/* label */}
+
+        {/* Label */}
         <label
-          htmlFor={id}
-          ref={labelRef}
-          className={classesForLabel()}
+          htmlFor={ id }
+          ref={ labelRef }
+          className={ getClassesForLabel() }
         >
-          {label}
+          { label }
         </label> 
 
-      </div>
+        {/* List */}
+        { renderModalSelectList() }
+
     </div>
   );
 }
