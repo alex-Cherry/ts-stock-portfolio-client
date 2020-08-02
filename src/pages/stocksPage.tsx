@@ -11,8 +11,8 @@ import { RouteComponentProps } from 'react-router-dom';
 import { AppState } from '../store';
 import { fetchStocks } from '../store/stocks/action';
 // import custom components
-import MainContainer from '../components/mainContainer';
-import StocksBoard from '../components/stocksBoard';
+import MainContainer from '../components/_projectComponents/mainContainer';
+import StocksBoard from '../components/_projectComponents/stocksBoard';
 import StockGroupFilter, { StockGroupFilterOperations } from '../components/stockGroupFilter';
 import FloatingButton from '../components/floatingButton';
 import Loader from '../components/loader';

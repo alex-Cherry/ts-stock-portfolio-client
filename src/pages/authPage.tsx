@@ -10,7 +10,7 @@ import { Redirect, RouteComponentProps } from 'react-router-dom';
 // import custom components
 import LoginComponent from '../components/_projectComponents/loginComponent';
 import RegisterComponent from '../components/_projectComponents/registerComponent';
-import LoginDependantSwitcher from '../components/loginDependantSwitcher';
+import LoginDependantSwitcher from '../components/_projectComponents/loginDependantSwitcher';
 // import utils
 import { getQueryParams } from '../utils/getQueryParams';
 // import types for state

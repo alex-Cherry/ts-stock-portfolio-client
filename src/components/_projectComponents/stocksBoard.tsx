@@ -6,9 +6,9 @@
 
 import React from 'react';
 // import custom components
-import StockCard from './stockCard';
+import StockCard from '../stockCard';
 // import types
-import { ExtendedStock } from '../types';
+import { ExtendedStock } from '../../types';
 
 
 ////////////////////////////////////////////////////////////////////////////////

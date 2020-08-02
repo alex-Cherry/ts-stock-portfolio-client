@@ -12,8 +12,8 @@ import Routes from './routes';
 import Header from './components/header';
 import { ToastContainer } from './components/toast';
 // import CurrentUserChecker
-import CurrentUserChecker from './components/currentUserChecker';
-import ErrorBoundary from './components/errorBoundary';
+import CurrentUserChecker from './components/_projectComponents/currentUserChecker';
+import ErrorBoundary from './components/_projectComponents/errorBoundary';
 
 // import for redux
 import { createStore, applyMiddleware } from 'redux';

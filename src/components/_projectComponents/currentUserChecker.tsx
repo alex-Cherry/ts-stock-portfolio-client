@@ -7,10 +7,10 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 // 
-import { getAuthToken, getAuthUser } from '../utils/localStorage/auth';
-import { authSuccess } from '../store/auth/action';
-import { AuthLoginAction } from '../store/auth/types';
-import { User } from '../types';
+import { getAuthToken, getAuthUser } from '../../utils/localStorage/auth';
+import { authSuccess } from '../../store/auth/action';
+import { AuthLoginAction } from '../../store/auth/types';
+import { User } from '../../types';
 
 ////////////////////////////////////////////////////////////////////////////////
 // 

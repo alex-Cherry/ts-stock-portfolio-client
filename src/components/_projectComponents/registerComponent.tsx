@@ -13,7 +13,7 @@ import Card, { CardContent, CardActions, CardErrors } from '../card';
 import { Input } from '../inputs';
 import Button from '../button';
 import TextInput from './textInput';
-import NotiticationWithTransfer from '../notiticationWithTransfer';
+import NotiticationWithTransfer from './notiticationWithTransfer';
 // import actions
 import { register } from '../../store/auth/action';
 // import input checker

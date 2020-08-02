@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { AppState } from '../store'
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 // import custom components
-import MainContainer from '../components/mainContainer';
+import MainContainer from '../components/_projectComponents/mainContainer';
 import StockEditorComponent from '../components/_projectComponents/stockEditorComponent';
 import ErrorIndicator from '../components/errorIndicator';
 // import utils

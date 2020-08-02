@@ -7,7 +7,7 @@ import { Select } from '../../inputs';
 import TextInput from '../textInput';
 import Button from '../../button';
 import Checkbox from '../../checkbox';
-import NotificationWithTransfer from '../../notiticationWithTransfer';
+import NotificationWithTransfer from '../notiticationWithTransfer';
 import CurrencyInput from '../currencyInput';
 import Loader from '../../loader';
 // store

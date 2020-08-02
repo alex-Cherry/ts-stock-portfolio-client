@@ -1,6 +1,6 @@
 import React from 'react';
 // import custom elements
-import ErrorIndicator from './errorIndicator';
+import ErrorIndicator from '../errorIndicator';
 
 
 type ErrorBoundaryProps = {
