@@ -8,8 +8,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 
 // import custom components
-import LoginComponent from '../components/compositionComponents/loginComponent';
-import RegisterComponent from '../components/compositionComponents/registerComponent';
+import LoginComponent from '../components/_projectComponents/loginComponent';
+import RegisterComponent from '../components/_projectComponents/registerComponent';
 import LoginDependantSwitcher from '../components/loginDependantSwitcher';
 // import utils
 import { getQueryParams } from '../utils/getQueryParams';
