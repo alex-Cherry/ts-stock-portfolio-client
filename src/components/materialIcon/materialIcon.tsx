@@ -1,4 +1,6 @@
 import React from 'react';
+// third-party libs
+import classNames from 'classnames';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,14 +49,15 @@ const MaterialIcon = (props: MaterialIconProps) => {
   const getClasses = () => {
     // destructure props
     const { className } = props;
-    // define default classes
-    const classes = ['material-icons'];
-    // extra classes
-    if (className) {
-      classes.push(className);
-    }
 
-    return classes.join(' ');
+    const classes = classNames(
+      // default classes
+      'material-icons',
+      // extra classes
+      { [`${className}`]: !!className }
+    );
+
+    return classes;
   }
 
 

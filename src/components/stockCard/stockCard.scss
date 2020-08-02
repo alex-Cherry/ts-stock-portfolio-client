@@ -1,6 +1,10 @@
 @import '../../index.scss';
 
 .stock-card {
+
+  // move to element
+  margin: 2px;
+
   width: 150px;
   height: 150px;
   border: 1px solid #fff;
@@ -9,34 +13,53 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 2px;
   background-color: $color-active-menu;
   color: #fff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
   position: relative;
   overflow: hidden;
 
-  .title {
+  // element
+  &__title {
+    display: block;
     font-weight: 500;
     margin: 0.5rem 0;
   }
 
-  span {
+  // elememt
+  &__price {
     display: block;
   }
 
-  .action {
-    position: absolute;
-    bottom: 5px;
-    opacity: 0;
-    transition: opacity 0.5s ease;
 
-    i {
-      cursor: pointer;
-    }
+  // ACTION PANEL
+  // element
+  &__action-panel {
+    position: absolute;
+    bottom: 10px;
+    opacity: 0;
+    height: 24px;
+    transition: opacity 0.5s ease;
+  }
+  // modificator
+  &__action--visible {
+    opacity: 1;
+  }
+  // element
+  &__action-icon {
+    cursor: pointer;
+  }
+  // element
+  &__action-spinner {
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
   }
 
-  &-favorite {
+
+  // FOR FAVORITE
+  // element
+  &__favorite {
     width: 48px;
     height: 48px;
     position: absolute;
@@ -44,39 +67,13 @@
     right: -20px;
     transition: top 0.25s ease-out, right 0.25s ease-out;
   }
-
-  &-favorite.active {
+  // modificator
+  &__favorite--active {
     top: 0;
     right: 0;
     transition: top 0.15s ease-out, right 0.15s ease-out;
   }
-
-  &-favorite:hover {
+  &__favorite:hover {
     cursor: pointer;
   }
-
-  
-  // FOR ANIMATION
-  &-add-favorite-enter-done {
-    top: 0;
-    right: 0;
-    transition: top 0.15s ease-out, right 0.15s ease-out;
-  }
-
-  &-add-favorite-exit {
-    top: 0;
-    right: 0;
-  }
-
-  &-add-favorite-exit-done {
-    top: -20px;
-    right: -20px;
-    transition: top 0.25s ease-out, right 0.25s ease-out;
-  }
-
-}
-
-.action-item-wrapper {
-  width: 24px;
-  height: 24px;
 }
