@@ -1,0 +1,98 @@
+@import '../../assets/scss/colors.scss';
+
+.tabs {
+
+  margin-top: 10px;
+
+  position: relative;
+  display: flex;
+  min-height: 48px;
+  max-height: 72px;
+
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+
+  // element - Scroll buttons
+  &__scroll-btn {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  &__scroll-arrow {
+    color: rgba($color: #000, $alpha: 0.87);
+    cursor: pointer;
+  }
+  &__scroll-btn--nonvisible {
+    opacity: 0;
+  }
+  &__scroll-btn--disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  // element - Content
+  &__content {
+    display: inline-block;
+    position: relative;
+    white-space: nowrap;
+    flex: 1 1 auto;
+    overflow-x: scroll;
+  }
+  &__content::-webkit-scrollbar {
+    display: none;
+  }
+  &__content-container {
+    display: flex;
+  }
+
+  // element - Tab
+  &__tab {
+    position: relative;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // display: inline-block;
+    width: 100%;
+    padding: 2px 12px;
+    // width: 170px;
+    line-height: 48px;
+    font-size: 1.15rem;
+    z-index: 1;
+    color: $color-blue-lighten-3;
+  }
+  &__tab-wrapper {
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+    width: 170px;
+  }
+
+  &__tab:hover {
+    color: $color-active-menu;
+    cursor: pointer;
+  }
+  // modificator
+  &__tab--active {
+    color: $color-active-menu;
+    font-weight: 500;
+  }
+  &__tab--fullwidth {
+    flex-grow: 1;
+    flex-basis: 0;
+    flex-shrink: 1;
+  }
+
+  // element - Slider
+  &__slider {
+    position: absolute;
+    background-color: rgba($color: $color-blue-lighten-3, $alpha: 0.3);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    transition: left 0.3s ease-in-out;
+  }
+
+}
