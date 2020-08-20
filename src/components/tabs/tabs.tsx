@@ -24,6 +24,7 @@ type TabsProps = {
   scrollable?: boolean,
   fullWidth?: boolean,
   scrollStep?: "single" | "multi",
+  activeTab?: number,
   className?: string,
   onChange?: (numTab: number) => void
 }
@@ -61,8 +62,12 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     this.refLeftArrow = React.createRef<HTMLDivElement>();
     this.refRightArrow = React.createRef<HTMLDivElement>();
     // state
+    let activeTab = this.props.activeTab || 0;
+    if (activeTab > this.getChildrenCount()) {
+      activeTab = 0;
+    }
     this.state = {
-      activeTab: 0,
+      activeTab: activeTab,
     }
 
     const { children } = this.props;
@@ -92,9 +97,12 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     }
     // set 
     this.setVisibilityOfArrows();
-    // set active tab = 0
+    // 
+    const { activeTab } = this.state;
+    this.scrollToTab(activeTab)
+    // set active tab
     this.setState({
-      activeTab: 0
+      activeTab
     });
   }
 
@@ -225,6 +233,16 @@ class Tabs extends React.Component<TabsProps, TabsState> {
       top: 0,
       behavior: "smooth"
     });
+  }
+
+  /**
+   * 
+   */
+  scrollToTab = (tabNumber: number) => {
+    // get the left position of the tabNumber-th tab
+    const leftTab = tabNumber * this.widthOfSlider;
+    // sroll to the nec position
+    this.contentScrollTo(leftTab);
   }
 
   /**
@@ -406,7 +424,6 @@ class Tabs extends React.Component<TabsProps, TabsState> {
 
   // RENDER
   render() {
-
     return (
       <div
         className={ this.getClasses() }

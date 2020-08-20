@@ -6,8 +6,8 @@ type MainContainerProps = {
 
 const MainContainer = (props: MainContainerProps) => {
   return (
-    <div className="container1">
-      <div className="row1">
+    <div className="container">
+      <div className="row">
         <div className="col-6 offset-3">
           { props.children }
         </div>

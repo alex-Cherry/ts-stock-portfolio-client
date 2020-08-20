@@ -2,8 +2,6 @@
 
 .tabs {
 
-  margin-top: 10px;
-
   position: relative;
   display: flex;
   min-height: 48px;
@@ -53,10 +51,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    // display: inline-block;
     width: 100%;
     padding: 2px 12px;
-    // width: 170px;
     line-height: 48px;
     font-size: 1.15rem;
     z-index: 1;
