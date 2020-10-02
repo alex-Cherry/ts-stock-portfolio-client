@@ -37,10 +37,6 @@ const ToastContainer = (props: ToastContainerProps) => {
   return (
     <div
       className="toast-container"
-      style={{
-        transitionProperty: 'all',
-        transitionDuration: '0.5s'
-      }}
     >
       {
         toasts.map((toast: Toast) => {

@@ -5,6 +5,16 @@ import Tabs, { Tab } from '../tabs';
 import classNames from 'classnames';
 
 
+// DESCRIPTION:
+// 
+// This component is a switcher between two options: "Login" and "Register".
+// Depending on which button an user pressed on,
+//  the appropriate event is generated.
+// 
+// Component "Tabs" is under hood of this component.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -12,8 +22,16 @@ import classNames from 'classnames';
 ////////////////////////////////////////////////////////////////////////////////
 
 type LoginSwitcherProps = {
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  //  positioning of the component
   className?: string,
+
+  // => Events
+  // It occurs when btn "Login" was clicked
   onClickLogin?:() => void,
+  // It occurs when btn "Register" was clicked
   onClickRegister?:() => void
 }
 
@@ -32,9 +50,10 @@ const LoginSwitcher = (props: LoginSwitcherProps) => {
   } = props;
 
 
-  // *** UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes, that need to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -49,7 +68,8 @@ const LoginSwitcher = (props: LoginSwitcherProps) => {
   }
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onChangeTabHandler = (tabNumber: number) => {
     // Login
     if (tabNumber === 0) {
@@ -63,7 +83,8 @@ const LoginSwitcher = (props: LoginSwitcherProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <Tabs
       fullWidth={ true }

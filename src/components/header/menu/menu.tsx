@@ -14,14 +14,14 @@ import './menu.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type MenuProps = {
-  // items of a menu
+  // Items of a menu
   items: MenuItemProps[],
-  // extra classes, that you can apply to the root element,
+  // Extra classes, that you can apply to the root element,
   // when you use this component inside other ones.
   // It's assumed that will be used classes that define
   // positioning of the component
   className?: string,
-  // component "Menu" uses component "MenuItem",
+  // Component "Menu" uses component "MenuItem",
   // which uses "NavLink" (from react-router-dom) for its rendering.
   // "NavLink" has "activeClassName"-property.
   // "useActiveClass" is a flag, whether should use this property or not
@@ -37,10 +37,11 @@ type MenuProps = {
 
 const Menu = (props: MenuProps) => {
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * func maps each element of items array
-   * to react component "MenuItem"
+   * Func maps each element of items array
+   * to a react component "MenuItem"
    * and render these components
    */
   const renderItems = () => {
@@ -48,7 +49,7 @@ const Menu = (props: MenuProps) => {
     return items.map((item, idx) => <MenuItem key={ idx } { ...item } useActiveClass={ useActiveClass }  />)
   }
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes, that need to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -65,7 +66,8 @@ const Menu = (props: MenuProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <ul className={ getClasses() }>
       { renderItems() }

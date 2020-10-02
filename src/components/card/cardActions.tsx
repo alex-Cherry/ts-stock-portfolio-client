@@ -10,10 +10,10 @@ import classNames from 'classnames';
 ////////////////////////////////////////////////////////////////////////////////
 
 type CardActionsProps = {
-  // content of the element
+  // Content of the element
   children: React.ReactNode,
-  // define, where display the content of the element.
-  // by defualt, "left"
+  // Define, where display the content of the element.
+  // By defualt, "left"
   position?: 'left' | 'center' | 'right'
 }
 
@@ -28,8 +28,10 @@ const CardActions = (props: CardActionsProps) => {
 
   const { children } = props;
 
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the sub-root element
+   * Defines classes to apply to the sub-root element
    */
   const getClassesForContent = () => {
 
@@ -48,7 +50,8 @@ const CardActions = (props: CardActionsProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div className="card__actions">
       <div className={ getClassesForContent() }>

@@ -3,8 +3,6 @@ import React, { ChangeEvent, KeyboardEvent, useRef } from 'react';
 import classNames from 'classnames';
 // utils
 import { setClass, removeClass } from '../../utils/checkClassesForRefObjects';
-// types
-import { inputType } from '../../types/inputTypes';
 // css
 import './inputs.scss';
 
@@ -15,16 +13,37 @@ import './inputs.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+export type inputType = 'text' | 'password' | 'email' | 'number';
+
+
+// at the core of the react-component "Input" is an html-element "input"
 type InputProps = {
   id: string,
-  label?: string,
+  // A label of an input
+  label: string,
+  // Define a type of a component
   type?: inputType,
+  // Specifies a value of an input
   value: string,
+  // Extra classes, that you can apply to the root element,
+  // when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  // positioning of the component
   className?: string,
+  // An error message. It's displayed if the property "valid" = false
   errorMsg?: string,
+  // Specifies whether display an error in the case of non-valid value.
+  // If "validate" = false, "errorMsg" won't be displayed in any case,
+  // If "validate" = true, "errorMsg" will be displayed if "valid" = false
   validate?: boolean,
+  // Specifies whether a value is valid or not
   valid?: boolean,
+  // In the base of a component "Input" is html-element "input".
+  // So this prop has a reference to this input.
+  // It's nec. for manipulating with it by outer elements
   inputRef?: React.RefObject<HTMLInputElement>,
+
+  // => Events
   onChange?: (data: string) => void,
   onFocus?: () => void,
   onBlur?: () => void,
@@ -56,12 +75,12 @@ const Input = (props: InputProps) => {
     onPressEnter = () => {}
   } = props;
   // 
-  // classes for label
+  // classes for the label
   const classLabelActive = 'input-field__label--active';
   const classLabelValid = 'input-field__label--valid';
   const classLabelInvalid = 'input-field__label--invalid';
   const classLabelFocused = 'input-field__label--focused';
-  // classes for input
+  // classes for the input
   const classInputValid = 'input-field__input--valid';
   const classInputInvalid = 'input-field__input--invalid';
   // define refs
@@ -69,7 +88,8 @@ const Input = (props: InputProps) => {
   const labelRef = useRef<HTMLLabelElement>(null);
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   //  => onFocus
   const onFocusInputHandler = () => {
     setClass(labelRef, classLabelActive);
@@ -108,16 +128,16 @@ const Input = (props: InputProps) => {
   }
 
 
-  // UTILS
+  // *** UTILS
   /**
-   * func defines, whether there is a value in the input or not
+   * Func defines, whether there is a value in the input or not
    */
   const isValueSet = (): boolean => {
     const { value } = props;
     return !!value.trim();
   }
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes, that need to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -135,7 +155,7 @@ const Input = (props: InputProps) => {
     return classes;
   }
   /**
-   * defines classes for the input
+   * Defines classes for the input
    */
   const getClassesForInput = (): string => {
 
@@ -151,7 +171,7 @@ const Input = (props: InputProps) => {
     return classes;
   }
   /**
-   * defines classes for the label
+   * Defines classes for the label
    */
   const getClassesForLabel = (): string => {
     
@@ -166,7 +186,7 @@ const Input = (props: InputProps) => {
     return classes;
   }
   /**
-   * func returns a block with an error description
+   * Func returns a block with an error description
    */
   const renderErrors = () => {
     if (validate && !valid && errorMsg) {
@@ -179,7 +199,8 @@ const Input = (props: InputProps) => {
   }
 
   
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div
       className={ getClasses() }

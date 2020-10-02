@@ -13,21 +13,36 @@ import { ExtendedStock } from '../../types';
 import './stockCard.scss';
 
 
+// DESCRIPTION:
+// 
+// This component displays a stock. The stock is passed in properties.
+// 
+// The component consists of three parts:
+//  - "Content", where the ticker and the price of the stock are rendered;
+//  - "ActionPanel", where the buttons which allow to manipulate with the stock are rendered;
+//  - "AddFavorite", where "Star" image is rendered.
+//      Clicking on the star, you can add the stock to favorite or remove one from favorite;
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// PROPS
 type StockCardProps = {
+  // The stock to render
   stock: ExtendedStock,
-  // extra classes, that you can apply to the root element,
-  // when you use this component inside other ones.
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string
 };
 
+// CONTEXT
 export const StockContext = React.createContext(new ExtendedStock());
 
 
@@ -36,6 +51,7 @@ export const StockContext = React.createContext(new ExtendedStock());
 // COMPONENT
 // 
 ////////////////////////////////////////////////////////////////////////////////
+
 const StockCard = (props: StockCardProps) => {
 
   const { stock } = props;
@@ -47,12 +63,15 @@ const StockCard = (props: StockCardProps) => {
   const divFavoriteRef = useRef<HTMLDivElement>(null);
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  //
+  // => "onMouseEnter"
   const onMouseEnterHandler = () => {
     // removeClass(refDiv, 'd-none');
     setClass(divActionRef, classDivActionVisible);
     setClass(divFavoriteRef, classDivFavoriteActive);
   }
+  // => "onMouseLeave"
   const onMouseLeaveHandler = () => {
     // setClass(refDiv, 'd-none');
     removeClass(divActionRef, classDivActionVisible);
@@ -60,9 +79,10 @@ const StockCard = (props: StockCardProps) => {
   }
 
 
-  // UTILS
+  // ===< UTILS >===
+  //
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes to apply to the root element
    */
   const getClasses = (): string => {
     const { className = '' } = props;
@@ -77,7 +97,8 @@ const StockCard = (props: StockCardProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  //
   return (
     <StockContext.Provider value={stock}>
       <div

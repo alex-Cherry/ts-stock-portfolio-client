@@ -1,25 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
-
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-// import store
+// store
 import { AppState } from '../store';
 import { fetchStocks } from '../store/stocks/action';
-// import custom components
+// custom components
 import MainContainer from '../components/_projectComponents/mainContainer';
 import StocksBoard from '../components/_projectComponents/stocksBoard';
-import StockGroupFilter, { StockGroupFilterOperations } from '../components/stockGroupFilter';
+import StockGroupFilter, { StockGroupFilterOperations } from '../components/_projectComponents/stockGroupFilter';
 import FloatingButton from '../components/floatingButton';
 import Loader from '../components/loader';
-import ErrorIndicator from '../components/errorIndicator';
-// import utils
+// import ErrorIndicator from '../components/errorIndicator';
+// utils
 import { getQueryParams } from '../utils/getQueryParams';
-// import types
+// types
 import { ExtendedStock } from '../types';
 
 
@@ -29,27 +23,35 @@ import { ExtendedStock } from '../types';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP STATE
 const mapState = (state: AppState) => {
   return {
     isAdmin: !!state.auth.user?.isAdmin,
     stocks: state.stocks.stocks
   }
 }
+
+// MAP DISPATCH
 const mapDispatch = (dispatch: any) => {
   return {
     fetchStocks: (bluetip: boolean = false) => dispatch(fetchStocks(bluetip))
   }
 }
 
+// PROPS
 const connector = connect(mapState, mapDispatch);
-// Props
 type StocksPageProps = ConnectedProps<typeof connector>
   & RouteComponentProps;
-// State
+
+// STATE
 type StocksPageState = {
+  // Stocks that must be displayed on the page
   stocks: ExtendedStock[],
+  // This flag indicates that an async operation is executing
   loading: boolean,
+  // This flag indicates that an error occured while an operation executing
   hasError: boolean,
+  // Defines the condition what stocks must be displayed
   filter: StockGroupFilterOperations
 }
 
@@ -62,14 +64,24 @@ type StocksPageState = {
 
 class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
 
-  // FIELDS
+  // ===< CLASS FIELDS >===
+  // 
+  // This field stores the mark that DOM is rendered.
+  // An user can start async operations and don't wait until they finished.
+  // In that case leak memories can have place.
+  // 
+  // So we use this field in async operations to not interact with the component,
+  //  when DOM is already (or yet) not rendered
   private mounted: boolean = true;
 
-  // CONSTRUCTOR
+
+  // ===< CONSTRUCTOR >===
+  // 
   constructor(props: StocksPageProps) {
     super(props);
 
-    // STATE
+    // ===< STATE >===
+    // 
     this.state = {
       stocks: [],
       loading: true,
@@ -78,35 +90,62 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
     }
   }
 
-  // LIFECYCLE
+
+  // ===< LIFECYCLE >===
+  // 
+  /**
+   * componentDidMount
+   */
   componentDidMount = () => {
     this.fetchData();
   }
+  /**
+   * componentDidUpdate
+   */
   componentDidUpdate = (prevProps: StocksPageProps, prevState: StocksPageState) => {
     const { filter } = this.state;
     if (prevState.filter !== filter) {
       this.fetchData();
     }
   }
+  /**
+   * componentWillUnmount
+   */
   componentWillUnmount = () => {
     this.mounted = false;
   }
 
-  // EVENT HANDLERS
+
+  // ===< EVENT HANDLERS >===
+  // 
   onClickAddStockHandler = () => {
     const { history } = this.props;
     history.push('/editStock');
   }
+  /**
+   * Occurs when the filter on the page changed
+   * 
+   * @param filter - the installable filter
+   */
   onChangeFilterHandler = (filter: StockGroupFilterOperations) => {
     this.setState({ filter });
+    // All stocks
     if (filter === StockGroupFilterOperations.ALL) {
       this.props.history.push('/stocks')
+    // "Bluetip" stocks
     } else if (filter === StockGroupFilterOperations.BLUETIPS) {
       this.props.history.push('/stocks?bluetip=true')
     }
   }
 
-  // UTILS
+
+  // ===< UTILS >===
+  // 
+  /**
+   * This page can be loaded with query params (now just with param "bluetip" or without it).
+   * This func returns the filter considering query params.
+   * This func is used just in constructor, defining an initial filter
+   */
   getInitialFilter = (): StockGroupFilterOperations => {
     const { location: { search } } = this.props;
     const queryParams = getQueryParams(search);
@@ -120,10 +159,14 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
 
     return result;
   }
-  fetchData = () => {
+  /**
+   * Get stocks from a server
+   */
+  fetchData = (): void => {
 
     const { fetchStocks } = this.props;
     const { filter } = this.state;
+    // Is it needed to get bluetips?
     const bluetip = (filter === StockGroupFilterOperations.BLUETIPS);
 
     this.setState({ loading: true });
@@ -136,26 +179,31 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
         () => { this.mounted && this.setState({ loading: false }) }
       );
   }
-  renderContent = () => {
+  /**
+   * Renders main content of this page
+   */
+  renderContent = (): React.ReactNode => {
     const { stocks } = this.props;
     const { loading } = this.state;
 
     if (loading) {
       return <Loader />;
+
     } else {
       return <StocksBoard stocks={stocks} />;
     }
   }
 
-  // RENDER
+
+  // ===< RENDER >===
+  // 
   render() {
-    // throw new Error('dsaadsd')
     const { isAdmin, stocks } = this.props;
     const { hasError, filter } = this.state;
 
-    // component has an error
-    if (hasError || !stocks) {
-      return <ErrorIndicator />;
+    // The component has an error
+    if (hasError) {
+      throw new Error('An error occurred while fetching stocks.');
     }
 
     // Main content
@@ -165,8 +213,8 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
         <h1>Акции</h1>
         {/* Filter */}
         <StockGroupFilter
-          initialFilter={filter}
-          onChangeFilter={this.onChangeFilterHandler}
+          initialFilter={ filter }
+          onChangeFilter={ this.onChangeFilterHandler }
         />
 
         {/* Render Stocks */}
@@ -176,8 +224,8 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
         {isAdmin && (
           <FloatingButton
             iconName="add"
-            isFixed={true}
-            onClick={this.onClickAddStockHandler}
+            isFixed={ true }
+            onClick={ this.onClickAddStockHandler }
           />
         )}
 

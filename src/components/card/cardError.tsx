@@ -8,8 +8,8 @@ import React from 'react';
 ////////////////////////////////////////////////////////////////////////////////
 
 type CardErrorsProps = {
-  // string, containing the definition of the error.
-  // if there are a few errors, they differ each from other with semicolon
+  // The string, containing the definition of an error.
+  // If there are a few errors, they must differ each from other with semicolon
   children: string
 }
 
@@ -22,20 +22,25 @@ type CardErrorsProps = {
 
 const CardErrors = (props: CardErrorsProps) => {
 
+
+  // ===< UTILS >===
   // 
+  /**
+   * Func renders the errors from the props or null
+   */
   const renderErrors = () => {
 
     const errors = props.children;
 
-    // if there aren't children, return null
+    // If there aren't children, return null
     if (!errors) {
       return null;
     }
 
-    // get an array of errors from the children-string
+    // Get an array of errors from the children-string
     const data: string[] = errors.split(';');
 
-    // map each string in the array to "ul-li" html-element
+    // Map each string in the array to "ul-li" html-element
     return (
       <div className="card__errors">
         <ul>
@@ -49,6 +54,9 @@ const CardErrors = (props: CardErrorsProps) => {
     );
   }
 
+
+  // ===< RENDER >===
+  // 
   return renderErrors();
 }
 

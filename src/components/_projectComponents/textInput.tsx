@@ -1,70 +1,126 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import custom components
+// custom components
 import { Input } from '../inputs';
-// import input checker
+// input checker
 import { validate as validateInput, ValidationsRuleType } from '../../utils/inputChecker/validate';
-// import types
-import { inputType } from '../../types/inputTypes';
+// types
+import { inputType } from '../inputs/input';
+
+
+// DESCRIPTION:
+// 
+// This component allows to edit text data. Data type is defined the property "type": email, password, simple text.
+// 
+// The component uses a different custom component "Input".
+//  Adds to it additional properties and behavior, considering validations.
+// 
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// EXTRA
+// 
+////////////////////////////////////////////////////////////////////////////////
 
 export type TextInputProps = {
   id: string,
+  // The label
   label: string,
+  // Define a type of the component
   type: inputType,
+  // The value
   value: string,
-  touched: boolean,
+  // The flag shows that all fields must be validated
+  //  regardless whether they is changed or not
+  forceValidation?: boolean,
+  // Specifies whether display an error message in the case of non-valid value.
+  // If "validate" = false, "errorMsg" won't be displayed in any case,
+  //  if "validate" = true, "errorMsg" will be displayed if "valid" = false
   validate?: boolean,
+  // Validation rules which will be used for check of a value
   validations: ValidationsRuleType,
+
+  // => Events
   onChange: (data: string, valid: boolean) => void,
   onPressEnter?: () => void
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// COMPONENT
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 const TextInput = (props: TextInputProps) => {
 
-  // STATE
+  // ===< STATE >===
+  // 
+  // The flag that the value (in the <Input>) is valid
   const [ valid, setValid ] = useState(true);
+  // The error message
   const [ errorMessage, setErrorMessage ] = useState('');
-  const [ touched, setTouched ] = useState(props.touched);
+  // The flag = "true" when
+  //  - the value in the input is changed;
+  //  - focus on the input is blurred
+  const [ touched, setTouched ] = useState(false);
+  // The flag = "true" when
+  //  - the value in the input is changed;
   const [ changed, setChanged ] = useState(false);
+  // Stores rules which will be used to validate the value (in the <Input>)
   const [ validations ] = useState(props.validations);
 
-  // PROPS
+
+  // ===< PROPS >===
+  // 
   const {
     id,
     label,
     value,
     validate = false,
+    forceValidation = false,
     type,
     onChange = (data: string, valid: boolean) => {},
     onPressEnter = () => {}
   } = props;
-  
-  // HOOKS
+
+
+  // ===< HOOKS >===
+  // 
   const doValidate = useCallback(() => {
     const { valid, msg } = validateInput(value, validations);
     setValid(valid);
     setErrorMessage(msg);
   }, [value, validations])
-  // this hook is used when property "touched" changed in parent component.
-  // i.e., when user pressed a button, but did not edit fields in a form yet.
-  // in this case validations wasn't applied and we force validation
+  // This hook is used when the property "forceValidation" changed in the parent component.
+  //  i.e., when an user pressed a button, but did not edit fields in a form yet.
+  // In this case validations wasn't applied and we force validation
   useEffect(() => {
-    if (props.touched && !touched) {
+    if (forceValidation && !touched) {
       setTouched(true);
       doValidate();
     }
-  }, [props, touched, doValidate]);
+  }, [forceValidation, touched, doValidate]);
 
-  // EVENT HANDLERS
+
+  // ===< EVENT HANDLERS >===
+  // 
+  // => "onChange"
   const onChangeHandler = (data: string) => {
+
+
+
     const { valid: isValid, msg } = validateInput(data, validations);
     setValid(isValid);
     setErrorMessage(msg);
     setChanged(true);
     onChange(data, isValid);
   }
+  // => "onPressEnter"
   const onPressEnterHandler = () => {
     onPressEnter();
   }
+  // => "onBlur"
   const onBlurHandler = () => {
     if (!validate) {
       return;
@@ -74,19 +130,22 @@ const TextInput = (props: TextInputProps) => {
     }
   }
 
-  // RENDER
+
+  // ===< RENDER >===
+  // 
   return (
     <Input
       id={id}
-      label={label}
-      value={value}
-      type={type}
-      valid={valid}
-      validate={validate && touched}
-      errorMsg={errorMessage}
-      onChange={onChangeHandler}
-      onPressEnter={onPressEnterHandler}
-      onBlur={onBlurHandler}
+      label={ label }
+      value={ value }
+      type={ type }
+      valid={ valid }
+      validate={ validate && touched }
+      errorMsg={ errorMessage }
+
+      onChange={ onChangeHandler }
+      onPressEnter={ onPressEnterHandler }
+      onBlur={ onBlurHandler }
     />
   );
 }

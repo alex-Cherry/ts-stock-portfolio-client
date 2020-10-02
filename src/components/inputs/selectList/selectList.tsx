@@ -11,10 +11,17 @@ import './selectList.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-type ListForSelectProps = {
+type SelectListProps = {
+  // Options of an element
   options: { id: string, name: string }[],
+  // ID of an active element
   activeId?: string,
+  // A text of the the first item in a list.
+  // This first item isn't clickable
   listHeader?: string,
+
+  // => Events
+  // A handler fo the event-click on a list's item
   onClick?: (id: string) => void
 }
 
@@ -25,17 +32,26 @@ type ListForSelectProps = {
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-const SelectList = (props: ListForSelectProps) => {
+const SelectList = (props: SelectListProps) => {
 
   const {
     activeId = '',
     onClick = (id: string) => {}
   } = props;
 
+
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickOptionHandler = (id: string) => {
     onClick(id);
   }
 
+
+  // ===< UTILS >===
+  // 
+  /**
+   * Renders the item of the list, that is a header
+   */
   const renderHeader = () => {
     const { listHeader = '' } = props;
 
@@ -46,12 +62,14 @@ const SelectList = (props: ListForSelectProps) => {
     return (
       <SelectListItem
         id=""
-        text={listHeader}
-        isHeader={true}
+        text={ listHeader }
+        isHeader={ true }
       />
     );
   }
-
+  /**
+   * Renders the items of the list, except for a header
+   */
   const renderItems = () => {
 
     const { options } = props;
@@ -59,18 +77,19 @@ const SelectList = (props: ListForSelectProps) => {
     return (
       options.map(item => (
         <SelectListItem
-          key={item.id}
-          id={item.id}
-          text={item.name}
-          isActive={activeId === item.id}
-          onClick={onClickOptionHandler}
+          key={ item.id }
+          id={ item.id }
+          text={ item.name }
+          isActive={ activeId === item.id }
+          onClick={ onClickOptionHandler }
         />
       ))
     );
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <ul className='select-list' style={{ top: '-10px' }}>
       {/* Header of list */}

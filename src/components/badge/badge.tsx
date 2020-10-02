@@ -5,6 +5,13 @@ import classNames from 'classnames';
 import './badge.scss';
 
 
+// DESCRIPTION:
+// 
+// This component is just a badge that can display any notifications.
+// It's used to highlight any text.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -12,16 +19,19 @@ import './badge.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type BadgeProps = {
-  // text of the notification
+  // A text of the badge
   text: string,
-  // extra classes, that you can apply to the root element,
-  // when you use this component inside other ones.
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string,
-  // mark, that special class will be applied
+  // If the flag = "true", special class will be applied to the component.
+  //  The component will be highlighted as active
   active?: boolean,
-  // 
+
+  // => Events
+  // A click on the badge
   onClick?: () => void
 };
 
@@ -34,16 +44,17 @@ type BadgeProps = {
 
 const Badge = (props: BadgeProps) => {
 
-  // desctructure props
+  // Desctructure the props
   const {
     text,
     onClick = () => {}
   } = props;
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -53,11 +64,11 @@ const Badge = (props: BadgeProps) => {
     } = props;
 
     const classes = classNames(
-      // default classes
+      // Default classes
       'badge',
-      // if the element is active, add a spec class
+      // If the element is active, add the spec class
       { 'badge--active': active },
-      // classes from props
+      // Classes from the props
       { [`${className}`]: !!className }
     );
 
@@ -65,11 +76,12 @@ const Badge = (props: BadgeProps) => {
   }
   
   
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <span
-      className={getClasses()}
-      onClick={onClick}
+      className={ getClasses() }
+      onClick={ onClick }
     >
       { text }
     </span>

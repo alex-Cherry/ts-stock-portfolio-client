@@ -1,6 +1,15 @@
 import { getHost } from './getHost';
 import { getAuthToken, getAuthUser } from './localStorage/auth';
 
+/**
+ * This function fulffils an async request
+ * 
+ * @param url - URL of a server (without host)
+ * @param method - the method of the request
+ * @param data - the body of the request
+ * @param paramHeaders - headers of the request
+ * @param addUserInfo - this flag indicates whether add info about the current user
+ */
 const useFetch = async (
   url: string,
   method: string = 'GET',
@@ -11,25 +20,37 @@ const useFetch = async (
 
   const host = getHost();
 
-  // define body of a request
+  // Define body of the request
   if (data) {
     data = JSON.stringify(data);
   }
-
-  // define headers of a request
+  // Define headers of the request
   const headers = defineHeaders(paramHeaders, addUserInfo);
-
+  // Execute the request
   const response = await fetch(`${host}${url}`, {
       method,
       headers,
       body: data
     });
+  // Get data from the response
   const responseData = await response.json();
+  // Get status
   const status = response.status;
 
+  // Return
   return { data: responseData, status };
 }
 
+/**
+ * This function returns a multi-map names to values.
+ * It defines headers for a request.
+ * 
+ * Also it can add info about the current user.
+ * It gets the token and id of the user and add these to headers.
+ * 
+ * @param paramHeaders 
+ * @param addUserInfo 
+ */
 const defineHeaders = (
   paramHeaders: {[key: string]: string},
   addUserInfo: boolean
@@ -37,10 +58,10 @@ const defineHeaders = (
 
   const headers: { [key: string]: string } = {};
   
-  // add 'Content-Type'
+  // Add 'Content-Type'
   headers['Content-Type'] = 'application/json';
 
-  // add user info
+  // Add user info
   if (addUserInfo) {
     // token
     const token = getAuthToken();
@@ -54,8 +75,9 @@ const defineHeaders = (
     }
   }
 
-  // copy data from paramHeaders
+  // Copy data from paramHeaders - may realize at will
 
+  // Return
   return headers;
 }
 

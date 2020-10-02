@@ -18,14 +18,26 @@ import './inputs.scss';
 
 type SelectProps = {
   id: string,
+  // A label for a component "Select".
+  // It's displayed when no option is chosen
   label?: string,
+  // id of the selected item
   value?: string,
+  // A text of the the first item in a select list.
+  // It's like an info item and doesn't have id.
+  // This first item isn't clickable
   listHeader?: string,
+  // Items of the select list.
+  // Each item has two string fields: id and name.
   options: { id: string, name: string }[],
-  errorMsg?: string,
-  validate?: boolean,
-  valid?: boolean,
+  // Extra classes, that you can apply to the root element,
+  // when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  // positioning of the component
   className?: string,
+
+  // => Events
+  // A change of a value in a select list
   onChange?: (data: string) => void
 }
 
@@ -49,14 +61,15 @@ const Select = (props: SelectProps) => {
     options,
     listHeader = 'Выберите вариант ...'
   } = props;
-  // 
+  //  
   const classLabelActive = 'input-field__label--active';
   // refs
   const divRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickOptionHandler = (id: string) => {
     onChange(id);
     setShowModal(false);
@@ -72,18 +85,19 @@ const Select = (props: SelectProps) => {
   }
   
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
    * 
-   * @param id: string
+   * @param id
    * 
-   * returns a value from the list by a given id
+   * Returns a value from the list by the given id
    */
   const valueById = (id: string): string => {
     return options.find(option => option.id === id)?.name || '';
   }
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes, that need to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -101,7 +115,7 @@ const Select = (props: SelectProps) => {
     return classes;
   }
   /**
-   * defines classes for the label
+   * Defines classes for the label
    */
   const getClassesForLabel = (): string => {
 
@@ -116,32 +130,33 @@ const Select = (props: SelectProps) => {
     return classes;
   }
   /**
-   * func returns modal window with the list of the options
+   * Func returns modal window with the list of the options
    */
   const renderModalSelectList = () => {
-    if (showModal) {
-      return (
-        <>
-          {/* Backdrop */}
-          <Backdrop
-            onClick={ onClickBackdropHandler }
-          />
-          {/* Select List */}
-          <SelectList
-            options={ options }
-            activeId={ value }
-            listHeader={ listHeader }
-            onClick={ onClickOptionHandler }
-          />
-        </>
-      );
+    if (!showModal) {
+      return null;
     }
 
-    return null;
+    return (
+      <>
+        {/* Backdrop */}
+        <Backdrop
+          onClick={ onClickBackdropHandler }
+        />
+        {/* Select List */}
+        <SelectList
+          options={ options }
+          activeId={ value }
+          listHeader={ listHeader }
+          onClick={ onClickOptionHandler }
+        />
+      </>
+    );
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div
       className={ getClasses() }

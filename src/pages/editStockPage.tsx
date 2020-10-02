@@ -1,19 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
-
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { AppState } from '../store'
 import { Redirect, RouteComponentProps } from 'react-router-dom';
-// import custom components
+// custom components
 import MainContainer from '../components/_projectComponents/mainContainer';
 import StockEditorComponent from '../components/_projectComponents/stockEditorComponent';
 import ErrorIndicator from '../components/errorIndicator';
-// import utils
+// utils
 import { getQueryParams } from '../utils/getQueryParams';
+
+
+// DESCRIPTION:
+// 
+// This is a page where an user can add a new stock or edit an existing one.
+// 
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,17 +29,15 @@ const mapState = (state: AppState) => {
   }
 }
 
-// type Props
-type EditStockPageExtraProps = {}
-
+// PROPS
 const connector = connect(mapState);
 type EditStockPageProps = ConnectedProps<typeof connector>
-  & EditStockPageExtraProps
   & RouteComponentProps;
 
-// type State
+// STATE
 type EditStockPageState = {
-  hasError: boolean
+  // flag, if there is an error while the page opening
+  // hasError: boolean
 }
 
 
@@ -50,45 +48,38 @@ type EditStockPageState = {
 ////////////////////////////////////////////////////////////////////////////////
 
 class EditStockPage extends React.Component<EditStockPageProps, EditStockPageState> {
-
-  state = {
-    hasError: false
-  }
-
-  static getDerivedStateFromError(error: any) {
-    return { hasError: true };
-  }
-
-  // LIFECYCLE HOOKS
-  componentDidCatch = () => {}
   
-  // UTILS
+  // ===< UTILS >===
+  // 
+  /**
+   * func returns the value of the param "id".
+   * If it's not set, func returns an empty string
+   */
   getId = (): string => {
-    // get id from query params
+    // get param "id" from query params
     const { location } = this.props;
     const params = getQueryParams(location.search);
     return ("id" in params) ? params.id : '';
   }
+  /**
+   * Func returns the string, containing the page header
+   */
   headerText = (): string => {
-    // form headerText
+    // Form the headerText
     const headerText: string = this.getId() ? 'Редактировать акцию' : 'Добавить акцию';
     return headerText;
   }
 
-  // RENDER
+
+  // ===< RENDER >===
+  // 
   render() {
 
     const { isAdmin } = this.props;
-    const { hasError } = this.state;
     
-    // this page is allowed for users with admin role
+    // This page is only available for users with admin role
     if (!isAdmin) {
       return <Redirect to="/" />;
-    }
-
-    // component has an error
-    if (hasError) {
-      return <ErrorIndicator />;
     }
     
     // Main content

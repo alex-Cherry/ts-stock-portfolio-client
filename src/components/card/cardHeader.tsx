@@ -8,7 +8,7 @@ import React from 'react';
 ////////////////////////////////////////////////////////////////////////////////
 
 type CardHeaderProps = {
-  // text of the header
+  // A text of the header
   children: string
 }
 
@@ -23,13 +23,14 @@ const CardHeader = (props: CardHeaderProps) => {
 
   const { children: headerText } = props;
 
-  // if headerText isn't set, return null
+  // If the headerText isn't set, return null
   if (!headerText) {
     return null;
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <h3 className="card__header">
       { headerText }

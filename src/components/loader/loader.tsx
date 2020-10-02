@@ -3,6 +3,12 @@ import React from 'react';
 import './loader.scss';
 
 
+// DESCRIPTION:
+// 
+// This is a loader.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // COMPONENT
@@ -10,7 +16,9 @@ import './loader.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 const Loader = () => {
-  // RENDER
+  
+  // ===< RENDER >===
+  // 
   return (
     <div className="loader"></div>
   );

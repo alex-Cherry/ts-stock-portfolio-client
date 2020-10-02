@@ -3,6 +3,13 @@ import React from 'react';
 import './backdrop.scss';
 
 
+// DESCRIPTION:
+// 
+// This component is used together with modal components.
+// It's necessary to understand when an event "Click" happened not on a modal component.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -10,6 +17,8 @@ import './backdrop.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type BackdropProps = {
+  // => Events
+  // A click on a backdrop
   onClick?: () => void
 }
 
@@ -26,10 +35,13 @@ const Backdrop = (props: BackdropProps) => {
     onClick = () => {}
   } = props;
 
+
+  // ===< RENDER >===
+  // 
   return (
     <div
       className='backdrop'
-      onClick={onClick}
+      onClick={ onClick }
     >
     </div>
   );

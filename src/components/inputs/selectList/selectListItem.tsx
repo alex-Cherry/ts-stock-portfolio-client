@@ -1,13 +1,34 @@
 import React from 'react';
+// third-party libs
+import classNames from 'classnames';
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// EXTRA
+// 
+////////////////////////////////////////////////////////////////////////////////
 
 type SelectListItemProps = {
   id: string,
+  // A text of an item
   text: string,
+  // Whether an item is active
   isActive?: boolean,
+  // Whether an item is a header
   isHeader?: boolean,
-  className?: string,
+  // className?: string,
+
+  // => Events
   onClick?: (id: string) => void
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+// COMPONENT
+// 
+////////////////////////////////////////////////////////////////////////////////
 
 const SelectListItem = (props: SelectListItemProps) => {
 
@@ -18,26 +39,34 @@ const SelectListItem = (props: SelectListItemProps) => {
     onClick = (id: string) => {}
   } = props;
 
+
+  // ===< UTILS >===
+  // 
+  /**
+   * Defines classes, that need to apply to the root element
+   */
   const getClasses = (): string => {
     const { isHeader = '' } = props;
 
-    const classes = ['select-list__item'];
-    if (isActive) {
-      classes.push('select-list__item_selected');
-    }
-    if (isHeader) {
-      classes.push('select-list__item_header');
-    }
+    const classes = classNames(
+      // default classes
+      'select-list__item',
+      // class for active element
+      { 'select-list__item--selected': isActive },
+      // class for header-element
+      { 'select-list__item--header': isHeader },
+    );
 
-    return classes.join(' ');
+    return classes;
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <li
       className={ getClasses() }
-      onClick={() => onClick(id)}
+      onClick={ () => onClick(id) }
     >
       { text }
       {/* if the element is active, display tick */}

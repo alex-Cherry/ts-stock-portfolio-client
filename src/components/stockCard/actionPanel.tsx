@@ -19,17 +19,17 @@ import { ExtendedStock } from '../../types';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP DISPATCH
 const mapDispatch = (dispatch: any) => {
   return {
     toast: (newToast: ToastWithoutId) => dispatch(addToast(newToast))
   }
 }
-const connector = connect(null, mapDispatch);
 
-type ActionPanelProps = {
-}
-  & RouteComponentProps
-  & ConnectedProps<typeof connector>;
+// PROPS
+const connector = connect(null, mapDispatch);
+type ActionPanelProps = ConnectedProps<typeof connector>
+  & RouteComponentProps;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,9 +40,12 @@ type ActionPanelProps = {
 
 const ActionPanel = (props: ActionPanelProps) => {
 
-  // loading = executing any operation from the action panel
+  // ===< STATE >===
+  // 
+  // This flag indicates that an operation from the action panel is executing
   const [ loading, setLoading ] = useState(false);
-  // when loading, show spinner instead of commands from the action panel
+
+  // When loading, show the spinner instead of commands from the action panel
   if (loading) {
     return (
       <div className="stock-card__action-spinner">
@@ -52,63 +55,68 @@ const ActionPanel = (props: ActionPanelProps) => {
   }
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
+  // => Add stock to portfolio
   const onClickAddStockToPortfolioHandler = (stock: ExtendedStock) => {
     const { ticker } = stock;
-    // create message for toast
+    // Create a message for a toast
     const text = `Акция ${ticker} добавлена в портфель.`;
 
     setLoading(true);
-    // push a toast
+    // push the toast
     doToast(text);
   }
+  // => Remove stock from portfolio
   const onClickRemoveStockFromPortfolio = (stock: ExtendedStock) => {
     const { ticker } = stock;
-    // create message for toast
+    // Create a message for a toast
     const text = `Акция ${ticker} удалена из портфеля.`;
 
     setLoading(true);
-    // push a toast
+    // Push the toast
     doToast(text);
   }
+  // => Edit stock
   const onClickEditStockHandler = (stock: ExtendedStock) => {
     const { history: { push } } = props;
     const {id} = stock;
-    // go to page "EditStockPage"
+    // Go to the page "EditStockPage"
     push(`/editStock?id=${id}`);
   }
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
+   * Pushes a new message to the toast "stack"
    * 
-   * 
-   * @param {string} message - a message that emerges when any action is being done
+   * @param {string} message - the message of the toast
    */
   const doToast = (message: string) => {
-    // get action from props
+    // Get the action from the props
     const { toast } = props;
     
-    // timeout is dummy.
-    // emulate a delay while excuting a network request.
+    // Timeout is dummy.
+    // Emulate a delay while excuting a network request.
     // 
     const timeId = setTimeout(() => {
       setLoading(false);
-      // when create a new toast, we don't know its id.
-      // so use class without id
+      // When create a new toast, we don't know its id,
+      //  so use the class without id
       const newToast: ToastWithoutId = {
         text: message
       };
-      // push a toast
+      // Push the toast
       toast(newToast);
       // 
       clearTimeout(timeId);
     }, 2000);
   }
   /**
-   * returns the panel with available commands
+   * Returns the panel with available commands
    * 
-   * @param {ExtendedStock} stock - a stock, which the action panel is rendered for
+   * @param {ExtendedStock} stock - the stock, which the action panel is rendered for
    */
   const renderActionPanel = (stock: ExtendedStock) => {
     return (
@@ -136,7 +144,8 @@ const ActionPanel = (props: ActionPanelProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <StockContext.Consumer>
       { (stock: ExtendedStock) => renderActionPanel(stock) }

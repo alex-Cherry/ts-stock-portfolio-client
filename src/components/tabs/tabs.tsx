@@ -13,22 +13,61 @@ import classNames from 'classnames';
 import './tabs.scss';
 
 
+// DESCRIPTION:
+// 
+// This component consists of a list of tabs.
+// 
+// When we use this component in other components, we must use component "Tab" as its child.
+// Component "Tab" has just a property "text".
+// Inside the component "Tabs" we convert component "Tab" to component "TabInner",
+//  which has more properties for more precise setting.
+// It's done so that when using the component, you do not need to set settings
+//  that are only necessary for the internal mechanism of component "Tabs".
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// PROPS
 type TabsProps = {
+  // Child components "Tab"
   children: React.ReactNode,
+  // This flag indicates that we can scroll this component.
+  // When "scrollable" = true, two arrows are rendered in the component,
+  //  these arrows allow to scroll tabs in the component
   scrollable?: boolean,
-  fullWidth?: boolean,
+  // This property defines the mode how tabs in the component will be scrolled.
+  //  - single => step is equal to one tab
+  //  - multi => the tab, that goes after the last wholly-visible tab, becomes the first tab
   scrollStep?: "single" | "multi",
+  // A tab in a component has the default width.
+  // If "fullWidth" = true, the width of tabs will be fitted to the width of the component
+  fullWidth?: boolean,
+  // A number of an active tab.
+  // When the component is being created,
+  //  we can point which tab will be active.
+  // By default, "activeTab" = 0, i.e. the first tab
   activeTab?: number,
+  // Extra classes that you can apply to the root element,
+  //  when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  //  positioning of the component
   className?: string,
+
+  // => Events
+  // It occurs when an user click on a tab.
+  // In the parameter "numTab" we get the number of the tab,
+  //  that's was clicked
   onChange?: (numTab: number) => void
 }
+
+// STATE
 type TabsState = {
+  // Stores number of an active tab
   activeTab: number
 }
 
@@ -41,6 +80,8 @@ type TabsState = {
 
 class Tabs extends React.Component<TabsProps, TabsState> {
 
+  // ===< CLASS FIELDS >===
+  // 
   // refs
   private refTabContainer: React.RefObject<HTMLDivElement>;
   private refContent: React.RefObject<HTMLDivElement>;
@@ -52,7 +93,8 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   private widthOfContent: number = 0;
 
 
-  // CONSTRUCTOR
+  // ===< CONSTRUCTOR >===
+  // 
   constructor(props: TabsProps) {
     super(props);
     // refs
@@ -63,6 +105,8 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     this.refRightArrow = React.createRef<HTMLDivElement>();
     // state
     let activeTab = this.props.activeTab || 0;
+    // If we set "activeTab" greater than count of the tabs,
+    //  change the value to "0".
     if (activeTab > this.getChildrenCount()) {
       activeTab = 0;
     }
@@ -71,8 +115,9 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     }
 
     const { children } = this.props;
-    // check, whether each item is a Tab.
-    // if it's not, throw an error
+    // A component "Tabs" has just components "Tab" as a child.
+    // So check, whether each item is a Tab.
+    // If it's not, throw an error
     React.Children.forEach(children, (item: any) => {
       if (!this.isTab(item)) {
         throw new Error(`Component 'Tabs' can have just a 'Tab' component as its children`);
@@ -81,16 +126,17 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   }
 
 
-  // LIFECYCLE
+  // ===< LIFECYCLE >===
+  // 
   componentDidMount = () => {
-    // define the width of the slider.
-    // it's equal to the width of a tab.
-    // it's suppoused, that the tabs have the same width
+    // Define the width of the slider.
+    // It's equal to the width of a child tab.
+    // It's suppoused, that the tabs have the same width
     if (this.refFirstTab.current) {
       const rect = this.refFirstTab.current.getBoundingClientRect();
       this.widthOfSlider = rect.width;
     }
-    // define the width of an area, where tabs are rendered
+    // Define the width of the area, where tabs are rendered
     if (this.refContent.current) {
       const rect = this.refContent.current.getBoundingClientRect();
       this.widthOfContent = rect.width;
@@ -107,23 +153,24 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   }
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * func renders tabs in the tab panel
+   * Func renders the tabs in the tab panel
    */
   renderTabs = () => {
         
     const { activeTab } = this.state;
     const { fullWidth = false } = this.props;
-    // define css-classes for tab-wrapper
+    // Define css-classes for tab-wrapper
     const classes = classNames(
       'tabs__tab-wrapper',
       { 'tabs__tab--fullwidth': fullWidth }
     );
 
     const { children } = this.props;
-    // map each child Tab-component to TabInner-component.
-    // Component TabInner has more properties and also has formatted render
+    // Map each child component "Tab" to a component "TabInner".
+    // Component "TabInner" has more properties and also has formatted render
     return React.Children.map(children, (item: any, idx) => (
       <div
         className={ classes }
@@ -139,17 +186,16 @@ class Tabs extends React.Component<TabsProps, TabsState> {
       </div>
     ));
   }
-
   /**
-   * func renders the block with left arrow
+   * Func renders the block with the left arrow
    */
   renderLeftArrow = () => {
     const { scrollable = false } = this.props;
-    // return nothing, if the component isn't scrollable
+    // Return nothing, if the component isn't scrollable
     if (!scrollable) {
       return null;
     }
-    // otherwise return left arrow
+    // Otherwise return the left arrow
     return (
       <div
         className="tabs__scroll-btn"
@@ -162,19 +208,16 @@ class Tabs extends React.Component<TabsProps, TabsState> {
       </div>
     );
   }
-
   /**
-   * func renders the block with right arrow
+   * Func renders the block with the right arrow
    */
   renderRightArrow = () => {
-    const {
-      scrollable = false
-    } = this.props;
-    // return nothing, if the component isn't scrollable
+    const { scrollable = false } = this.props;
+    // Return nothing, if the component isn't scrollable
     if (!scrollable) {
       return null;
     }
-    // otherwise return right arrow
+    // Otherwise return the right arrow
     return (
       <div
         className="tabs__scroll-btn"
@@ -187,18 +230,16 @@ class Tabs extends React.Component<TabsProps, TabsState> {
       </div>
     );
   }
-
   /**
-   * function checks, whether obj is a Tab-component
+   * Function checks, whether obj is a Tab-component
    * 
    * @param obj - react-element, which must be checked, whether it is a TabComponent
    */
   isTab = (obj: React.ReactElement<{}>): boolean => {
     return obj.hasOwnProperty('type') && obj.type === Tab;
   }
-
   /**
-   * returns style for the slider: width- and left-properties
+   * Returns style for the slider: width- and left-properties
    */
   getSliderStyle = (): CSSProperties => {
     const { activeTab } = this.state;
@@ -208,45 +249,45 @@ class Tabs extends React.Component<TabsProps, TabsState> {
       left: 0 + activeTab * this.widthOfSlider
     }
   }
-
   /**
-   * scrolls the block "content" to a specified x-coord
+   * Scrolls the block "Content" to the specified x-coord
    * 
-   * @param left - 
+   * @param left - the new left of the block "Content"
    */
   contentScrollTo = (left: number) => {
+    // !! use here the method "scrollTo"
     this.refContent.current?.scrollTo({
       left,
       top: 0,
       behavior: "smooth"
     });
   }
-
   /**
-   * scrolls the block "content" by a specified value
+   * Scrolls the block "Content" by the specified value
    * 
-   * @param step - 
+   * @param step
    */
   contentScrollBy = (step: number) => {
+    // !! use here the method "scrollBy"
     this.refContent.current?.scrollBy({
       left: step,
       top: 0,
       behavior: "smooth"
     });
   }
-
   /**
+   * Scrolls the block "Content" to the specified tab
    * 
+   * @param tabNumber - 
    */
   scrollToTab = (tabNumber: number) => {
-    // get the left position of the tabNumber-th tab
+    // Get the left position of the tabNumber-th tab
     const leftTab = tabNumber * this.widthOfSlider;
-    // sroll to the nec position
+    // Sroll to the nec position
     this.contentScrollTo(leftTab);
   }
-
   /**
-   * func configures visibility arrow-buttons
+   * Func configures visibility the arrow-buttons
    */
   setVisibilityOfArrows = (): void => {
     // 
@@ -258,44 +299,40 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     const classArrowDisabled = 'tabs__scroll-btn--disabled';
 
     // => left arrow
-    // if the most left tab is being shown
+    // If the most left tab is being shown,
+    //  disable the left arrow
     if (leftContent === 0) {
       setClass(this.refLeftArrow, classArrowNonvisible);
       setClass(this.refLeftArrow, classArrowDisabled);
-    // 
+    //  otherwise, enable the left arrow
     } else {
       removeClass(this.refLeftArrow, classArrowNonvisible);
       removeClass(this.refLeftArrow, classArrowDisabled);
     }
 
     // => right arrow
-    // if the most right tab is being shown
+    // If the most right tab is being shown,
+    //  diable the right arrow
     if (rightContent === rightContentMax) {
       setClass(this.refRightArrow, classArrowNonvisible);
       setClass(this.refRightArrow, classArrowDisabled);
-    // 
+    //  otherwise, enable the right arrow
     } else {
       removeClass(this.refRightArrow, classArrowNonvisible);
       removeClass(this.refRightArrow, classArrowDisabled);
     }
   }
-
   /**
-   * returns count of child tabs
+   * Returns count of the child tabs
    */
   getChildrenCount = (): number => {
-    // get children
+    // Get the children
     const { children } = this.props;
     // 
     return React.Children.count(children);
   }
-
   /**
-   * 
-   * @param val 
-   */
-  /**
-   * defines classes, that need to apply to the root element
+   * Defines classes, that need to apply to the root element
    */
   getClasses = (): string => {
 
@@ -306,7 +343,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
     const classes = classNames(
       // default classes
       'tabs',
-      // classes from props
+      // classes from the props
       { [`${className}`]: !!className }
     );
 
@@ -314,23 +351,29 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   }
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
+  /**
+   * Handles a click on a tab
+   * 
+   * @param val - number of the tab, that was clicked
+   */
   onClickTabHandler = (val: number) => {
 
-    // get the left-coord of the tab, that was clicked on
+    // Get the left-coord of the tab, that was clicked on
     const leftTab = val * this.widthOfSlider;
-    // get the right-coord of the tab, that was clicked on
+    // Get the right-coord of the tab, that was clicked on
     const rightTab = leftTab + this.widthOfSlider;
-    // get the left position of the visible part of the scrollable area
+    // Get the left position of the visible part of the scrollable area
     const leftContent = this.refContent.current?.scrollLeft || 0;
 
-    // diff is a value that need to scroll by to the left,
+    // Diff is a value that need to scroll by to the left,
     // when we clicked on the most right visible (partially or wholly) tab
     const diff = rightTab - (leftContent + this.widthOfContent);
     if (diff > 0) {
       this.contentScrollBy(diff);
 
-    // if we clicked on the most left tab,
+    // If we clicked on the most left tab,
     // define a value that need to scroll by to the right
     } else if (leftTab < leftContent) {
       this.contentScrollBy(leftTab - leftContent);
@@ -341,75 +384,73 @@ class Tabs extends React.Component<TabsProps, TabsState> {
       onChange = (numTab: number) => {}
     } = this.props;
 
-    // set active tab
+    // Set active tab
     this.setState({
       activeTab: val
     });
 
     onChange(val);
   }
-
   /**
-   * handles a click on the right arrow
+   * Handles a click on the right arrow
    */
   onClickRightArrowHandler = () => {
-    // get the mode of scrolling
+    // Get the mode of scrolling
     const { scrollStep = "multi" } = this.props;
 
-    // get the left position of the visible part of the scrollable area
+    // Get the left position of the visible part of the scrollable area
     const leftContent = this.refContent.current?.scrollLeft || 0;
-    // get the right position of the visible part of the scrollable area
+    // Get the right position of the visible part of the scrollable area
     const rightContent = leftContent + this.widthOfContent;
-    // get the number of the tab, that goes after the last wholly-visible tab
+    // Get number of the tab, that goes after the last wholly-visible tab
     const num = Math.floor(rightContent / this.widthOfSlider);
 
     // mode "MULTI"
     if (scrollStep === 'multi') {
-      // define a new left position, that need to scroll to
+      // Define the new left position, that need to scroll to
       const left = num * this.widthOfSlider;
-      // scroll the content to a new left position
+      // Scroll the content to the new left position
       this.contentScrollTo(left);
 
     // mode "SINGLE"
     } else if (scrollStep === 'single') {
-      // define the right position of the tab, that must be shown after scrolling
+      // Define the right position of the tab, that must be shown after scrolling
       const rightTabToBe = num * this.widthOfSlider + this.widthOfSlider;
-      // compute the "x-value", that need to scroll by
+      // Compute the "x-value", that need to scroll by
       const diff = rightTabToBe - rightContent;
-      // scroll the content by a gotten diff
+      // Scroll the content by the gotten diff
       this.contentScrollBy(diff);
 
     }
   }
-
   /**
-   * handles a click on the left arrow
+   * Handles a click on the left arrow
    */
   onClickLeftArrowHandler = () => {
-    // get the mode of scrolling
+    // Get the mode of scrolling
     const { scrollStep = "multi" } = this.props;
-    // get the left position of the visible part of the scrollable area
+    // Get the left position of the visible part of the scrollable area
     const leftContent = this.refContent.current?.scrollLeft || 0;
     
     // mode "MULTI"
     if (scrollStep === 'multi') {
-      // the number of a tab, that's the most left visible (partially or wholly)
+      // Number of a tab, that's the most left visible (partially or wholly)
       const num = Math.floor(leftContent / this.widthOfSlider);
-      // compute the right position of a necessary tab
+      // Compute the right position of a necessary tab
       const rightContentToBe = num * this.widthOfSlider + this.widthOfSlider;
-      // define a new left position, that need to scroll to
+      // Define the new left position, that need to scroll to
       let left = rightContentToBe - this.widthOfContent;
       left = left >= 0 ? left : 0; 
-      // scroll the content to a new left position
+      // Scroll the content to the new left position
       this.contentScrollTo(left);
 
     // mode "SINGLE"
     } else if (scrollStep === 'single') {
-      // define the num of a tab, that must be shown after scrolling on one step
+      // Define num of the tab, that must be shown after scrolling on one step
       const num = Math.ceil(leftContent / this.widthOfSlider - 1);
-      // compute the left position of a necessary tab
+      // Compute the left position of the necessary tab
       const leftTabToBe = num * this.widthOfSlider;
-      // compute the "x-value", that need to scroll by
+      // Compute the "x-value", that need to scroll by
       const diff = leftTabToBe - leftContent;
       if (diff < 0) {
         this.contentScrollBy(diff);
@@ -417,12 +458,14 @@ class Tabs extends React.Component<TabsProps, TabsState> {
 
     }
   }
+  // 
   onScrollHandler = () => {
     this.setVisibilityOfArrows();
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   render() {
     return (
       <div

@@ -3,6 +3,13 @@ import React from 'react';
 import './circleSpinner.scss';
 
 
+// DESCRIPTION:
+// 
+// This component is an animation block. It's a rotating circle.
+// It is used as a loader that indicates that an operation is executing.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // COMPONENT
@@ -10,7 +17,9 @@ import './circleSpinner.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 const CircleSpinner = () => {
-  // RENDER
+
+  // ===< RENDER >===
+  // 
   return (
     <div className="circle-spinner"></div>
   );

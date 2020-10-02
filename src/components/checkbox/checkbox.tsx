@@ -5,6 +5,12 @@ import classNames from 'classnames';
 import './checkbox.scss';
 
 
+// DESCRIPTION:
+// 
+// This is a checkbox.
+//
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -12,18 +18,19 @@ import './checkbox.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type CheckboxProps = {
-  // id of the element
   id: string,
-  // text of the label of the checkbox
+  // A label text of the checkbox
   text: string
-  // value of the checkbox
+  // A value of the checkbox
   value: boolean,
-  // extra classes, that you can apply to the root element,
-  // when you use this component inside other ones.
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string,
-  // 
+
+  // => Events
+  // A changing tick in the checkbox
   onChange?: () => void
 }
 
@@ -38,9 +45,11 @@ const Checkbox = (props: CheckboxProps) => {
 
   const { id, text, value, onChange } = props;
 
-  // UTILS
+
+  // ===< UTILS >===
+  // 
   /**
-   * func defines classes, that need to apply to the root element
+   * Func defines classes to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -57,7 +66,8 @@ const Checkbox = (props: CheckboxProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div className={ getClasses() }>
       <label className="input-checkbox__label">

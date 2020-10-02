@@ -7,7 +7,6 @@ import { authLogout } from '../../store/auth/action';
 // custom components
 import Menu, { MenuItemProps } from './menu';
 import Logo from './logo';
-// import ProfileLogo from './profileLogo';
 // css
 import './header.scss';
 
@@ -43,8 +42,8 @@ type HeaderProps = ConnectedProps<typeof connector>;
 
 const Header = (props: HeaderProps) => {
 
-
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickLogoutHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     // logout from app
@@ -53,7 +52,8 @@ const Header = (props: HeaderProps) => {
   }
 
 
-  // VAR-s
+  // ===< VAR-s >===
+  // 
   // define main menu items
   const menuItems: MenuItemProps[] = [
     { text: 'Компании', path: 'companies' },
@@ -71,11 +71,17 @@ const Header = (props: HeaderProps) => {
   ];
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
+  /**
+   * Func returns a marking for the block "Profile".
+   * Func returns a different marking in depedence of
+   * an user is logged in or not
+   */
   const renderProfile = () => {
     const { isLoggedIn } = props;
 
-    // if user is logged in
+    // if an user is logged in
     if (isLoggedIn) {
       return (
         <>
@@ -85,12 +91,13 @@ const Header = (props: HeaderProps) => {
       );
     }
 
-    // if user isn't logged in
+    // if an user isn't logged in
     return <Menu items={ signInItems } />;
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <header className="header">
       <div className="header__inner">

@@ -11,16 +11,18 @@ import './menu.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 export type MenuItemProps = {
-  // text of a menu item
+  // A text of a menu item
   text: string,
-  // path of a page, where a menu item leads.
-  // path is used without a slash at start
+  // Path of a page, where a menu item leads in.
+  // Path is used without a slash at start
   path: string,
-  // this component uses "NavLink" (from react-router-dom) for its rendering.
+  // This component uses "NavLink" (from react-router-dom) for its rendering.
   // "NavLink" has "activeClassName"-property.
   // "useActiveClass" is a flag, whether should use this property or not
   useActiveClass?: boolean,
-  // event
+
+  // => Events
+  // A click on a menu item
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 
@@ -41,13 +43,15 @@ const MenuItem = (props: MenuItemProps) => {
   } = props;
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickHandler = (e: React.MouseEvent<HTMLElement>) => {
     onClick(e);
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <li className="menu__item">
       <NavLink

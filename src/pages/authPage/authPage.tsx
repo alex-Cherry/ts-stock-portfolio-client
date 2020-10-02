@@ -42,13 +42,13 @@ const AuthPage = (props: AuthPageProps) => {
 
   // *** EVENT HANDLERS
   /**
-   * handle the click on the Login button
+   * handles a click on the Login button
    */
   const onClickLoginHandler = () => {
     setActiveTab(0);
   }
   /**
-   * handle the click on the Register button
+   * handles a click on the Register button
    */
   const onClickRegisterHandler = () => {
     setActiveTab(1);
@@ -57,18 +57,18 @@ const AuthPage = (props: AuthPageProps) => {
 
   // *** UTILS
   const renderMain = (): React.ReactNode => {
-    // return registration form
+    // return the Registration form
     if (activeTab === 0) {
       return renderLogin();
 
-    // return login form
+    // return the Login form
     } else if (activeTab === 1) {
       return renderRegister();
 
     } 
   }
   /**
-   * renders Login form
+   * renders the Login form
    */
   const renderLogin = () => {
     return (
@@ -79,7 +79,7 @@ const AuthPage = (props: AuthPageProps) => {
     );
   }
   /**
-   * renders Registration form
+   * renders the Registration form
    */
   const renderRegister = () => {
     return (
@@ -91,15 +91,15 @@ const AuthPage = (props: AuthPageProps) => {
   }
 
 
-  // if user is authorized,
-  // then redirect to main page
+  // if an user is authorized,
+  // then redirect to the main page
   const { isLoggedIn = false } = props;
   if (isLoggedIn) {
     return <Redirect to="/" />;
   }
   
 
-  // RENDER
+  // *** RENDER
   return (
     <MainContainer>
 

@@ -7,6 +7,12 @@ import MaterialIcon from '../materialIcon';
 import './button.scss';
 
 
+// DESCRIPTION:
+// 
+// This is a button.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -14,18 +20,20 @@ import './button.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type ButtonProps = {
-  // text on the button
+  // A text of the button
   text: string,
-  // material icon's name
+  // A material icon's name
   iconName?: string,
-  // extra classes, that you can apply to the root element
-  // when you use this component inside other ones.
+  // Extra classes, that you can apply to the root element
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string,
-  // whether button is active or disabled
+  // Whether the button is active or disabled
   disabled?: boolean,
-  // 
+  
+  // => Events
+  // A click on the button
   onClick?: () => void
 }
 
@@ -45,9 +53,10 @@ const Button = (props: ButtonProps) => {
   } = props;
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -68,8 +77,8 @@ const Button = (props: ButtonProps) => {
     return classes;
   }
   /**
-   * if iconName isn't set, return null;
-   * if iconName is set, return MaterialIcon
+   * If the iconName isn't set, return null;
+   *  if the iconName is set, return a component "MaterialIcon"
    */
   const renderIcon = () => {
     const { iconName = '' } = props;
@@ -87,7 +96,8 @@ const Button = (props: ButtonProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <button
       className={ getClasses() }

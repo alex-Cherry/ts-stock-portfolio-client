@@ -5,6 +5,13 @@ import './errorIndicator.scss';
 import errorImg from '../../assets/images/error.png';
 
 
+// DESCRIPTION:
+// 
+// This component allows to show an user that an error has occured.
+// It's also a fallback UI for the component "ErrorBoundary".
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -12,7 +19,7 @@ import errorImg from '../../assets/images/error.png';
 ////////////////////////////////////////////////////////////////////////////////
 
 type ErrorIndicatorProps = {
-  // string that defines the text of the error
+  // An error's text
   text?: string
 }
 
@@ -25,15 +32,16 @@ type ErrorIndicatorProps = {
 
 const ErrorIndicator = (props: ErrorIndicatorProps) => {
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * func returns the description of the error
+   * Func returns the error description
    */
   const getContent = () => {
     const { text } = props;
 
     if (text) {
-      // if the text is defined in props, return one
+      // If the text is defined in the props, return one
       return (
         <div className="error-indicator__text">
           { text }
@@ -41,7 +49,7 @@ const ErrorIndicator = (props: ErrorIndicatorProps) => {
       );
 
     } else {
-      // otherwise, return a default text
+      // Otherwise, return the default text
       return (
         <div className="error-indicator__text">
           Что-то совершенно пошло не так!
@@ -54,7 +62,8 @@ const ErrorIndicator = (props: ErrorIndicatorProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div className="error-indicator">
       {/* img */}

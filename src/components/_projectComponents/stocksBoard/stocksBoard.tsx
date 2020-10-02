@@ -1,14 +1,16 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
-
 import React from 'react';
-// import custom components
-import StockCard from '../stockCard';
-// import types
-import { ExtendedStock } from '../../types';
+// Custom components
+import StockCard from '../../stockCard';
+// Types
+import { ExtendedStock } from '../../../types';
+// CSS
+import './stocksBoard.scss';
+
+
+// DESCRIPTION:
+// 
+// This component just renders stocks, defined in the props.
+// 
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -18,6 +20,7 @@ import { ExtendedStock } from '../../types';
 ////////////////////////////////////////////////////////////////////////////////
 
 type StocksBoardProps = {
+  // Stocks to render
   stocks: ExtendedStock[]
 }
 
@@ -29,23 +32,28 @@ type StocksBoardProps = {
 ////////////////////////////////////////////////////////////////////////////////
 
 const StocksBoard = (props: StocksBoardProps) => {
+
+  // ===< UTILS >===
   // 
+  /**
+   * Func renders stocks
+   */
   const generateContent = () => {
     const { stocks } = props;
 
-    return stocks.map(
-      (stock: ExtendedStock) => (
-        <StockCard
-          key={stock.id}
-          stock={stock}
-        />
-      )
-    )
+    return stocks.map((stock: ExtendedStock) => (
+      <StockCard
+        key={ stock.id }
+        stock={ stock }
+      />
+    ))
   }
 
-  // RENDER
+
+  // ===< RENDER >===
+  // 
   return (
-    <div className="d-flex flex-wrap">
+    <div className="stocks-board">
       { generateContent() }
     </div>
   );

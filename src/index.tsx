@@ -37,7 +37,7 @@ const App = () => {
             <ToastContainer />
           </ErrorBoundary>
         </Router>
-        </CurrentUserChecker>
+      </CurrentUserChecker>
     </Provider>
   );
 }

@@ -8,7 +8,7 @@ import React from 'react';
 ////////////////////////////////////////////////////////////////////////////////
 
 type CardContentProps = {
-  // content of the element
+  // Content of the element
   children: React.ReactNode
 }
 
@@ -21,7 +21,8 @@ type CardContentProps = {
 
 const CardContent = ({ children }: CardContentProps) => {
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div className="card__content">
       { children }

@@ -3,6 +3,13 @@ import React from 'react';
 import classNames from 'classnames';
 
 
+// DESCRIPTION:
+// 
+// This component is used to display an icon from material icon collection (https://material.io).
+//  The icon name is defined in the property "iconName".
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -10,14 +17,16 @@ import classNames from 'classnames';
 ////////////////////////////////////////////////////////////////////////////////
 
 type MaterialIconProps = {
-  // material icon's name
+  // A material icon's name
   iconName: string,
-  // extra classes, that you can apply to the root element,
-  // when you use this component inside other ones.
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string,
-  // handler for event "onClick"
+
+  // => Events
+  // A click on the icon
   onClick?: () => void
 }
 
@@ -36,15 +45,17 @@ const MaterialIcon = (props: MaterialIconProps) => {
   } = props;
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickHandler = () => {
     onClick();
   }
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes to apply to the root element
    */
   const getClasses = () => {
     // destructure props
@@ -61,7 +72,8 @@ const MaterialIcon = (props: MaterialIconProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <i
       className={ getClasses() }

@@ -7,6 +7,14 @@ import MaterialIcon from '../materialIcon';
 import './floatingButton.scss';
 
 
+// DESCRIPTION:
+// 
+// This is a button. It has a circle form.
+// If assign the property "isFixed", then the button is placed in the bottom-left corner
+//  and at the top of the elements.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -14,15 +22,18 @@ import './floatingButton.scss';
 ////////////////////////////////////////////////////////////////////////////////
 
 type FloatingButtonProps = {
-  // material icon's name
+  // A material icon's name
   iconName: string,
-  // extra classes, that you can apply to the root element,
-  // when you use this component inside other ones.
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string,
-  // define, whether display button in the bottom-left corner or not
+  // Defines whether display the button in the bottom-left corner or not
   isFixed?: boolean,
+
+  // => Events
+  // A click on the button
   onClick?: () => void
 }
 
@@ -41,9 +52,10 @@ const FloatingButton = (props: FloatingButtonProps) => {
   } = props;
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * function returns a string, including classes for the root element
+   * Function returns the string, including classes for the root element
    */
   const getClasses = (): string => {
 
@@ -66,14 +78,16 @@ const FloatingButton = (props: FloatingButtonProps) => {
   }
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const clickHandler = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     onClick();
   }
 
   
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div
       className={ getClasses() }

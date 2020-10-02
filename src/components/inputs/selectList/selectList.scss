@@ -19,14 +19,14 @@
     position: relative;
   }
 
-  &__item_header {
+  &__item--header {
     background-color: $color-grey-lighten-2;
     cursor: auto;
     font-weight: 500;
     color: $color-grey-darken-2;
   }
 
-  &__item_selected, &__item:hover:not(&__item_header) {
+  &__item--selected, &__item:hover:not(&__item--header) {
     background-color: rgba($color: $color-blue-lighten-3, $alpha: 0.3);
   }
 

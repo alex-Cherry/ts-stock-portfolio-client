@@ -8,6 +8,7 @@ import React from 'react';
 ////////////////////////////////////////////////////////////////////////////////
 
 export type TabProps = {
+  // A text of the tab
   text: string
 };
 
@@ -24,7 +25,8 @@ const Tab = (props: TabProps) => {
     text
   } = props;
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div>
       { text }

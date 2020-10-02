@@ -14,7 +14,7 @@ import logoImg from '../../../assets/images/buy1.png';
 ////////////////////////////////////////////////////////////////////////////////
 
 type LogoProps = {
-  // extra classes, that you can apply to the root element,
+  // Extra classes, that you can apply to the root element,
   // when you use this component inside other ones.
   // It's assumed that will be used classes that define
   // positioning of the component
@@ -30,9 +30,10 @@ type LogoProps = {
 
 const Logo = (props: LogoProps) => {
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes, that need to apply to the root element
    */
   const getClasses = () => {
     
@@ -51,7 +52,8 @@ const Logo = (props: LogoProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div className={ getClasses() }>
       <a className="logo__link" href="/">

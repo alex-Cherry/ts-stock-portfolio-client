@@ -1,24 +1,38 @@
-////////////////////////////////////////////////////////////////////////////////
-// 
-// IMPORT
-// 
-////////////////////////////////////////////////////////////////////////////////
 import React from 'react';
 import { AnyAction } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-// import custom components
+// custom components
 import Card, { CardContent, CardActions, CardErrors } from '../card';
 import { Input } from '../inputs';
 import Button from '../button';
 import TextInput from './textInput';
 import NotiticationWithTransfer from './notiticationWithTransfer';
-// import actions
+// actions
 import { register } from '../../store/auth/action';
-// import input checker
+// input checker
 import { email, required, minLength } from '../../utils/inputChecker/validators';
 import { ValidationsRuleType } from '../../utils/inputChecker/validate';
+
+
+// DESCRIPTION:
+// 
+// This component allows to register in the system.
+// 
+// The component is complex, consists of several simple elements: TextInput, Button.
+//  The custom react component "Card" is used for organization of child components.
+// 
+// Before register we must check that fields:
+// - email
+// - password
+// - username
+// are completed and valid.
+// Otherwise, a warning is issued.
+// 
+// If registration was successful, a component "NotificationWithTransfer" is displayed,
+//  what leads to the main page.
+// 
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,36 +41,44 @@ import { ValidationsRuleType } from '../../utils/inputChecker/validate';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-type RegiseterComponentExtraProps = {}
-
-type RegiseterComponentState = {
-  loading: boolean,
-  error: string,
-  email: string,
-  isEmailValid: boolean,
-  emailValidations: ValidationsRuleType,
-  password: string,
-  isPasswordValid: boolean,
-  passwordValidations: ValidationsRuleType,
-  username: string,
-  isUsernameValid: boolean,
-  usernameValidations: ValidationsRuleType,
-  confirmPassword: string,
-  registrationSuccess: boolean,
-  touched: boolean
-}
-
-// DISPATCH
+// MAP DISPATCH
 const mapDispatch = (dispatch: ThunkDispatch<void, unknown, AnyAction>) => {
   return {
     register: (email: string, password: string, username: string): Promise<void> => dispatch(register(email, password, username))
   }
 }
 
+// PROPS
 const connector = connect(null, mapDispatch);
 type RegisterComponentProps = ConnectedProps<typeof connector>
-  & RouteComponentProps
-  & RegiseterComponentExtraProps;
+  & RouteComponentProps;
+
+// STATE
+type RegisterComponentState = {
+  // The flag indicates that an async operation is executing
+  loading: boolean,
+  // Stores an error messsage got after a request to a server
+  error: string,
+
+  // The next states are fields necessary for login:
+  email: string,
+  password: string,
+  username: string,
+  confirmPassword: string,
+
+  // Whether the "email" is valid
+  isEmailValid: boolean,
+  // Whether the "password" is valid
+  isPasswordValid: boolean,
+  // Whether the "username" is valid
+  isUsernameValid: boolean,
+  
+  // This flag indicates a registration is completed successfully
+  registrationSuccess: boolean,
+  // The flag indicates that all fields must be validated
+  //  regardless whether they is changed or not
+  forceValidation: boolean
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,130 +87,175 @@ type RegisterComponentProps = ConnectedProps<typeof connector>
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-class RegisterComponent extends React.Component<RegisterComponentProps, RegiseterComponentState> {
+class RegisterComponent extends React.Component<RegisterComponentProps, RegisterComponentState> {
 
+  // ===< CLASS FIELDS >===
+  // 
+  // This field stores the mark that DOM is rendered.
+  //  An user can start async operations and don't wait until they finished.
+  //  In that case leak memories have place.
+  // 
+  // So we use this field in async operations to not interact with the component,
+  //  when DOM is already (or yet) not rendered
   private mounted: boolean = false;
+  // These rules are used for check of the state "email"
+  private emailValidations: ValidationsRuleType = {
+    required: { rule: required, msg: `Поле 'Email' не заполнено.` },
+    email: { rule: email, msg: `Поле 'Email' не корректно.` }
+  };
+  // These rules are used for check of the state "username"
+  private usernameValidations: ValidationsRuleType = {
+    required: { rule: required, msg: `Поле 'Username' не заполнено.` }
+  };
+  // These rules are used for check of the state "password"
+  private passwordValidations: ValidationsRuleType = {
+    required: { rule: required, msg: `Поле 'Password' не заполнено.` },
+    minLength: { rule: minLength(6), msg: `Поле 'Password' долно содержать не менее 6 символов.` }
+  };
 
-  state: RegiseterComponentState = {
+
+  // ===< STATE >===
+  // 
+  state: RegisterComponentState = {
     // email
     email: '',
     isEmailValid: false,
-    emailValidations: {
-      required: { rule: required, msg: `Поле 'Email' не заполнено.` },
-      email: { rule: email, msg: `Поле 'Email' не корректно.` }
-    },
     // username
     username: '',
     isUsernameValid: false,
-    usernameValidations: {
-      required: { rule: required, msg: `Поле 'Username' не заполнено.` }
-    },
     // password
     password: '',
     isPasswordValid: false,
-    passwordValidations: {
-      required: { rule: required, msg: `Поле 'Password' не заполнено.` },
-      minLength: { rule: minLength(6), msg: `Поле 'Password' долно содержать не менее 6 символов.` }
-    },
     // others
     confirmPassword: '',
     registrationSuccess: false,
-    touched: false,
+    forceValidation: false,
     loading: false,
     error: ''
   }
 
-  // LIFECYCLE
+
+  // ===< LIFECYCLE >===
+  // 
+  /**
+   * componentDidMount
+   */
   componentDidMount = () => {
     this.setLoading(false);
     this.setError('');
     this.mounted = true;
   }
+  /**
+   * componentWillUnmount
+   */
   componentWillUnmount() {
     this.mounted = false;
   }
 
 
-  // EVENT HANDLERS
-  //  => Email
+  // ===< EVENT HANDLERS >===
+  // 
+  // => Email - "onChange"
   onChangeEmailHandler = (data: string, valid: boolean) => {
     this.setState({
       email: data.trim(),
       isEmailValid: valid
     });
   }
+  // => Email - "onPressEnter"
   onPressEnterEmailHandler = () => {
     this.doSubmit();
   }
-  //  => Username
+  // => Username - "onChange"
   onChangeUsernameHandler = (data: string, valid: boolean) => {
     this.setState({
       username: data.trim(),
       isUsernameValid: valid
     });
   }
+  // => Username - "onPressEnter"
   onPressEnterUsernameHandler = () => {
     this.doSubmit();
   }
-  //  => Password
+  // => Password - "onChange"
   onChangePasswordHandler = (data: string, valid: boolean) => {
     this.setState({
       password: data.trim(),
       isPasswordValid: valid
     });
   }
+  // => Password - "onPressEnter"
   onPressEnterPasswordHandler = () => {
     this.doSubmit();
   }
-  //  => Confirm Password
+  // => Confirm Password - "onChange"
   onChangeConfirmPasswordHandler = (data: string) => {
     this.setState({
       confirmPassword: data
     });
   }
-  //  => Submit
+  // => btn "Submit" - "onClick"
   onClickSubmitHandler = () => {
     this.doSubmit();
   }
 
-  // UTILS
+
+  // ===< UTILS >===
+  // 
+  /**
+   * Returns "true", if all verifiable fields are valid,
+   *  "false" otherwise
+   */
   isValid = (): boolean => {
     const { isEmailValid, isPasswordValid, isUsernameValid } = this.state;
     return isEmailValid && isPasswordValid && isUsernameValid;
   }
+  /**
+   * Returns "true", if all verifiable fields are completed,
+   *  "false" otherwise
+   */
   hasData = (): boolean => {
     const { email, password, username } = this.state;
     return !!email.trim() && !!password.trim() && !!username.trim();
   }
+  /**
+   * Sets the state "loading" to the "value"
+   */
   setLoading = (value: boolean): void => {
     this.setState({
       loading: value
     });
   }
+  /**
+   * Sets the state "error" to the "msg"
+   */
   setError = (msg: string): void => {
     this.setState({
       error: msg
     });
   }
+  /**
+   * Does the async operation "registration"
+   */
   doSubmit = async (): Promise<void> => {
-    // all fields must be completed
+    // All fields must be completed
     if (!this.hasData()) {
-      this.setState({ touched: true });
+      this.setState({ forceValidation: true });
       return;
     }
-    // all fields must be valid
+    // All fields must be valid
     if (!this.isValid()) {
       return;
     }
 
-    // if all fields are correct, do register
+    // If all fields are correct, do register
     const { email, password, username } = this.state;
     this.setLoading(true);
 
     try {
-      // register user
+      // Register user
       await this.props.register(email, password, username);
-      // if registration is successful
+      // If registration is successful
       this.mounted && this.setState({
         email: '',
         username: '',
@@ -204,10 +271,12 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Regisete
     }
   }
 
-  // RENDER
+
+  // ===< RENDER >===
+  // 
   render() {
-    // if registration is successful,
-    // show notification
+    // If registration is successful,
+    //  show a notification
     const { registrationSuccess } = this.state;
     if (registrationSuccess) {
       return <NotiticationWithTransfer
@@ -218,62 +287,66 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Regisete
       />;
     }
 
-    // get data from state
-    const { loading, error, touched,
-      email, emailValidations,
-      username, usernameValidations,
-      password, passwordValidations
+    // Get data from the state
+    const { loading, error, forceValidation,
+      email,
+      username,
+      password,
     } = this.state;
     
 
     return (
       <Card>
-        
+
         {/* CONTENT */}
         <CardContent>
           {/* Email */}
           <TextInput
             id='email'
             label='Email'
-            value={email}
+            value={ email }
             type='email'
-            touched={touched}
-            validate={true}
-            validations={emailValidations}
-            onChange={this.onChangeEmailHandler}
-            onPressEnter={this.onPressEnterEmailHandler}
+            forceValidation={ forceValidation }
+            validate={ true }
+            validations={ this.emailValidations }
+
+            onChange={ this.onChangeEmailHandler }
+            onPressEnter={ this.onPressEnterEmailHandler }
           />
           {/* Username */}
           <TextInput
             id='Username'
             label='Email'
-            value={username}
+            value={ username }
             type='text'
-            touched={touched}
-            validate={true}
-            validations={usernameValidations}
-            onChange={this.onChangeUsernameHandler}
-            onPressEnter={this.onPressEnterUsernameHandler}
+            forceValidation={ forceValidation }
+            validate={ true }
+            validations={ this.usernameValidations }
+
+            onChange={ this.onChangeUsernameHandler }
+            onPressEnter={ this.onPressEnterUsernameHandler }
           />
           {/* Password */}
           <TextInput
             id='password'
             label='Password'
-            value={password}
+            value={ password }
             type='password'
-            touched={touched}
-            validate={true}
-            validations={passwordValidations}
-            onChange={this.onChangePasswordHandler}
-            onPressEnter={this.onPressEnterPasswordHandler}
+            forceValidation={ forceValidation }
+            validate={ true }
+            validations={ this.passwordValidations }
+
+            onChange={ this.onChangePasswordHandler }
+            onPressEnter={ this.onPressEnterPasswordHandler }
           />
           {/* Confirm Password */}
           <Input
             id="confirm"
             type="password"
             label="Confirm password"
-            value={this.state.confirmPassword}
-            onChange={this.onChangeConfirmPasswordHandler}
+            value={ this.state.confirmPassword }
+
+            onChange={ this.onChangeConfirmPasswordHandler }
           />
         </CardContent>
 
@@ -281,8 +354,9 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Regisete
         <CardActions>
           <Button
             text="Регистрация"
-            disabled={loading}
-            onClick={this.onClickSubmitHandler}
+            disabled={ loading }
+
+            onClick={ this.onClickSubmitHandler }
           />
         </CardActions>
         

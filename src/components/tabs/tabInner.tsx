@@ -9,11 +9,19 @@ import classNames from 'classnames';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// PROPS
 export type TabInnerProps = {
+  // A text of the tab
   text: string,
+  // Whether the tab is in active state or not
   active?: boolean,
+  // Actially, this property is like an id of the tab.
+  // It's necessary in order to we can differ one tab from other
   value?: number,
+  // This property has a reference to the tab
   refTab?: React.RefObject<HTMLDivElement>,
+
+  // => Events
   onClick?: (val: number) => void
 };
 
@@ -26,6 +34,8 @@ export type TabInnerProps = {
 
 const Tab = (props: TabInnerProps) => {
 
+  // ===< PROPS >===
+  // 
   const {
     text,
     active = false,
@@ -35,9 +45,10 @@ const Tab = (props: TabInnerProps) => {
   } = props;
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * defines classes, that need to apply to the root element
+   * Defines classes to apply to the root element
    */
   const getClasses = (): string => {
     const classes = classNames(
@@ -51,13 +62,15 @@ const Tab = (props: TabInnerProps) => {
   }
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickHandler = () => {
     onClick(value);
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <div
       className={ getClasses() }

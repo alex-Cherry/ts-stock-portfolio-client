@@ -19,12 +19,14 @@ import yellowStarSvg from '../../assets/svg/favorite-yellow.svg';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP DISPATCH
 const mapDispatch = (dispatch: any) => {
   return {
     setFavorite: (stock: ExtendedStock): Promise<void> => dispatch(setStockFavorite(stock))
   }
 }
 
+// PROPS
 const connector = connect(null, mapDispatch);
 type AddFavoriteProps = ConnectedProps<typeof connector>;
 
@@ -37,25 +39,29 @@ type AddFavoriteProps = ConnectedProps<typeof connector>;
 
 const AddFavorite = (props: AddFavoriteProps) => {
 
-  // loading = executing adding a stock to favorite
+  // ===< STATE >===
+  // 
+  // This flag indicates that adding a stock to favorite is executing
   const [ loading, setLoading ] = useState(false);
-  // if there is a loading, return spinner
+
+  // If there is loading, render the spinner
   if (loading) {
     return <Spinner />;
   }
 
 
-  // EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   const onClickHandler = async (stock: ExtendedStock) => {
-    // get action from props
+    // Get the action from the props
     const { setFavorite } = props;
 
     setLoading(true);
-    // timeout is dummy.
-    // emulate a delay while excuting a network request.
+    // Timeout is dummy.
+    // Emulate a delay while excuting a network request.
     // 
-    // when "setFavorite" will be realized,
-    // it's necessary to delete setTimeout
+    // When "setFavorite" will be realized,
+    //  it's necessary to delete setTimeout
     const timeId = setTimeout(() => {
       setFavorite(stock)
         .finally(() => {
@@ -66,15 +72,17 @@ const AddFavorite = (props: AddFavoriteProps) => {
   }
 
 
-  // UTILS
+  // ===< UTILS >===
+  // 
   /**
-   * returns an empty start or a yellow star (svg). It depends on the "isFavorite" property
+   * Returns an empty star or a yellow star (svg). 
+   * It depends on the "isFavorite" property
    * 
-   * @param {ExtendedStock} stock - a stock, which the star is rendered for
+   * @param {ExtendedStock} stock - the stock, which the star is rendered for
    */
   const renderStar = (stock: ExtendedStock) => {
     const { isFavorite } = stock;
-    // define, which star to render
+    // Define, which star to render
     const starSvg = isFavorite ? yellowStarSvg : transparentStarSvg;
     // 
     return (
@@ -87,7 +95,8 @@ const AddFavorite = (props: AddFavoriteProps) => {
   }
 
 
-  // RENDER
+  // ===< RENDER >===
+  // 
   return (
     <StockContext.Consumer>
       { (stock: ExtendedStock) => renderStar(stock) }
