@@ -198,7 +198,7 @@ class StocksPage extends React.Component<StocksPageProps, StocksPageState> {
   // ===< RENDER >===
   // 
   render() {
-    const { isAdmin, stocks } = this.props;
+    const { isAdmin } = this.props;
     const { hasError, filter } = this.state;
 
     // The component has an error

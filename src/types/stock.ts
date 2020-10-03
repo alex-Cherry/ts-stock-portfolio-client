@@ -9,16 +9,16 @@ export class Stock {
   public sector: EconomicSector;
   public bluetip: boolean;
 
-  constructor() {
-    this.id = '';
-    this.ticker = '';
-    this.shortName = '';
-    this.price = 0;
-    this.sector = new EconomicSector();
-    this.bluetip = false;
-  }
-
-  init(
+  constructor()
+  constructor(
+    id: string,
+    ticker: string,
+    shortName: string,
+    price: number,
+    sector: EconomicSector,
+    bluetip: boolean
+  )
+  constructor(
     id?: string,
     ticker?: string,
     shortName?: string,
@@ -40,12 +40,17 @@ export class ExtendedStock extends Stock {
   
   public isFavorite: boolean;
 
-  constructor() {
-    super();
-    this.isFavorite = false;
-  }
-
-  init(
+  constructor()
+  constructor(
+    id: string,
+    ticker: string,
+    shortName: string,
+    price: number,
+    sector: EconomicSector,
+    bluetip: boolean,
+    isFavorite: boolean
+  )
+  constructor(
     id?: string,
     ticker?: string,
     shortName?: string,
@@ -54,13 +59,14 @@ export class ExtendedStock extends Stock {
     bluetip?: boolean,
     isFavorite?: boolean
   ) {
-    super.init(
-      id,
-      ticker,
-      shortName,
-      price,
-      sector,
-      bluetip
+
+    super(
+      id || '',
+      ticker || '',
+      shortName || '',
+      price || 0,
+      sector || new EconomicSector(),
+      bluetip || false
     );
     this.isFavorite = isFavorite || false;
   }
@@ -69,14 +75,12 @@ export class ExtendedStock extends Stock {
     // const newStock = JSON.parse(JSON.stringify(this)) as ExtendedStock;
     // newStock.prototype = this;
     
-    const newSector = new EconomicSector();
-    newSector.init(
+    const newSector = new EconomicSector(
       this.sector.id,
       this.sector.name
     );
 
-    const newStock = new ExtendedStock();
-    newStock.init(
+    const newStock = new ExtendedStock(
       this.id,
       this.ticker,
       this.shortName,

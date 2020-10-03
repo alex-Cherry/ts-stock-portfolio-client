@@ -330,15 +330,13 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     const { saveStock } = this.props;
 
     // create a sector object
-    const sector: EconomicSector = new EconomicSector();
-    sector.init(
+    const sector: EconomicSector = new EconomicSector(
       sectorId, // id
       '' // name
     );
 
     // create a stock object
-    const stock: ExtendedStock = new ExtendedStock();
-    stock.init(
+    const stock: ExtendedStock = new ExtendedStock(
       id, // id
       ticker, // ticker
       shortName, // shortName

@@ -32,12 +32,18 @@ export const getAuthToken = (): string => {
  *  or null, if there is no data in the LS
  */
 export const getAuthUser = (): User | null => {
-  let rawUser = localStorage.getItem('user');
-  if (!rawUser) {
+  let strUser = localStorage.getItem('user');
+  if (!strUser) {
     return null;
   }
   try {
-    return JSON.parse(rawUser) as User;
+    const rawUser = JSON.parse(strUser);
+    const user = new User(
+      rawUser.id,
+      rawUser.username,
+      Boolean(rawUser.isAdmin)
+    );
+    return user ;
   } catch {
     return null;
   }

@@ -31,8 +31,7 @@ export const login = (
       // get data from response
       const { user, token } = data;
       // create an user
-      const loggedUser = new User();
-      loggedUser.init(
+      const loggedUser = new User(
         user.id,
         user.username,
         user.isAdmin

@@ -82,16 +82,14 @@ export const fetchStocks = (
       throw new Error(msg);
     }
     // transform data
-    const stocks = data.stocks.map((item: any) => {
+    const stocks: ExtendedStock[] = data.stocks.map((item: any) => {
         
-        const sector = new EconomicSector();
-        sector.init(
+        const sector = new EconomicSector(
           item.sector.id,
           item.sector.name
         );
 
-        const stock = new ExtendedStock();
-        stock.init(
+        const stock = new ExtendedStock(
           item.id,
           item.ticker,
           item.shortName,
@@ -103,7 +101,7 @@ export const fetchStocks = (
 
         return stock;
       }
-    ) as ExtendedStock[];
+    );
     
     // dispatch
     dispatch(actionCreatorStocksFetch(stocks));
@@ -138,15 +136,13 @@ export const getStockById = (
     const rawStock = data.stock;
 
     // create sector
-    const sector = new EconomicSector();
-    sector.init(
+    const sector = new EconomicSector(
       rawStock.sector.id,
       rawStock.sector.name
     );
 
     // create stock
-    const stock = new ExtendedStock();
-    stock.init(
+    const stock = new ExtendedStock(
       rawStock.id,
       rawStock.ticker,
       rawStock.shortName,
