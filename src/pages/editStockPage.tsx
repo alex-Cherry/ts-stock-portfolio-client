@@ -5,9 +5,8 @@ import { Redirect, RouteComponentProps } from 'react-router-dom';
 // custom components
 import MainContainer from '../components/_projectComponents/mainContainer';
 import StockEditorComponent from '../components/_projectComponents/stockEditorComponent';
-import ErrorIndicator from '../components/errorIndicator';
 // utils
-import { getQueryParams } from '../utils/getQueryParams';
+import { getParamFromQueryParams } from '../utils/getQueryParams';
 
 
 // DESCRIPTION:
@@ -58,8 +57,7 @@ class EditStockPage extends React.Component<EditStockPageProps, EditStockPageSta
   getId = (): string => {
     // get param "id" from query params
     const { location } = this.props;
-    const params = getQueryParams(location.search);
-    return ("id" in params) ? params.id : '';
+    return getParamFromQueryParams(location.search, 'id');
   }
   /**
    * Func returns the string, containing the page header

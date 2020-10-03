@@ -33,3 +33,14 @@ export const getQueryParams = (search: string) => {
 
   return result;
 }
+
+/**
+ * The function returns the parameter value from a search string.
+ * 
+ * @param search - the query string
+ * @param param - the name of the parameter that you want to find
+ */
+export const getParamFromQueryParams = (search: string, param: string): string => {
+  const params = getQueryParams(search);
+  return (param in params) ? params[param] : '';
+}

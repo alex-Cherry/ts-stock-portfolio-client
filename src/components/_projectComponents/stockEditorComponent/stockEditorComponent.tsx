@@ -15,7 +15,7 @@ import { AppState } from '../../../store'
 import { fetchSectors, saveStock, getStockById } from '../../../store/stocks/action';
 import { ExtendedStock, EconomicSector } from '../../../types';
 // Utils
-import { getQueryParams } from '../../../utils/getQueryParams';
+import { getParamFromQueryParams } from '../../../utils/getQueryParams';
 // Validations
 import { ValidationsRuleType } from '../../../utils/inputChecker/validate';
 import { required, nonZero } from '../../../utils/inputChecker/validators';
@@ -285,8 +285,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
    */
   getId = (): string => {
     const { location } = this.props;
-    const params = getQueryParams(location.search);
-    return ("id" in params) ? params.id : '';
+    return getParamFromQueryParams(location.search, 'id');
   }
   /**
    * Returns "true", if all verifiable fields are completed,
