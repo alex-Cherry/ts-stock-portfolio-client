@@ -12,18 +12,26 @@ import { AppState } from '../../store';
 import './authPage.scss';
 
 
+// DESCRIPTION:
+// 
+// This is a page where an user can register or login in the system
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP STATE
 const mapState = (state: AppState) => {
   return {
     isLoggedIn: !!state.auth.token
   }
 }
 
+// PROPS
 const connector = connect(mapState);
 type AuthPageProps = ConnectedProps<typeof connector> & RouteComponentProps;
 
@@ -40,35 +48,40 @@ const AuthPage = (props: AuthPageProps) => {
   const [ activeTab, setActiveTab ] = useState(0);
 
 
-  // *** EVENT HANDLERS
+  // ===< EVENT HANDLERS >===
+  // 
   /**
-   * handles a click on the Login button
+   * Handles a click on the "Login" button
    */
   const onClickLoginHandler = () => {
     setActiveTab(0);
   }
   /**
-   * handles a click on the Register button
+   * Handles a click on the "Register" button
    */
   const onClickRegisterHandler = () => {
     setActiveTab(1);
   }
 
 
-  // *** UTILS
+  // ===< UTILS >===
+  // 
+  /**
+   * Function renders the main content of this page
+   */
   const renderMain = (): React.ReactNode => {
-    // return the Registration form
+    // return the "Registration" form
     if (activeTab === 0) {
       return renderLogin();
 
-    // return the Login form
+    // return the "Login" form
     } else if (activeTab === 1) {
       return renderRegister();
 
     } 
   }
   /**
-   * renders the Login form
+   * Renders the "Login" form
    */
   const renderLogin = () => {
     return (
@@ -79,7 +92,7 @@ const AuthPage = (props: AuthPageProps) => {
     );
   }
   /**
-   * renders the Registration form
+   * Renders the "Registration" form
    */
   const renderRegister = () => {
     return (
@@ -91,15 +104,16 @@ const AuthPage = (props: AuthPageProps) => {
   }
 
 
-  // if an user is authorized,
-  // then redirect to the main page
+  // If an user is authorized,
+  //  then redirect to the main page
   const { isLoggedIn = false } = props;
   if (isLoggedIn) {
     return <Redirect to="/" />;
   }
   
 
-  // *** RENDER
+  // ===< RENDER >===
+  // 
   return (
     <MainContainer>
 

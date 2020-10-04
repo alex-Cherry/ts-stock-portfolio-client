@@ -14,6 +14,8 @@ import Loader from '../../loader';
 import { AppState } from '../../../store'
 import { fetchSectors, saveStock, getStockById } from '../../../store/stocks/action';
 import { ExtendedStock, EconomicSector } from '../../../types';
+// Types
+import { StockNotFoundError } from '../../../types/exceptions';
 // Utils
 import { getParamFromQueryParams } from '../../../utils/getQueryParams';
 // Validations
@@ -110,7 +112,9 @@ type StockEditorComponentState = {
   error: string,
   // The flag indicates that all fields must be validated
   //  regardless whether they is changed or not
-  forceValidation: boolean
+  forceValidation: boolean,
+  // 
+  stockNotFound: boolean
 }
 
 
@@ -169,7 +173,8 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     loading: false,
     hasError: false,
     error: '',
-    forceValidation: false
+    forceValidation: false,
+    stockNotFound: false
   }
 
 
@@ -200,8 +205,12 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
           let stock = new ExtendedStock();
           // If there is the second value,
           //  it's a stock
-          if (values[1]) {
+          if (values.length === 2) {
             stock = values[1];
+          }
+          if (!stock) {
+            // console.log('undefined');
+            throw new StockNotFoundError(`Stock witd id ${this.getId()} not found`);
           }
           // Get data from the stock.
           //  If the stock is empty, assign default values
@@ -212,11 +221,32 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
         }
       )
       .catch(
-        () => { this.mounted && this.setState({ hasError: true }) }
+        (err) => {
+          if (err instanceof StockNotFoundError) {
+            this.mounted && this.setState({ stockNotFound: true })
+          } else {
+            this.mounted && this.setState({ hasError: true })
+          }
+        }
       )
       .finally(
         () => { this.mounted && this.setState({ startLoading: false }) }
       )
+  }
+  /**
+   * componentDidUpdate
+   */
+  componentDidUpdate(prevProps: StockEditorComponentProps, prevState: StockEditorComponentState) {
+
+    const { stockNotFound } = this.state;
+    const { history: { push } } = this.props;
+
+    if (prevState.stockNotFound !== stockNotFound && stockNotFound) {
+      // If we didn't find the stock, go to the "NotFound" page
+      if (stockNotFound) {
+        push('/notfound');
+      }
+    }
   }
   /**
    * componentWillUnmount
@@ -382,6 +412,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
     if (hasError) {
       throw new Error();
     }
+
     // If the component is initializing,
     //  display <Loader>
     if (startLoading) {

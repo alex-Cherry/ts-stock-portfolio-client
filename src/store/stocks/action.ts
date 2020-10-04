@@ -126,9 +126,12 @@ export const getStockById = (
   try {
     const fetchResult = await useFetch(`/api/stocks/stocks/${id}`);
     const { data, status } = fetchResult;
+    if (status === 404) {
+      return undefined;
+      
     // if http-status doesn't have code 200,
     //    throw an error
-    if (status !== 200) {
+    } else if (status !== 200) {
       const msg = 'При чтении данных возникла ошибка';
       throw new Error(msg);
     }

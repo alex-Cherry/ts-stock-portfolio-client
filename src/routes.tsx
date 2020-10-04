@@ -7,6 +7,7 @@ import BrokersPage from './pages/brokersPage';
 import StocksPage from './pages/stocksPage';
 import AuthPage from './pages/authPage';
 import EditStockPage from './pages/editStockPage';
+import NotFoundPage from './pages/notFoundPage';
 
 export default () => {
   return (
@@ -17,6 +18,8 @@ export default () => {
       <Route path="/stocks" component={StocksPage} />
       <Route path="/signin" component={AuthPage} />
       <Route path="/editStock/:id?" component={EditStockPage} />
+      <Route path="/notfound" component={ NotFoundPage } />
+      <Route component={ NotFoundPage } />
     </Switch>
   )
 }
