@@ -26,39 +26,7 @@ ul, li {
 }
 
 
-
-// 
-.d-flex {
-  display: flex;
-}
-
-.d-none {
-  display: none;
-}
-
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
-.flex-column {
-  flex-direction: column !important;
-}
-
-.justify-content-between {
-  justify-content: space-between !important;
-}
-
-.justify-content-center {
-  justify-content: center !important;
-}
-
-.align-items-center {
-  align-items: center !important;
-}
-
-.h-100 {
-  height: 100% !important;
-}
+// CONTAINER
 
 .container {
   width: 1280px;
@@ -109,6 +77,9 @@ ul, li {
 
 }
 
+
+// UTILS
+
 .ml-auto {
   margin-left: auto !important;
 }
@@ -124,9 +95,4 @@ ul, li {
 .w-content {
   width: fit-content;
 }
-
-.right {
-  float: right !important;
-}
-
 
