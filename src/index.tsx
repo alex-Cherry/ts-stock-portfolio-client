@@ -1,31 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-
-import './normalize.css';
-
-
-import './index.scss';
-// import routes
-import Routes from './routes';
-// import custom components
-import Header from './components/header';
-import { ToastContainer } from './components/toast';
-// import CurrentUserChecker
-import CurrentUserChecker from './components/_projectComponents/currentUserChecker';
-import ErrorBoundary from './components/_projectComponents/errorBoundary';
-
-// import for redux
+// For redux
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+// Routes
+import Routes from './routes';
+// Custom components
+import Header from './components/header';
+import { ToastContainer } from './components/toast';
+import CurrentUserChecker from './components/_projectComponents/currentUserChecker';
+import ErrorBoundary from './components/_projectComponents/errorBoundary';
+// Store
 import rootReducer from './store';
+// CSS
+import './normalize.css';
+import './index.scss';
+
 
 const store = createStore(
   rootReducer,
   applyMiddleware(thunk)
 );
 
+// COMPONENT
+// 
 const App = () => {
   return (
     <Provider store={store}>
@@ -42,8 +42,8 @@ const App = () => {
   );
 }
 
-
-
+// RENDER
+// 
 ReactDOM.render(
   <React.StrictMode>
     <App />

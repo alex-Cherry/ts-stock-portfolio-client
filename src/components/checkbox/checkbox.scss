@@ -1,14 +1,12 @@
 @import '../../index.scss';
 
 .input-checkbox {
-  // вынести в элемент
-  margin: 24px 0;
 
   // element
   &__label {
     padding-left: 15px;
     font-size: 1rem;
-    color: $color-grey-darken-2;
+    color: $color-list-header;
     cursor: pointer;
   }
 
@@ -31,7 +29,7 @@
       top: -2px;
       width: 18px;
       height: 18px;
-      border: 2px solid $color-grey-darken-2;
+      border: 2px solid $color-list-header;
       cursor: pointer;
       transition: border 0.2s ease, transform 0.2s ease;
   }
@@ -42,8 +40,8 @@
       top: -6px;
       width: 10px;
       height: 18px;
-      border-bottom: 2px solid $color-font--focus;
-      border-right: 2px solid $color-font--focus;
+      border-bottom: 2px solid $color-font--active;
+      border-right: 2px solid $color-font--active;
       border-top: none;
       border-left: none;
       cursor: pointer;

@@ -14,24 +14,24 @@
     font-size: 1rem;
     padding: 0;
     margin: 0 0 0.5rem 0;
-    border-bottom: 1px solid $inactive-field;
+    border-bottom: 1px solid $color-font--not-active;
     box-shadow: none;
     transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
 
     &:focus {
-      border-bottom: 1px solid $focus-field;
-      box-shadow: 0 1px 0 0 $focus-field;
+      border-bottom: 1px solid $color-font--active;
+      box-shadow: 0 1px 0 0 $color-font--active;
       transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
     }
 
     // modificator
     // when input is valid
     &--valid {
-      border-bottom: 1px solid $color-valid;
+      border-bottom: 1px solid $color-font--valid;
     }
     &--valid:focus {
-      border-bottom: 1px solid $color-valid;
-      box-shadow: 0 1px 0 0 $color-valid;
+      border-bottom: 1px solid $color-font--valid;
+      box-shadow: 0 1px 0 0 $color-font--valid;
       transition: box-shadow 0.3s ease, border-bottom 0.3s ease;
     }
 
@@ -51,7 +51,7 @@
   &__label {
 
     font-size: 1rem;
-    color: $inactive-field;
+    color: $color-font--not-active;
     position: absolute;
     left: 0;
     top: 0;
@@ -67,11 +67,11 @@
     }
     // modificator
     &--focused {
-      color: $focus-field;
+      color: $color-font--active;
     }
     // modificator
     &--valid {
-      color: $color-valid;
+      color: $color-font--valid;
     }
     // modificator
     &--invalid {

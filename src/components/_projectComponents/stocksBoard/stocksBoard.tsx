@@ -45,6 +45,7 @@ const StocksBoard = (props: StocksBoardProps) => {
       <StockCard
         key={ stock.id }
         stock={ stock }
+        className="stocks-board__stock-card"
       />
     ))
   }

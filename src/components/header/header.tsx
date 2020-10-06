@@ -17,19 +17,21 @@ import './header.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-// state from redux
+// MAP STATE
 const mapState = (state: AppState) => {
   return {
     isLoggedIn: !!state.auth.user
   }
 }
-// actions from redux
+
+// MAP DISPATCH
 const mapDispatch = (dispatch: any) => {
   return {
     logout: () => dispatch(authLogout())
   }
 }
 
+// PROPS
 const connector = connect(mapState, mapDispatch);
 type HeaderProps = ConnectedProps<typeof connector>;
 

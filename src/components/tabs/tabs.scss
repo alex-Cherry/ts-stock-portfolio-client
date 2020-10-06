@@ -66,12 +66,12 @@
   }
 
   &__tab:hover {
-    color: $color-active-menu;
+    color: $color-list-item;
     cursor: pointer;
   }
   // modificator
   &__tab--active {
-    color: $color-active-menu;
+    color: $color-list-item;
     font-weight: 500;
   }
   &__tab--fullwidth {

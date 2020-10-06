@@ -433,7 +433,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
 
     // Main content
     return (
-      <Card>
+      <Card className="stock-editor">
         {/* CONTENT */}
         <CardContent>
           {/* ShortName */}
@@ -476,6 +476,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
             id="bluetip"
             value={bluetip}
             text={`"Голубая фишка"`}
+            className="stock-editor__bluetip"
             onChange={this.onChangeBlueTipHandler}
           />
           {/* Sector */}

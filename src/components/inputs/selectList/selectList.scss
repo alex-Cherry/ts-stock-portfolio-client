@@ -14,7 +14,7 @@
   &__item {
     padding: 15px;
     cursor: pointer;
-    color: $color-active-menu;
+    color: $color-list-item;
     font-size: 1rem;
     position: relative;
   }
@@ -23,7 +23,7 @@
     background-color: $color-grey-lighten-2;
     cursor: auto;
     font-weight: 500;
-    color: $color-grey-darken-2;
+    color: $color-list-header;
   }
 
   &__item--selected, &__item:hover:not(&__item--header) {
@@ -35,8 +35,8 @@
     position: absolute;
     right: 15px;
     top: 10px;
-    border-bottom: 2px solid $color-active-menu;
-    border-right: 2px solid $color-active-menu;
+    border-bottom: 2px solid $color-list-item;
+    border-right: 2px solid $color-list-item;
     width: 12px;
     height: 18px;
     display: inline-block;

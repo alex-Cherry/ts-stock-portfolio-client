@@ -1,4 +1,9 @@
 .stocks-board {
   display: flex;
   flex-wrap: wrap;
+
+  // Element
+  &__stock-card {
+    margin: 2px;
+  }
 }
