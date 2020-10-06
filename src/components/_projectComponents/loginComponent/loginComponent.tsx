@@ -3,15 +3,17 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // custom components
-import Card, { CardContent, CardActions, CardErrors } from '../card';
-import Button from '../button';
-import TextInput from './textInput';
+import Card, { CardContent, CardActions, CardErrors } from '../../card';
+import Button from '../../button';
+import TextInput from '../textInput';
 // actions
-import { login } from '../../store/auth/action';
-import { AuthLoginAction } from '../../store/auth/types';
+import { login } from '../../../store/auth/action';
+import { AuthLoginAction } from '../../../store/auth/types';
 // input checker
-import { email, required, minLength } from '../../utils/inputChecker/validators';
-import { ValidationsRuleType } from '../../utils/inputChecker/validate';
+import { email, required, minLength } from '../../../utils/inputChecker/validators';
+import { ValidationsRuleType } from '../../../utils/inputChecker/validate';
+// CSS
+import './loginComponent.scss';
 
 
 // DESCRIPTION:
@@ -232,7 +234,10 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
     } = this.state;
 
     return (
-      <Card>
+      <Card
+        className="login-form"
+      >
+
         {/* CONTENT */}
         <CardContent>
           {/* Email */}
@@ -244,6 +249,7 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.emailValidations }
+            className="login-form__input"
 
             onChange={ this.onChangeEmailHandler }
             onPressEnter={ this.onPressEnterEmailHandler }
@@ -257,6 +263,7 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.passwordValidations }
+            className="login-form__input"
 
             onChange={ this.onChangePasswordHandler }
             onPressEnter={ this.onPressEnterPasswordHandler }

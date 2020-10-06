@@ -30,6 +30,11 @@ export type TextInputProps = {
   type: inputType,
   // The value
   value: string,
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  //  positioning of the component
+  className?: string,
   // The flag shows that all fields must be validated
   //  regardless whether they is changed or not
   forceValidation?: boolean,
@@ -80,6 +85,7 @@ const TextInput = (props: TextInputProps) => {
     validate = false,
     forceValidation = false,
     type,
+    className = '',
     onChange = (data: string, valid: boolean) => {},
     onPressEnter = () => {}
   } = props;
@@ -142,6 +148,7 @@ const TextInput = (props: TextInputProps) => {
       valid={ valid }
       validate={ validate && touched }
       errorMsg={ errorMessage }
+      className={ className }
 
       onChange={ onChangeHandler }
       onPressEnter={ onPressEnterHandler }

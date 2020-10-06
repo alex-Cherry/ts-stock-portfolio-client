@@ -4,16 +4,18 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // custom components
-import Card, { CardContent, CardActions, CardErrors } from '../card';
-import { Input } from '../inputs';
-import Button from '../button';
-import TextInput from './textInput';
-import NotiticationWithTransfer from './notiticationWithTransfer';
+import Card, { CardContent, CardActions, CardErrors } from '../../card';
+import { Input } from '../../inputs';
+import Button from '../../button';
+import TextInput from '../textInput';
+import NotiticationWithTransfer from '../notiticationWithTransfer';
 // actions
-import { register } from '../../store/auth/action';
+import { register } from '../../../store/auth/action';
 // input checker
-import { email, required, minLength } from '../../utils/inputChecker/validators';
-import { ValidationsRuleType } from '../../utils/inputChecker/validate';
+import { email, required, minLength } from '../../../utils/inputChecker/validators';
+import { ValidationsRuleType } from '../../../utils/inputChecker/validate';
+// CSS
+import './registerComponent.scss';
 
 
 // DESCRIPTION:
@@ -296,7 +298,9 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
     
 
     return (
-      <Card>
+      <Card
+        className="register-form"
+      >
 
         {/* CONTENT */}
         <CardContent>
@@ -309,6 +313,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.emailValidations }
+            className="register-form__input"
 
             onChange={ this.onChangeEmailHandler }
             onPressEnter={ this.onPressEnterEmailHandler }
@@ -316,12 +321,13 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
           {/* Username */}
           <TextInput
             id='Username'
-            label='Email'
+            label='Username'
             value={ username }
             type='text'
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.usernameValidations }
+            className="register-form__input"
 
             onChange={ this.onChangeUsernameHandler }
             onPressEnter={ this.onPressEnterUsernameHandler }
@@ -335,6 +341,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.passwordValidations }
+            className="register-form__input"
 
             onChange={ this.onChangePasswordHandler }
             onPressEnter={ this.onPressEnterPasswordHandler }
@@ -345,6 +352,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
             type="password"
             label="Confirm password"
             value={ this.state.confirmPassword }
+            className="register-form__input"
 
             onChange={ this.onChangeConfirmPasswordHandler }
           />

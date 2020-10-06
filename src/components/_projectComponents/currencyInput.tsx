@@ -40,6 +40,11 @@ type CurrencyInputProps =  {
   label: string,
   // A value
   value: number,
+  // Extra classes, that you can apply to the root element,
+  //  when you use this component inside other ones.
+  // It's assumed that will be used classes that define
+  //  positioning of the component
+  className?: string,
   // The mark = "true" when
   //  - the value in the input is changed;
   //  - focus on the input is blurred
@@ -530,7 +535,8 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
       id,
       label,
       value,
-      validate=false
+      className = '',
+      validate = false
     } = this.props;
     // state
     const {
@@ -544,6 +550,7 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
         id={ id }
         label={ label }
         type="text"
+        className={ className }
         value={ this.formatValue(value) }
         valid={ valid }
         validate={ validate && touched }

@@ -433,7 +433,10 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
 
     // Main content
     return (
-      <Card className="stock-editor">
+      <Card
+        className="stock-editor"
+      >
+
         {/* CONTENT */}
         <CardContent>
           {/* ShortName */}
@@ -445,6 +448,8 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
             forceValidation={forceValidation}
             validate={true}
             validations={this.shortNameValidations}
+            className="stock-editor__input"
+
             onChange={this.onChangeCompanyShortNameHandler}
             onPressEnter={this.onPressEnterCompanyShortNameHandler}
           />
@@ -457,6 +462,8 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
             forceValidation={forceValidation}
             validate={true}
             validations={this.tickerValidations}
+            className="stock-editor__input"
+
             onChange={this.onChangeTickerHandler}
             onPressEnter={this.onPressEnterTickerHandler}
           />
@@ -468,6 +475,8 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
             touched={forceValidation}
             validate={true}
             validations={this.priceValidations}
+            className="stock-editor__input"
+
             onChange={this.onChangePriceHandler}
             onPressEnter={this.onPressEnterPriceHandler}
           />
@@ -477,6 +486,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
             value={bluetip}
             text={`"Голубая фишка"`}
             className="stock-editor__bluetip"
+
             onChange={this.onChangeBlueTipHandler}
           />
           {/* Sector */}
@@ -486,6 +496,8 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
             value={sectorId}
             options={options}
             listHeader="Выберите отрасль ..."
+            className="stock-editor__input"
+            
             onChange={this.onChangeSectorHandler}
           />
         </CardContent>
