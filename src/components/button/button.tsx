@@ -104,7 +104,7 @@ const Button = (props: ButtonProps) => {
       disabled={ disabled }
       onClick={ onClick }
     >
-      <div className="d-flex">
+      <div className="btn__block">
         {/* text */}
         { text }
         {/* icon */}
