@@ -1,44 +1,55 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-// import utils
+// Utils
 import { setAuth, clearAuth } from '../../utils/localStorage/auth';
 import { useFetch } from '../../utils/useFetch';
-// import types
+// Types
 import { AuthActionTypes, AuthLoginAction } from './types';
 import { User } from '../../types';
 
-// LOGIN
+
+/**
+ * LOGIN
+ * 
+ * The function does authorization of an user.
+ * And saves the data about the user and its token in the local storage.
+ * Authorization is by email and password
+ * 
+ * @param email 
+ * @param password 
+ */
 export const login = (
   email: string, password: string
 ): ThunkAction<Promise<void>, void, unknown, AuthLoginAction> => async (dispatch): Promise<void> => {
     
-    // form data necessary for authorization
+    // Form data necessary for authorization
     const authData = {
       email,
       password
     };
 
     try {
-      // do authorization
+      // Do authorization
       const fetchResult = await useFetch('/api/auth/login', 'POST', authData);
+      // Get result of the response
       const { data, status } = fetchResult;
       
-      // if http-status doesn't have code 200,
-      //    throw an error
+      // If http-status doesn't have code 200,
+      //  throw an error
       if (status !== 200) {
         throw new Error(data.message);
       }
-      // get data from response
+      // Get the user and the token from the response
       const { user, token } = data;
-      // create an user
+      // Create the user
       const loggedUser = new User(
         user.id,
         user.username,
         user.isAdmin
       );
-      // set redux-state
+      // Set redux-state
       dispatch(authSuccess(loggedUser, token));
-      // save data in local storage
+      // Save the user and the token in the local storage
       setAuth(token, loggedUser);
 
     } catch (err) {
@@ -48,16 +59,27 @@ export const login = (
 }
 
 
-// REGISTER
+/**
+ * REGISTER
+ * 
+ * The function does registration of an user.
+ * 
+ * @param email 
+ * @param password 
+ * @param username 
+ */
 export const register = (
   email: string, password: string, username: string
 ): ThunkAction<Promise<void>, void, unknown, AnyAction> => async (dispatch): Promise<void> => {
     try {
+      // Form data necessary for registration
       const registerData = { email, password, username };
+      // Do registration
       const fetchResult = await useFetch('/api/auth/register', 'POST', registerData);
+      // Get result from the response
       const { data, status } = fetchResult;
-      // if http-status doesn't have code 2**,
-      //    throw an error
+      // If http-status doesn't have code 2**,
+      //  throw an error
       if (Math.floor(status / 100) !== 2) {
         throw new Error(data.message);
       }
@@ -68,6 +90,12 @@ export const register = (
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+// 
+// ACTION CREATORS
+// 
+////////////////////////////////////////////////////////////////////////////////
+
 // AUTH SUCCESS
 export const authSuccess = (
   user: User, token: string
@@ -77,16 +105,14 @@ export const authSuccess = (
     payload: { user, token }
   }
 }
-
-
 // LOGOUT
 export const authLogout = () => {
-  // clear data in local storage
+  // Clear auth data in the local storage
   clearAuth();
   // action creator
   return logout();
 }
-
+// 
 const logout = () => {
   return {
     type: AuthActionTypes.AUTH_LOGOUT

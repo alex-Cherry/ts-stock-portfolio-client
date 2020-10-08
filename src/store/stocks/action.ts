@@ -4,8 +4,8 @@ import { ExtendedStock, EconomicSector } from '../../types';
 // import utils
 import { useFetch } from '../../utils/useFetch';
 // 
-import { StocksActionTypes } from './types';
-import { AppState } from '..';
+import { StocksActionTypes, StocksAction } from './types';
+import { AppState } from '../';
 
 interface IKeyName {
   id: string,
@@ -13,22 +13,28 @@ interface IKeyName {
 }
 
 
-// FETCH SECTORS
+/**
+ * FETCH SECTORS
+ * 
+ * The function gets economic sectors from a server
+ *  and returns them
+ */
 export const fetchSectors = (
 ): ThunkAction<Promise<IKeyName[] | undefined>, void, unknown, Action<any>> => async (dispatch) => {
   try {
-    // execute request
+    // Execute the request
     const fetchResult = await useFetch('/api/stocks/sectors');
+    // Get the data from the response
     const { data, status } = fetchResult;
-    // if http-status doesn't have code 200,
-    //    throw an error
+    // If http-status doesn't have the code 200,
+    //  throw an error
     if (status !== 200) {
       const msg = 'При чтении данных возникла ошибка';
       throw new Error(msg);
     }
-    // get data
+    // Get sectors
     const sectors = data.sectors as IKeyName[];
-    // return results
+    // Return the result
     return sectors;
   } catch (err) {
     throw new Error(err.message);
@@ -36,24 +42,35 @@ export const fetchSectors = (
 }
 
 
-// SAVE STOCK
+/**
+ * SAVE STOCK
+ * 
+ * The function saves a stock on a server.
+ * The stock can be new or existing. Id it has an empty id, it's new
+ * 
+ * @param stock - the stock to save
+ */
 export const saveStock = (
   stock: ExtendedStock
 ): ThunkAction<Promise<void>, void, unknown, Action<any>> => async (dispatch) => {
   try {
+    // Form data to save.
     const data = {
       stock: { ...stock }
     }
-    // execute request
+    // Execute the request
     const fetchResult = await useFetch('/api/stocks/savestock', 'POST', data);
+    // Get the data from the response:
+    //  - id - id of the new or the edited stock
     const { status, data: id } = fetchResult;
-    // if http-status doesn't have code 2**,
-    //    throw an error
+    // If http-status doesn't have the code 2**,
+    //  throw an error
     if (status !== 200 && status !== 201) {
       throw new Error('При сохранении данных возникла ошибка');
     }
-    // dispatch
+    //
     stock.id = id;
+    // Save the stock in the redux-state
     dispatch(actionCreatorStockSave(stock));
 
   } catch (err) {
@@ -62,33 +79,41 @@ export const saveStock = (
 }
 
 
-// FETCH STOCKS
+/**
+ * FETCH STOCKS
+ * 
+ * The function gets stocks from a server
+ *  and returns them
+ * 
+ * @param bluetip - the flag indicates that need fetch stocks from the "bluetip" category
+ */
 export const fetchStocks = (
   bluetip: boolean = false
 ): ThunkAction<Promise<void>, void, unknown, Action<any>> => async (dispatch) => {
   try {
-    // execute request
+    // Execute the necessary request
     let fetchResult;
     if (bluetip) {
       fetchResult = await useFetch('/api/stocks/stocks?bluetip=true', 'GET', null, {}, true);
     } else {
       fetchResult = await useFetch('/api/stocks/stocks', 'GET', null, {}, true);
     }
+    // Get the data from the response
     const { data, status } = fetchResult;
-    // if http-status doesn't have code 200,
-    //    throw an error
+    // If http-status doesn't have the code 200,
+    //  throw an error
     if (status !== 200) {
       const msg = 'При чтении данных возникла ошибка';
       throw new Error(msg);
     }
-    // transform data
+    // Transform data into "our" types
     const stocks: ExtendedStock[] = data.stocks.map((item: any) => {
-        
+        // The econ. sector
         const sector = new EconomicSector(
           item.sector.id,
           item.sector.name
         );
-
+        // The stock
         const stock = new ExtendedStock(
           item.id,
           item.ticker,
@@ -103,7 +128,7 @@ export const fetchStocks = (
       }
     );
     
-    // dispatch
+    // Save stocks in the redux-state
     dispatch(actionCreatorStocksFetch(stocks));
 
   } catch (err) {
@@ -112,11 +137,18 @@ export const fetchStocks = (
 }
 
 
-// GET STOCK BY ID
+/**
+ * GET STOCK BY ID
+ * 
+ * The function gets a stock from a server by the specified id
+ * 
+ * @param id - id of the stock to get
+ */
 export const getStockById = (
   id: string
 ): ThunkAction<Promise<ExtendedStock | undefined>, AppState, unknown, Action<any>> => async (dispatch, getState) => {
   
+  // At the beginning try to find the stock in the redux-state.
   const { stocks: { stocks } } = getState();
   const stockInStore = stocks.find(el => el.id === id);
   if (stockInStore) {
@@ -124,27 +156,30 @@ export const getStockById = (
   }
   
   try {
+    // Execute the request
     const fetchResult = await useFetch(`/api/stocks/stocks/${id}`);
+    // Get the data from the response:
     const { data, status } = fetchResult;
+    // If we didn't find the stock with the specified id,
+    //  return undefined
     if (status === 404) {
       return undefined;
       
-    // if http-status doesn't have code 200,
-    //    throw an error
+    // If http-status doesn't have the code 200,
+    //  throw an error
     } else if (status !== 200) {
       const msg = 'При чтении данных возникла ошибка';
       throw new Error(msg);
     }
-    // get data
+    // Get the data
     const rawStock = data.stock;
 
-    // create sector
+    // Create the economic sector
     const sector = new EconomicSector(
       rawStock.sector.id,
       rawStock.sector.name
     );
-
-    // create stock
+    // Create the stock
     const stock = new ExtendedStock(
       rawStock.id,
       rawStock.ticker,
@@ -155,7 +190,7 @@ export const getStockById = (
       false // favorite
     );
 
-    // return results
+    // Return the stock
     return stock;
 
   } catch (err) {
@@ -163,7 +198,14 @@ export const getStockById = (
   }
 }
 
-// SET STOCK TO FAVORITE
+
+/**
+ * SET STOCK TO FAVORITE - not realize
+ * 
+ * The function changes the attribute "isFavorite" of a stock
+ * 
+ * @param stock - the stock, which the property "isFavorite" is being changed for
+ */
 export const setStockFavorite = (
   stock: ExtendedStock
 ): ThunkAction<Promise<void>, void, unknown, Action<any>> => async dispatch => {
@@ -173,7 +215,7 @@ export const setStockFavorite = (
     // do in a case of a successful REST-call
     const newStock = stock.copy();
     newStock.isFavorite = !newStock.isFavorite;
-
+    // Save the stock in the redux-state
     dispatch(actionCreatorStockSave(newStock));
 
   } catch (err) {
@@ -189,15 +231,14 @@ export const setStockFavorite = (
 ////////////////////////////////////////////////////////////////////////////////
 
 // FETCH STOCKS
-const actionCreatorStocksFetch = (stocks: ExtendedStock[]) => {
+const actionCreatorStocksFetch = (stocks: ExtendedStock[]): StocksAction => {
   return {
     type: StocksActionTypes.STOCK_FETCH,
     payload: { stocks }
   }
 }
-
 // SAVE STOCK
-const actionCreatorStockSave = (stock: ExtendedStock) => {
+const actionCreatorStockSave = (stock: ExtendedStock): StocksAction => {
   return {
     type: StocksActionTypes.STOCK_SAVE,
     payload: { stock }
