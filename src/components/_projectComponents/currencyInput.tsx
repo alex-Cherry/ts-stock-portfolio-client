@@ -549,15 +549,15 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
       <Input
         id={ id }
         label={ label }
-        type="text"
-        className={ className }
-        value={ this.formatValue(value) }
-        valid={ valid }
-        validate={ validate && touched }
-        errorMsg={ errorMessage }
-        inputRef={ this.inputRef }
-        onBlur={ this.onBlurHandler }
-        onPressEnter={ this.onPressEnterHandler }
+        // type="text"
+        // className={ className }
+        data={ this.formatValue(value) }
+        // valid={ valid }
+        // validate={ validate && touched }
+        // errorMsg={ errorMessage }
+        // inputRef={ this.inputRef }
+        // onBlur={ this.onBlurHandler }
+        // onPressEnter={ this.onPressEnterHandler }
       />
     );
   }

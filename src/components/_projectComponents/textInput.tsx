@@ -143,16 +143,16 @@ const TextInput = (props: TextInputProps) => {
     <Input
       id={id}
       label={ label }
-      value={ value }
+      data={ value }
       type={ type }
-      valid={ valid }
-      validate={ validate && touched }
-      errorMsg={ errorMessage }
-      className={ className }
+      // valid={ valid }
+      // validate={ validate && touched }
+      // errorMsg={ errorMessage }
+      // className={ className }
 
-      onChange={ onChangeHandler }
-      onPressEnter={ onPressEnterHandler }
-      onBlur={ onBlurHandler }
+      // onChange={ onChangeHandler }
+      // onPressEnter={ onPressEnterHandler }
+      // onBlur={ onBlurHandler }
     />
   );
 }
