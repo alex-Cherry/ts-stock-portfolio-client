@@ -117,6 +117,25 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
     super(props);
 
     this.inputRef = React.createRef<HTMLInputElement>();
+
+    const {
+
+      integerDigits = 7,
+      fractionDigits = 2,
+      decimalSeparator = ','
+    } = this.props;
+
+    const regExp = new RegExp(`^\\d{${integerDigits}}[${decimalSeparator}]\\d{${fractionDigits}}$`);
+    console.log(regExp)
+    const sum1 = '1231231,45';
+    const sum2 = '1231231,456';
+    const sum3 = '123123112,45';
+    const sum4 = '12312.45';
+    console.log(`${sum1} = `, regExp.test(sum1));
+    console.log(`${sum2} = `, regExp.test(sum2));
+    console.log(`${sum3} = `, regExp.test(sum3));
+    console.log(`${sum4} = `, regExp.test(sum4));
+
   }
 
 
@@ -535,6 +554,11 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
       id,
       label,
       value,
+
+      integerDigits = 7,
+      fractionDigits = 2,
+      decimalSeparator = ',',
+
       className = '',
       validate = false
     } = this.props;
@@ -549,8 +573,8 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
       <Input
         id={ id }
         label={ label }
-        // type="text"
-        // className={ className }
+        type="text"
+        className={ className }
         data={ this.formatValue(value) }
         // valid={ valid }
         // validate={ validate && touched }

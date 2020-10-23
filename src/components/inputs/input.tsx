@@ -14,7 +14,7 @@ import './inputs.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-export type inputType = 'text' | 'password' | 'email' | 'number';
+export type inputType = 'text' | 'password' | 'email';
 
 // PROPS
 type InputProps = {
@@ -39,8 +39,14 @@ type InputProps = {
   // Rules which will be used to validate the value
   validations?: ValidationsRuleType,
 
+  inputRef?: React.RefObject<HTMLInputElement>,
+
+  // 
+  formatValueFunction?: (data: string) => string,
+
   // => Events
   onChange?: (value: string, valid: boolean) => void,
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void,
   onPressEnter?: () => void
 };
 
@@ -141,8 +147,11 @@ class Input extends React.Component<InputProps, InputState>  {
    * 
    */ 
   onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange = (value: string, valid: boolean) => {} } = this.props;
-
+    
+    const {
+      onChange = (value: string, valid: boolean) => {}
+    } = this.props;
+    
     const value = event.target.value;
     let valid = true;
 
@@ -156,13 +165,22 @@ class Input extends React.Component<InputProps, InputState>  {
     onChange(value, valid);
   }
   /**
-   * => Input - "onKeyPress"
+   * => Input - "onKeyDown"
    */
-  onKeyPressInputHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    const { onPressEnter = () => {} } = this.props;
+  onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    // Destructure the props
+    const {
+      onPressEnter = () => {},
+      onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {}
+    } = this.props;
+
+    // Key "Enter"
     if (event.key === 'Enter') {
-      // Run the event from the props
-      onPressEnter();
+      onPressEnter()
+
+    // Another key
+    } else {
+      onKeyPress(event);
     }
   }
 
@@ -354,6 +372,13 @@ class Input extends React.Component<InputProps, InputState>  {
     }
   }
 
+  formatValue = (data: string): string => {
+    const {
+      formatValueFunction = (data: string): string => { return data; }
+    } = this.props;
+    return formatValueFunction(data);
+  }
+
 
   // ===< RENDER >===
   // 
@@ -362,7 +387,8 @@ class Input extends React.Component<InputProps, InputState>  {
     const {
       label,
       data,
-      type="text"
+      type="text",
+      inputRef
     } = this.props;
 
     return (
@@ -373,20 +399,22 @@ class Input extends React.Component<InputProps, InputState>  {
         <input
           id={ this.id }
           type={ type }
-          value={ data }
-          // ref={ inputRef }
+          // value={ data }
+          value={ this.formatValue(data) }
+          // ref={ this.inputRef }
           className={ this.getClassesForInput() }
-          
+          // Ref
+          ref={ inputRef }
+          // Events
           onFocus={ this.onFocusInputHandler }
           onBlur={ this.onBlurInputHandler }
           onChange={ this.onChangeInputHandler }
-          onKeyPress={ this.onKeyPressInputHandler }
+          onKeyDown={ this.onKeyDownHandler }
         />
 
         {/* Label */}
         <label
           htmlFor={ this.id }
-
           className={ this.getClassesForLabel() }
         >
           { label }
