@@ -442,7 +442,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
           <Input
             label="Краткое наименование компании"
             type="text"
-            data={ shortName }
+            value={ shortName }
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.shortNameValidations }
@@ -455,7 +455,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
           <Input
             label="Тикер"
             type="text"
-            data={ ticker }
+            value={ ticker }
             forceValidation={ forceValidation }
             validate={ true }
             validations={ this.tickerValidations }

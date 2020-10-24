@@ -575,7 +575,7 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
         label={ label }
         type="text"
         className={ className }
-        data={ this.formatValue(value) }
+        value={ this.formatValue(value) }
         // valid={ valid }
         // validate={ validate && touched }
         // errorMsg={ errorMessage }

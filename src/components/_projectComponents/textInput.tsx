@@ -143,7 +143,7 @@ const TextInput = (props: TextInputProps) => {
     <Input
       id={id}
       label={ label }
-      data={ value }
+      value={ value }
       type={ type }
       // valid={ valid }
       // validate={ validate && touched }

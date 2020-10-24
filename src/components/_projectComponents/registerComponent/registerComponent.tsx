@@ -351,7 +351,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
             id="confirm"
             type="password"
             label="Confirm password"
-            data={ this.state.confirmPassword }
+            value={ this.state.confirmPassword }
             className="register-form__input"
 
             // onChange={ this.onChangeConfirmPasswordHandler }

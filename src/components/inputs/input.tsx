@@ -8,6 +8,12 @@ import { validate as validateInput, ValidationsRuleType } from '../../utils/inpu
 import './inputs.scss';
 
 
+// DESCRIPTION:
+// 
+// This component allows users to enter text data.
+// 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -21,7 +27,7 @@ type InputProps = {
   // A label of the input
   label: string,
   // A value of the input
-  data: string,
+  value: string,
   // id of the input-element
   id?: string,
   // Define a type of the component
@@ -41,19 +47,26 @@ type InputProps = {
 
   inputRef?: React.RefObject<HTMLInputElement>,
 
-  // 
+  // This function defines how the value will be displayed in the input-element.
+  // If this function isn't set, the value will be displayed with no formatting (transformation)
   formatValueFunction?: (data: string) => string,
+  // This function is opposite of the previous one.
+  // It gets the plain value from the formatted (transformed) one.
+  // If the function isn't set there won't be the reverse transformation
+  interpretValueFunction?: (data: string) => string,
 
   // => Events
   onChange?: (value: string, valid: boolean) => void,
   onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void,
-  onPressEnter?: () => void
+  onPressEnter?: () => void,
+  onChangeValidity?: (valid: boolean) => void
 };
 
 // STATE
 type InputState = {
   isTouched: boolean,
-  isFocused: boolean
+  isFocused: boolean,
+  // errorMessage: string
 };
 
 
@@ -92,7 +105,8 @@ class Input extends React.Component<InputProps, InputState>  {
     // State
     this.state = {
       isTouched: false,
-      isFocused: false
+      isFocused: false,
+      // errorMessage: ''
     }
   }
 
@@ -113,9 +127,14 @@ class Input extends React.Component<InputProps, InputState>  {
    * => componentDidUpdate()
    */
   componentDidUpdate = (prevProps: InputProps) => {
+    
     // Destructure the props
-    const { forceValidation: prevForceValidation = false } = prevProps;
-    const { forceValidation = false } = this.props;
+    const {
+      forceValidation: prevForceValidation = false
+    } = prevProps;
+    const {
+      forceValidation = false
+    } = this.props;
 
     // Force validation
     if (prevForceValidation !== forceValidation && forceValidation && this.needValidate()) {
@@ -152,12 +171,14 @@ class Input extends React.Component<InputProps, InputState>  {
       onChange = (value: string, valid: boolean) => {}
     } = this.props;
     
-    const value = event.target.value;
+    let value = event.target.value;
     let valid = true;
 
     if (this.needValidate()) {
       // The input becomes touched
       this.setChanged();
+      // Transpile the value
+      value = this.interpretValue(value);
       // Validate the value
       valid = this.doValidate(value);
     }
@@ -255,8 +276,8 @@ class Input extends React.Component<InputProps, InputState>  {
    * The function returns the flag whether there is a value is in the input
    */
   isValueSet = (): boolean => {
-    const { data } = this.props;
-    return !!data.trim();
+    const { value } = this.props;
+    return !!value.trim();
   }
   /**
    * => isValid()
@@ -264,7 +285,7 @@ class Input extends React.Component<InputProps, InputState>  {
    * The function returns the flag whether the value is valid or not
    */
   isValid = (): boolean => {
-    return !this.errorMessage;
+    return !this.getError();
   }
   /**
    * => needValidate()
@@ -324,6 +345,18 @@ class Input extends React.Component<InputProps, InputState>  {
    */
   setError = (msg: string): void => {
     this.errorMessage = msg;
+    // this.setState({ errorMessage: msg })
+  }
+  /**
+   * => getError()
+   * 
+   * The function gets the variable "errorMessage"
+   * 
+   * @param msg - the assignable message
+   */
+  getError = (): string => {
+    return this.errorMessage;
+    // return this.state.errorMessage;
   }
   /**
    * => renderErrors()
@@ -333,7 +366,7 @@ class Input extends React.Component<InputProps, InputState>  {
   renderErrors = () => {
     if (this.needApplyValidation() && !this.isValid()) {
       return (
-        <span className="input-field__error">{ this.errorMessage }</span>  
+        <span className="input-field__error">{ this.getError() }</span>  
       );
     }
     return null;
@@ -363,30 +396,49 @@ class Input extends React.Component<InputProps, InputState>  {
    */
   forceValidation = (): void => {
     // 
-    const { data } = this.props;
+    const { value } = this.props;
 
     if (this.needValidate()) {
-      this.doValidate(data);
+      this.doValidate(value);
       this.setChanged();
       this.setTouched();
     }
   }
-
+  /**
+   * => formatValue()
+   * 
+   * This function defines how the value will be displayed in the input-element.
+   * 
+   * @param data - the string to format
+   */
   formatValue = (data: string): string => {
     const {
       formatValueFunction = (data: string): string => { return data; }
     } = this.props;
     return formatValueFunction(data);
   }
+  /**
+   * => interpretValue()
+   * 
+   * Thsi function tries to get the plain value from the formatted one.
+   * 
+   * @param data - the string to interpret
+   */
+  interpretValue = (data: string): string => {
+    const {
+      interpretValueFunction = (data: string): string => { return data; }
+    } = this.props;
+    return interpretValueFunction(data);
+  }
 
 
   // ===< RENDER >===
   // 
   render = () => {
-
+    
     const {
       label,
-      data,
+      value,
       type="text",
       inputRef
     } = this.props;
@@ -399,9 +451,7 @@ class Input extends React.Component<InputProps, InputState>  {
         <input
           id={ this.id }
           type={ type }
-          // value={ data }
-          value={ this.formatValue(data) }
-          // ref={ this.inputRef }
+          value={ this.formatValue(value) }
           className={ this.getClassesForInput() }
           // Ref
           ref={ inputRef }

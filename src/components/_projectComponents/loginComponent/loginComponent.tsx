@@ -243,7 +243,7 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
           {/* Email */}
           <Input
             label='Email'
-            data={ email }
+            value={ email }
             type='email'
             forceValidation={ forceValidation }
             validate={ true }
@@ -256,7 +256,7 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
           {/* Password */}
           <Input
             label='Password'
-            data={ password }
+            value={ password }
             type='password'
             forceValidation={ forceValidation }
             validate={ true }

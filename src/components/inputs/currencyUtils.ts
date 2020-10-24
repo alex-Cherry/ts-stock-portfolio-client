@@ -30,15 +30,16 @@ export const getSumFromString = (data: string, settings: CurrencySettings): numb
 
   let integerPart = '';
   let fractionalPart = '0'.repeat(fractionDigits);
-
+  
   // Remove any symbol except a digit or the specified separator
   const regexNotDigit = new RegExp(`[^0-9${decimalSeparator}.]`, 'gi');
   let strData = data
-    .replace(regexNotDigit, '');
+    .replace(regexNotDigit, '')
+    .replace(decimalSeparator, '.'); // replace the decimal separator with the default separator
 
   // Define the integer part.
   // Find the position of the decimal separator
-  let indexSeparator = strData.indexOf(decimalSeparator);
+  let indexSeparator = strData.indexOf('.');
   if (indexSeparator === -1) {
     integerPart = strData;
     strData = '';
@@ -51,7 +52,7 @@ export const getSumFromString = (data: string, settings: CurrencySettings): numb
 
   // Define the fractional part.
   // Find the position of the decimal separator
-  indexSeparator = strData.indexOf(decimalSeparator);
+  indexSeparator = strData.indexOf('.');
   if (indexSeparator === -1) {
     fractionalPart = strData;
 
@@ -59,6 +60,7 @@ export const getSumFromString = (data: string, settings: CurrencySettings): numb
     fractionalPart = strData.slice(0, indexSeparator);
 
   }
+
   // Format the fractional part.
   // The length of the part must have the specified value
   fractionalPart = fractionalPart

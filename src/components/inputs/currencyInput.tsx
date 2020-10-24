@@ -22,7 +22,7 @@ import { ValidationsRuleType } from '../../utils/inputChecker/validate';
 // Available currencies are defined in the enum "Currencies".
 // In the constant "CurrencySymbols" are determined appropriate currency symbols.
 // 
-// In the base of the component is a custom react component "Input".
+// In the base of the component is the custom react component "Input".
 // 
 
 
@@ -126,7 +126,13 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
   private cursorPosition: number = 0;
   // Stores amount of thousands groups
   private numGroups: number = 0;
-  //
+  // Stores the symbol an user entered.
+  // The order of events are next:
+  //  1. onKeyPress
+  //  2. onChange
+  // We can get the key an user entered only in the event "onKeyPress".
+  // But we need to use this key in the event "onChange".
+  // So we use the variable to store the key between the events
   private pressedKey: string = '';
 
 
@@ -171,110 +177,17 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
    */
   onChangeHandler = (data: string, valid: boolean) => {
     
-    // 
-    if (!this.inputRef.current) {
-      return;
-    }
-
     const {
-      value,
+      value: prevValue, 
       onChange = (data: number, valid: boolean) => {} // Get the event "onChange"
     } = this.props;
 
-    // Save the previous value
-    const prevValue: number = value;
-
-    // Save the current position of the cursor
-    this.cursorPosition = this.inputRef.current.selectionStart || 0;
-
-
     try {
-
-      // An user pressed not acceptable symbol,
-      if (!this.userEnteredAcceptableSymbol(this.pressedKey)) {
-        // Return the cursor to its previous position.
-        this.cursorPosition -= 1;
-        // Interrupt the processing
-        throw new Error('Not acceptable symbol');
-      }
-
-
-      // An user pressed the button "Backspace"
-      //  and removed the decimal separator
-      if (this.userRemovedDecimalSeparator(this.pressedKey, data)) {
-        // Interrupt the processing
-        throw new Error('Not a number');
-      }
-
-
-      // Convert the new value to the type "number"
-      let newValueAsNumber = getSumFromString(data, this.getCurrencySettings());
-
-
-      // An user entered the decimal separator in the integer part
-      if (this.userEnteredDecimalSeparatorInTheIntegerPart(this.pressedKey, newValueAsNumber, prevValue)) {
-        // Get the integer part with separators
-        const integerPartWithSeparators = getIntegerPartWithSeparators(prevValue, this.getCurrencySettings());
-        // Move the cursor to the position after the decimal separator
-        this.cursorPosition = integerPartWithSeparators.length + 1;
-        // Interrupt the processing
-        throw new Error('Not a number');
-      }
-
-
-      // An user entered the decimal separator in the fractional part
-      if (this.userEnteredDecimalSeparatorInTheFractionalPart(this.pressedKey, newValueAsNumber, prevValue)) {
-        // Return the cursor to the previous position
-        this.cursorPosition -= 1;
-        // Interrupt the processing
-        throw new Error('Not a number');
-      }
-
-
-      // Check whether the length of the integer part
-      //  exceeds the specified length or not
-      if (this.lengthOfIntegerPartExceeded(newValueAsNumber)) {
-        // Return the cursor to the previous position
-        this.cursorPosition -= 1;
-        // Interrupt the processing
-        throw new Error('The length of the integer part was exceeded')
-      }
-
-
-      // An user changed the integer part of the number,
-      //  and the integer part was "0"
-      if (this.userChangedZeroIntegerPart(newValueAsNumber, prevValue)) {
-        // We removed the "0" and leave only the new digit (in the integer part)
-        newValueAsNumber = +`${this.pressedKey}.${getFractionalPart(newValueAsNumber, this.getCurrencySettings())}`;
-        this.cursorPosition = 1;
-      }
-
-
-      // Compute the number of thousands groups
-      const numGroups = getNumGroups(newValueAsNumber);
-
-      // If the number of thousands groups is changed,
-      //  it's necessary to consider the group separator.
-      // So additionally move the cursor in the required direction
-      this.cursorPosition += 1 * (numGroups - this.numGroups);
-
-      // Update variables
-      this.numGroups = numGroups;
-      
-
-      // Run the event "onChange" from the props with the new value
-      onChange(newValueAsNumber, valid);
+      const newValue = +data;
+      onChange(newValue, valid);
 
     } catch {
-
-      // Leave the previous value and
-      //  run the event "onChange" from the props
       onChange(prevValue, true);
-
-    } finally {
-
-      // Zero the entered symbol
-      this.pressedKey = '';
 
     }
   }
@@ -326,7 +239,12 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
     const { currency = Currencies.RUB } = this.props;
     return CurrencySymbols[currency];
   }
-
+  /**
+   * => getCurrencySettings()
+   * 
+   * Returns the object with settings necessary for the functions
+   *  from the package "CurrencyUtils"
+   */
   getCurrencySettings = (): CurrencySettings => {
     return {
       'currencyPosition': this.getCurrencyPosition(),
@@ -338,7 +256,134 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
     }
   }
 
+  /**
+   * => interpretValue()
+   * 
+   * The function is used to check the user input
+   * 
+   * @param data 
+   */
+  interpretValue = (data: string): string => {
 
+    const {
+      value
+    } = this.props;
+
+    // Save the previous value
+    const prevValue: number = value;
+
+    if (!this.inputRef.current) {
+      return '' + prevValue;
+    }
+
+    let result = prevValue;
+
+    // Save the current position of the cursor
+    this.cursorPosition = this.inputRef.current.selectionStart || 0;
+
+
+    try {
+
+      // An user presses not acceptable symbol,
+      if (!this.userEnteredAcceptableSymbol(this.pressedKey)) {
+        // Return the cursor to its previous position.
+        this.cursorPosition -= 1;
+        // Interrupt the processing
+        throw new Error('Not acceptable symbol');
+      }
+
+
+      // An user presses the button "Backspace"
+      //  and removed the decimal separator
+      if (this.userRemovedDecimalSeparator(this.pressedKey, data)) {
+        // Interrupt the processing
+        throw new Error('Not a number');
+      }
+
+
+      // Convert the new value to the type "number"
+      let newValueAsNumber = getSumFromString(data, this.getCurrencySettings());
+
+
+      // An user enters the decimal separator in the integer part
+      if (this.userEnteredDecimalSeparatorInTheIntegerPart(this.pressedKey, newValueAsNumber, prevValue)) {
+        // Get the integer part with separators
+        const integerPartWithSeparators = getIntegerPartWithSeparators(prevValue, this.getCurrencySettings());
+        // Move the cursor to the position after the decimal separator
+        this.cursorPosition = integerPartWithSeparators.length + 1;
+        // Interrupt the processing
+        throw new Error('Not a number');
+      }
+
+
+      // An user enters the decimal separator in the fractional part
+      if (this.userEnteredDecimalSeparatorInTheFractionalPart(this.pressedKey, newValueAsNumber, prevValue)) {
+        // Return the cursor to the previous position
+        this.cursorPosition -= 1;
+        // Interrupt the processing
+        throw new Error('Not a number');
+      }
+
+
+      // Check whether the length of the integer part
+      //  exceeds the specified length or not
+      if (this.lengthOfIntegerPartExceeded(newValueAsNumber)) {
+        // Return the cursor to the previous position
+        this.cursorPosition -= 1;
+        // Interrupt the processing
+        throw new Error('The length of the integer part was exceeded')
+      }
+
+
+      // An user changes the integer part of the number,
+      //  and the integer part was "0".
+      // 
+      // e.g. there is the number "0.50" in the input.
+      // An user enters the digit "2". And now there is the number "20.50" in the input.
+      // We must leave the number "2.50", not the "20.50"
+      if (this.userChangedZeroIntegerPart(newValueAsNumber, prevValue)) {
+        // We removed the "0" and leave only the new digit (in the integer part)
+        newValueAsNumber = +`${this.pressedKey}.${getFractionalPart(newValueAsNumber, this.getCurrencySettings())}`;
+        this.cursorPosition = 1;
+      }
+
+
+      // Compute the number of thousands groups
+      const numGroups = getNumGroups(newValueAsNumber);
+
+      // If the number of thousands groups is changed,
+      //  it's necessary to consider the group separator.
+      // So additionally move the cursor in the required direction
+      this.cursorPosition += 1 * (numGroups - this.numGroups);
+
+      // Update variables
+      this.numGroups = numGroups;
+
+
+      result = newValueAsNumber;
+
+    } catch {
+      
+
+    } finally {
+
+      // Zero the entered symbol
+      this.pressedKey = '';
+
+    }
+
+    return '' + result;
+
+  }
+
+  // 
+  // The next functions are used to check the user input.
+  // Every function is a separate step of this check
+  // 
+
+  /**
+   * => userEnteredAcceptableSymbol()
+   */
   userEnteredAcceptableSymbol = (enteredSymbol: string): boolean => {
 
     let result = true;
@@ -356,7 +401,9 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
 
     return result;
   }
-
+  /**
+   * => userEnteredDecimalSeparatorInTheIntegerPart()
+   */
   userEnteredDecimalSeparatorInTheIntegerPart = (enteredSymbol: string, newValue: number, prevValue: number): boolean => {
 
     let result = false;
@@ -372,7 +419,9 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
 
     return result;
   }
-
+  /**
+   * => userEnteredDecimalSeparatorInTheFractionalPart()
+   */
   userEnteredDecimalSeparatorInTheFractionalPart = (enteredSymbol: string, newValue: number, prevValue: number): boolean => {
 
     let result = false;
@@ -388,7 +437,9 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
 
     return result;
   }
-
+  /**
+   * => userRemovedDecimalSeparator()
+   */
   userRemovedDecimalSeparator = (enteredSymbol: string, newValue: string): boolean => {
 
     let result = false;
@@ -402,7 +453,9 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
 
     return result;
   }
-
+  /**
+   * => lengthOfIntegerPartExceeded()
+   */
   lengthOfIntegerPartExceeded = (value: number): boolean => {
 
     let result = false;
@@ -418,7 +471,9 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
 
     return result;
   }
-
+  /**
+   * => userChangedZeroIntegerPart()
+   */
   userChangedZeroIntegerPart = (newValue: number, prevValue: number): boolean => {
 
     let result = false;
@@ -452,20 +507,21 @@ class CurrencyInput extends React.Component<CurrencyInputProps, CurrencyInputSta
       validations = {}
     } = this.props;
 
-    console.log('value = ', value);
-
     return (
       <Input
         label={ label }
         type="text"
         className={ className }
-        data={ '' + value }
+        // The component "Input" handles with string values,
+        //  so convert our value to the type "string"
+        value={ '' + value }
         validate={ validate }
         forceValidation={ forceValidation }
         validations={ validations }
         inputRef={ this.inputRef }
 
         formatValueFunction={ formatValue(this.getCurrencySettings()) }
+        interpretValueFunction={ this.interpretValue }
 
         onChange={ this.onChangeHandler }
         onKeyPress={ this.onKeyPressHandler }
