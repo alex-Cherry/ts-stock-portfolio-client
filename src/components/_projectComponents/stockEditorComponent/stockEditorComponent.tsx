@@ -468,7 +468,7 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
           <CurrencyInput
             label="Цена"
             value={ price }
-            // touched={ forceValidation }
+            forceValidation={ forceValidation }
             currencyPosition="postfix"
             validate={ true }
             validations={ this.priceValidations }

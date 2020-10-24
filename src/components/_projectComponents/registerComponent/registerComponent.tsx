@@ -7,7 +7,6 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import Card, { CardContent, CardActions, CardErrors } from '../../card';
 import { Input } from '../../inputs';
 import Button from '../../button';
-import TextInput from '../textInput';
 import NotiticationWithTransfer from '../notiticationWithTransfer';
 // actions
 import { register } from '../../../store/auth/action';
@@ -305,8 +304,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
         {/* CONTENT */}
         <CardContent>
           {/* Email */}
-          <TextInput
-            id='email'
+          <Input
             label='Email'
             value={ email }
             type='email'
@@ -319,7 +317,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
             onPressEnter={ this.onPressEnterEmailHandler }
           />
           {/* Username */}
-          <TextInput
+          <Input
             id='Username'
             label='Username'
             value={ username }
@@ -333,8 +331,7 @@ class RegisterComponent extends React.Component<RegisterComponentProps, Register
             onPressEnter={ this.onPressEnterUsernameHandler }
           />
           {/* Password */}
-          <TextInput
-            id='password'
+          <Input
             label='Password'
             value={ password }
             type='password'
