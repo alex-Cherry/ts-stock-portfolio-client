@@ -1,10 +1,17 @@
-import React, { ChangeEvent, KeyboardEvent, useRef } from 'react';
-// third-party libs
+import React, { ChangeEvent, KeyboardEvent } from 'react';
+// Third-party libs
 import classNames from 'classnames';
-// utils
-import { setClass, removeClass } from '../../utils/checkClassesForRefObjects';
-// css
+import { v4 as uuid } from 'uuid';
+// Utils
+import { validate as validateInput, ValidationsRuleType } from '../../utils/inputChecker/validate';
+// CSS
 import './inputs.scss';
+
+
+// DESCRIPTION:
+// 
+// This component allows users to enter text data.
+// 
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,42 +20,54 @@ import './inputs.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-export type inputType = 'text' | 'password' | 'email' | 'number';
+export type inputType = 'text' | 'password' | 'email';
 
-
-// at the core of the react-component "Input" is an html-element "input"
+// PROPS
 type InputProps = {
-  id: string,
-  // A label of an input
+  // A label of the input
   label: string,
-  // Define a type of a component
-  type?: inputType,
-  // Specifies a value of an input
+  // A value of the input
   value: string,
+  // id of the input-element
+  id?: string,
+  // Define a type of the component
+  type?: inputType,
   // Extra classes, that you can apply to the root element,
-  // when you use this component inside other ones.
+  //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
-  // positioning of the component
+  //  positioning of the component
   className?: string,
-  // An error message. It's displayed if the property "valid" = false
-  errorMsg?: string,
-  // Specifies whether display an error in the case of non-valid value.
-  // If "validate" = false, "errorMsg" won't be displayed in any case,
-  // If "validate" = true, "errorMsg" will be displayed if "valid" = false
+  // Specifies whether display an error in case of non-valid value
   validate?: boolean,
-  // Specifies whether a value is valid or not
-  valid?: boolean,
-  // In the base of a component "Input" is html-element "input".
-  // So this prop has a reference to this input.
-  // It's nec. for manipulating with it by outer elements
+  // The flag shows that all fields must be validated
+  //  regardless whether they is changed or not
+  forceValidation?: boolean,
+  // Rules which will be used to validate the value
+  validations?: ValidationsRuleType,
+
   inputRef?: React.RefObject<HTMLInputElement>,
 
+  // This function defines how the value will be displayed in the input-element.
+  // If this function isn't set, the value will be displayed with no formatting (transformation)
+  formatValueFunction?: (data: string) => string,
+  // This function is opposite of the previous one.
+  // It gets the plain value from the formatted (transformed) one.
+  // If the function isn't set there won't be the reverse transformation
+  interpretValueFunction?: (data: string) => string,
+
   // => Events
-  onChange?: (data: string) => void,
-  onFocus?: () => void,
-  onBlur?: () => void,
-  onPressEnter?: () => void
-}
+  onChange?: (value: string, valid: boolean) => void,
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void,
+  onPressEnter?: () => void,
+  onChangeValidity?: (valid: boolean) => void
+};
+
+// STATE
+type InputState = {
+  isTouched: boolean,
+  isFocused: boolean,
+  // errorMessage: string
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -56,185 +75,407 @@ type InputProps = {
 // COMPONENT
 // 
 ////////////////////////////////////////////////////////////////////////////////
+class Input extends React.Component<InputProps, InputState>  {
 
-// FormInput
-const Input = (props: InputProps) => {
-
-  const {
-    id = '',
-    label = 'input',
-    type = 'text',
-    value = '',
-    errorMsg = '',
-    validate = false,
-    valid = true,
-    inputRef,
-    onChange = (data: string) => {},
-    onFocus = () => {},
-    onBlur = () => {},
-    onPressEnter = () => {}
-  } = props;
+  // ===< CLASS FIELDS >===
   // 
-  // classes for the label
-  const classLabelActive = 'input-field__label--active';
-  const classLabelValid = 'input-field__label--valid';
-  const classLabelInvalid = 'input-field__label--invalid';
-  const classLabelFocused = 'input-field__label--focused';
-  // classes for the input
-  const classInputValid = 'input-field__input--valid';
-  const classInputInvalid = 'input-field__input--invalid';
-  // define refs
-  const divRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLLabelElement>(null);
+  private id: string = '';
+  private isChanged: boolean = false;
+  private errorMessage: string = '';
+  // Classes for the label
+  // -> for position
+  private classLabelActive = 'input-field__label--active';
+  // -> for color
+  private classLabelValid = 'input-field__label--valid';
+  private classLabelInvalid = 'input-field__label--invalid';
+  private classLabelFocused = 'input-field__label--focused';
+  // Classes for the input
+  private classInputValid = 'input-field__input--valid';
+  private classInputInvalid = 'input-field__input--invalid';
+
+
+  // ===< CONSTRUCTOR >===
+  // 
+  constructor(props: InputProps) {
+    super(props);
+
+    const { id = '' } = this.props;
+    // Generate id
+    this.id = id ? id : 'input_' + uuid();
+    // State
+    this.state = {
+      isTouched: false,
+      isFocused: false,
+      // errorMessage: ''
+    }
+  }
+
+
+  // ===< LIFECYCLE >===
+  // 
+  /**
+   * => componentDidMount()
+   */
+  componentDidMount = () => {
+    const { forceValidation = false } = this.props;
+
+    if (forceValidation && this.needValidate()) {
+      this.forceValidation();
+    }
+  }
+  /**
+   * => componentDidUpdate()
+   */
+  componentDidUpdate = (prevProps: InputProps) => {
+    
+    // Destructure the props
+    const {
+      forceValidation: prevForceValidation = false
+    } = prevProps;
+    const {
+      forceValidation = false
+    } = this.props;
+
+    // Force validation
+    if (prevForceValidation !== forceValidation && forceValidation && this.needValidate()) {
+      this.forceValidation();
+    }
+  }
 
 
   // ===< EVENT HANDLERS >===
   // 
-  //  => onFocus
-  const onFocusInputHandler = () => {
-    setClass(labelRef, classLabelActive);
-
-    if (validate) {
-      if (valid) {
-        setClass(labelRef, classLabelValid);
-      } else {
-        setClass(labelRef, classLabelInvalid);
-      }
-    } else {
-      setClass(labelRef, classLabelFocused);
-    }
-    // onFocus from props
-    onFocus();
-  }
-  //  => onBlur
-  const onBlurInputHandler = () => {
-    if (!isValueSet()) {
-      removeClass(labelRef, classLabelActive);
-    }
-    removeClass(labelRef, classLabelValid);
-    removeClass(labelRef, classLabelInvalid);
-    removeClass(labelRef, classLabelFocused);
-    onBlur();
-  }
-  //  => onChange
-  const onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value);
-  }
-  //  => onKeyPress
-  const onKeyPressInputHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      onPressEnter();
-    }
-  }
-
-
-  // *** UTILS
   /**
-   * Func defines, whether there is a value in the input or not
+   * => Input - "onFocus"
    */
-  const isValueSet = (): boolean => {
-    const { value } = props;
-    return !!value.trim();
+  onFocusInputHandler = () => {
+    this.setFocused(true);
   }
   /**
-   * Defines classes, that need to apply to the root element
+   * => Input - "onBlur"
    */
-  const getClasses = (): string => {
-
+  onBlurInputHandler = () => {
+    this.setFocused(false);
+    if (this.needValidate()) {
+      // The input becomes touched
+      this.setTouched();
+    }
+  }
+  /**
+   * => Input - "onChange"
+   * 
+   */ 
+  onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    
     const {
-      className = ''
-    } = props;
+      onChange = (value: string, valid: boolean) => {}
+    } = this.props;
+    
+    let value = event.target.value;
+    let valid = true;
+
+    if (this.needValidate()) {
+      // The input becomes touched
+      this.setChanged();
+      // Transpile the value
+      value = this.interpretValue(value);
+      // Validate the value
+      valid = this.doValidate(value);
+    }
+    // Run the event "onChange" from the props
+    onChange(value, valid);
+  }
+  /**
+   * => Input - "onKeyDown"
+   */
+  onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    // Destructure the props
+    const {
+      onPressEnter = () => {},
+      onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {}
+    } = this.props;
+
+    // Key "Enter"
+    if (event.key === 'Enter') {
+      onPressEnter()
+
+    // Another key
+    } else {
+      onKeyPress(event);
+    }
+  }
+
+
+  // ===< UTILS >===
+  // 
+  /**
+   * => getClasses()
+   * 
+   * Defines classes to apply to the root element
+   */
+  getClasses = (): string => {
+
+    const { className = '' } = this.props;
 
     const classes = classNames(
-      // default classes
+      // Default classes
       'input-field',
-      // classes from props
+      // Classes from the props
       { [`${className}`]: !!className }
     );
 
     return classes;
   }
   /**
-   * Defines classes for the input
+   * => getClassesForInput()
+   * 
+   * Defines classes to apply to the input
    */
-  const getClassesForInput = (): string => {
+  getClassesForInput = (): string => {
 
     const classes = classNames(
-      // default classes
+      // Default classes
       'input-field__input',
-      // class, if a value in the input is valid
-      { [`${classInputValid}`]: validate && valid  },
-      // class, if a value in the input isn't valid
-      { [`${classInputInvalid}`]: validate && !valid  }
+
+      // The next classes are applied when this.needApplyValidation() and
+      // -> valid
+      { [`${this.classInputValid}`]: this.needApplyValidation() && this.isValid() },
+      // -> not valid
+      { [`${this.classInputInvalid}`]: this.needApplyValidation() && !this.isValid() }
     );
 
     return classes;
   }
   /**
-   * Defines classes for the label
+   * => getClassesForLabel()
+   * 
+   * Defines classes to apply to the label
    */
-  const getClassesForLabel = (): string => {
+  getClassesForLabel = (): string => {
     
+    const { isFocused } = this.state;
+
     const classes = classNames(
-      // default classes
+      // Default classes
       'input-field__label',
-      // class, when there is a value in the input.
-      // we apply '--active' modificator
-      { [`${classLabelActive}`]: isValueSet() }
+      // When there is a value in the input or the input is focused,
+      //  we apply '--active' modificator
+      { [`${this.classLabelActive}`]: this.isValueSet() || isFocused },
+
+      // The next classes are mutually exclusive
+      { [`${this.classLabelValid}`]: isFocused && this.needApplyValidation() && this.isValid() },
+      { [`${this.classLabelInvalid}`]: isFocused && this.needApplyValidation() && !this.isValid() },
+      { [`${this.classLabelFocused}`]: isFocused && !this.needApplyValidation() }
     );
 
     return classes;
   }
   /**
-   * Func returns a block with an error description
+   * => isValueSet()
+   * 
+   * The function returns the flag whether there is a value is in the input
    */
-  const renderErrors = () => {
-    if (validate && !valid && errorMsg) {
+  isValueSet = (): boolean => {
+    const { value } = this.props;
+    return !!value.trim();
+  }
+  /**
+   * => isValid()
+   * 
+   * The function returns the flag whether the value is valid or not
+   */
+  isValid = (): boolean => {
+    return !this.getError();
+  }
+  /**
+   * => needValidate()
+   * 
+   * Returns whether to validate the value in the input
+   */
+  needValidate = (): boolean => {
+    const { validate = false } = this.props;
+    return validate;
+  }
+  /**
+   * => needApplyValidation()
+   */
+  needApplyValidation = (): boolean => {
+    const { isTouched } = this.state;
+    return this.needValidate() && isTouched;
+  }
+  /**
+   * => setChanged()
+   * 
+   * The function sets the variable "isChanged" to "true"
+   */
+  setChanged = (): void => {
+    if (!this.isChanged) {
+      this.isChanged = true;
+    }
+  }
+  /**
+   * => setFocused()
+   * 
+   * Sets the state "isFocused" to the parameter
+   * 
+   * @param value - the assignable value
+   */
+  setFocused = (value: boolean): void => {
+    this.setState({ isFocused: value });
+  }
+  /**
+   * => setTouched()
+   * 
+   * The function sets the state "isTouched" to "true"
+   */
+  setTouched = (): void => {
+    const { isTouched } = this.state;
+    // We change the state only if the value is changed and isn't touched yet.
+    // We avoid frequent state changes
+    if (this.isChanged && !isTouched) {
+      this.setState({ isTouched: true });
+    }
+  }
+  /**
+   * => setError()
+   * 
+   * The function sets the variable "errorMessage" to the parameter "msg"
+   * 
+   * @param msg - the assignable message
+   */
+  setError = (msg: string): void => {
+    this.errorMessage = msg;
+    // this.setState({ errorMessage: msg })
+  }
+  /**
+   * => getError()
+   * 
+   * The function gets the variable "errorMessage"
+   * 
+   * @param msg - the assignable message
+   */
+  getError = (): string => {
+    return this.errorMessage;
+    // return this.state.errorMessage;
+  }
+  /**
+   * => renderErrors()
+   * 
+   * The function returns a block with an error description
+   */
+  renderErrors = () => {
+    if (this.needApplyValidation() && !this.isValid()) {
       return (
-        <span className="input-field__error">{ errorMsg }</span>  
+        <span className="input-field__error">{ this.getError() }</span>  
       );
     }
-
     return null;
   }
+  /**
+   * => doValidate()
+   * 
+   * The function validates the parameter according to specified rules.
+   * Also sets the error messsage
+   * 
+   * @param value - the value to validate
+   */
+  doValidate = (value: string): boolean => {
+    // Get the rules from the props
+    const { validations = {} } = this.props;
+    // Validate the value
+    const { valid, msg } = validateInput(value, validations);
+    // The error msg
+    this.setError(msg);
 
-  
+    return valid;
+  }
+  /**
+   * => forceValidation()
+   * 
+   * 
+   */
+  forceValidation = (): void => {
+    // 
+    const { value } = this.props;
+
+    if (this.needValidate()) {
+      this.doValidate(value);
+      this.setChanged();
+      this.setTouched();
+    }
+  }
+  /**
+   * => formatValue()
+   * 
+   * This function defines how the value will be displayed in the input-element.
+   * 
+   * @param data - the string to format
+   */
+  formatValue = (data: string): string => {
+    const {
+      formatValueFunction = (data: string): string => { return data; }
+    } = this.props;
+    return formatValueFunction(data);
+  }
+  /**
+   * => interpretValue()
+   * 
+   * Thsi function tries to get the plain value from the formatted one.
+   * 
+   * @param data - the string to interpret
+   */
+  interpretValue = (data: string): string => {
+    const {
+      interpretValueFunction = (data: string): string => { return data; }
+    } = this.props;
+    return interpretValueFunction(data);
+  }
+
+
   // ===< RENDER >===
   // 
-  return (
-    <div
-      className={ getClasses() }
-      ref={ divRef }
-    >
+  render = () => {
+    
+    const {
+      label,
+      value,
+      type="text",
+      inputRef
+    } = this.props;
 
-      {/* Input */}
-      <input
-        id={ id }
-        type={ type }
-        value={ value }
-        ref={ inputRef }
-        className={ getClassesForInput() }
-        
-        onFocus={ onFocusInputHandler }
-        onBlur={ onBlurInputHandler }
-        onChange={ onChangeInputHandler }
-        onKeyPress={ onKeyPressInputHandler }
-      />
-
-      {/* Label */}
-      <label
-        htmlFor={ id }
-        ref={ labelRef }
-        className={ getClassesForLabel() }
+    return (
+      <div
+        className={ this.getClasses() }
       >
-        { label }
-      </label> 
+        {/* Input */}
+        <input
+          id={ this.id }
+          type={ type }
+          value={ this.formatValue(value) }
+          className={ this.getClassesForInput() }
+          // Ref
+          ref={ inputRef }
+          // Events
+          onFocus={ this.onFocusInputHandler }
+          onBlur={ this.onBlurInputHandler }
+          onChange={ this.onChangeInputHandler }
+          onKeyDown={ this.onKeyDownHandler }
+        />
 
-      {/* Error */}
-      { renderErrors() }
+        {/* Label */}
+        <label
+          htmlFor={ this.id }
+          className={ this.getClassesForLabel() }
+        >
+          { label }
+        </label> 
 
-    </div>
-  );
+        {/* Error */}
+        { this.renderErrors() }
+
+      </div>
+    );
+  }
 }
 
 export default Input;

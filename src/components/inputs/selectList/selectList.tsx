@@ -42,6 +42,9 @@ const SelectList = (props: SelectListProps) => {
 
   // ===< EVENT HANDLERS >===
   // 
+  /**
+   * => SelectListItem - "onClick"
+   */
   const onClickOptionHandler = (id: string) => {
     onClick(id);
   }
@@ -50,6 +53,8 @@ const SelectList = (props: SelectListProps) => {
   // ===< UTILS >===
   // 
   /**
+   * => renderHeader()
+   * 
    * Renders the item of the list, that is a header
    */
   const renderHeader = () => {
@@ -68,6 +73,8 @@ const SelectList = (props: SelectListProps) => {
     );
   }
   /**
+   * => renderItems()
+   * 
    * Renders the items of the list, except for a header
    */
   const renderItems = () => {

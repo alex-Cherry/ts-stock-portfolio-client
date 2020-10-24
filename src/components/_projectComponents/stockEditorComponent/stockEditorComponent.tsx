@@ -3,12 +3,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // Custom components
 import Card, { CardContent, CardActions, CardErrors } from '../../card';
-import { Select } from '../../inputs';
-import TextInput from '../textInput';
+import { Select, Input, CurrencyInput } from '../../inputs';
 import Button from '../../button';
 import Checkbox from '../../checkbox';
 import NotificationWithTransfer from '../notiticationWithTransfer';
-import CurrencyInput from '../currencyInput';
+// import CurrencyInput from '../currencyInput';
 import Loader from '../../loader';
 // Store
 import { AppState } from '../../../store'
@@ -439,46 +438,44 @@ class StockEditorComponent extends React.Component<StockEditorComponentProps, St
 
         {/* CONTENT */}
         <CardContent>
-          {/* ShortName */}
-          <TextInput
-            id="companyShortName"
+          {/* Company ShortName */}
+          <Input
             label="Краткое наименование компании"
             type="text"
-            value={shortName}
-            forceValidation={forceValidation}
-            validate={true}
-            validations={this.shortNameValidations}
+            value={ shortName }
+            forceValidation={ forceValidation }
+            validate={ true }
+            validations={ this.shortNameValidations }
             className="stock-editor__input"
 
-            onChange={this.onChangeCompanyShortNameHandler}
-            onPressEnter={this.onPressEnterCompanyShortNameHandler}
+            onChange={ this.onChangeCompanyShortNameHandler }
+            onPressEnter={ this.onPressEnterCompanyShortNameHandler }
           />
           {/* Ticker */}
-          <TextInput
-            id="ticker"
+          <Input
             label="Тикер"
             type="text"
-            value={ticker}
-            forceValidation={forceValidation}
-            validate={true}
-            validations={this.tickerValidations}
+            value={ ticker }
+            forceValidation={ forceValidation }
+            validate={ true }
+            validations={ this.tickerValidations }
             className="stock-editor__input"
 
-            onChange={this.onChangeTickerHandler}
-            onPressEnter={this.onPressEnterTickerHandler}
+            onChange={ this.onChangeTickerHandler }
+            onPressEnter={ this.onPressEnterTickerHandler }
           />
           {/* Price */}
           <CurrencyInput
-            id="price"
             label="Цена"
-            value={price}
-            touched={forceValidation}
-            validate={true}
-            validations={this.priceValidations}
+            value={ price }
+            forceValidation={ forceValidation }
+            currencyPosition="postfix"
+            validate={ true }
+            validations={ this.priceValidations }
             className="stock-editor__input"
 
-            onChange={this.onChangePriceHandler}
-            onPressEnter={this.onPressEnterPriceHandler}
+            onChange={ this.onChangePriceHandler }
+            onPressEnter={ this.onPressEnterPriceHandler }
           />
           {/* BlueTip */}
           <Checkbox

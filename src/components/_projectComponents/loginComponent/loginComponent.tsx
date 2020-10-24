@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 // custom components
 import Card, { CardContent, CardActions, CardErrors } from '../../card';
 import Button from '../../button';
-import TextInput from '../textInput';
+import { Input } from '../../inputs';
 // actions
 import { login } from '../../../store/auth/action';
 import { AuthLoginAction } from '../../../store/auth/types';
@@ -241,8 +241,7 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
         {/* CONTENT */}
         <CardContent>
           {/* Email */}
-          <TextInput
-            id='email'
+          <Input
             label='Email'
             value={ email }
             type='email'
@@ -255,10 +254,9 @@ class LoginComponent extends React.Component<LoginComponentProps, LoginComponent
             onPressEnter={ this.onPressEnterEmailHandler }
           />
           {/* Password */}
-          <TextInput
-            id='password'
+          <Input
             label='Password'
-            value={password}
+            value={ password }
             type='password'
             forceValidation={ forceValidation }
             validate={ true }
