@@ -10,6 +10,10 @@ import imgArrowDown from '../../assets/svg/arrowDown.svg';
 import './inputs.scss';
 
 
+// !!! REWRITE WITH THE COMPONENT "Input"
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // 
 // EXTRA
@@ -97,7 +101,7 @@ const Select = (props: SelectProps) => {
     return options.find(option => option.id === id)?.name || '';
   }
   /**
-   * Defines classes, that need to apply to the root element
+   * Defines classes to apply to the root element
    */
   const getClasses = (): string => {
 
@@ -108,7 +112,7 @@ const Select = (props: SelectProps) => {
     const classes = classNames(
       // default classes
       'input-field',
-      // classes from props
+      // Classes from the props
       { [`${className}`]: !!className }
     );
 
@@ -122,8 +126,8 @@ const Select = (props: SelectProps) => {
     const classes = classNames(
       // default classes
       'input-field__label',
-      // class, when there is a value in the input.
-      // we apply '--active' modificator
+      // When there is a value in the input,
+      //  we apply '--active' modificator
       { [`${classLabelActive}`]: !!value }
     );
 

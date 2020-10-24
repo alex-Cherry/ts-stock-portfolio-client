@@ -11,11 +11,11 @@ import classNames from 'classnames';
 
 type SelectListItemProps = {
   id: string,
-  // A text of an item
+  // A text of the item
   text: string,
-  // Whether an item is active
+  // Whether the item is active
   isActive?: boolean,
-  // Whether an item is a header
+  // Whether the item is a header
   isHeader?: boolean,
   // className?: string,
 
@@ -43,7 +43,9 @@ const SelectListItem = (props: SelectListItemProps) => {
   // ===< UTILS >===
   // 
   /**
-   * Defines classes, that need to apply to the root element
+   * => getClasses()
+   * 
+   * Defines classesto apply to the root element
    */
   const getClasses = (): string => {
     const { isHeader = '' } = props;
