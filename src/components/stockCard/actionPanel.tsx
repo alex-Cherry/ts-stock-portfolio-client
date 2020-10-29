@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
+import { v4 as uuid } from 'uuid';
 // custom components
 import MaterialIcon from '../materialIcon';
 import Spinner from '../circleSpinner';
+import Tooltip from '../tooltip';
 // context
 import { StockContext } from './stockCard';
 // store
@@ -44,6 +46,10 @@ const ActionPanel = (props: ActionPanelProps) => {
   // 
   // This flag indicates that an operation from the action panel is executing
   const [ loading, setLoading ] = useState(false);
+  // These variables store the id-s of the buttons
+  const elementIdAddStock = useRef(`addStock_${uuid()}`);
+  const elementIdRemoveStock = useRef(`removeStock_${uuid()}`);
+  const elementIdEditStock = useRef(`editStock_${uuid()}`);
 
   // When loading, show the spinner instead of commands from the action panel
   if (loading) {
@@ -114,32 +120,76 @@ const ActionPanel = (props: ActionPanelProps) => {
     }, 2000);
   }
   /**
+   * => getIdAddStock()
+   * 
+   * Returns id for the button "Add stock to the portfolio"
+   */
+  const getIdAddStock = (): string => {
+    return elementIdAddStock.current;
+  }
+  /**
+   * => getIdRemoveStock()
+   * 
+   * Returns id for the button "Remove stock from the portfolio"
+   */
+  const getIdRemoveStock = (): string => {
+    return elementIdRemoveStock.current;
+  }
+  /**
+   * => getIdEditStock()
+   * 
+   * Returns id for the button "Edit stock"
+   */
+  const getIdEditStock = (): string => {
+    return elementIdEditStock.current;
+  }
+  /**
    * Returns the panel with available commands
    * 
    * @param {ExtendedStock} stock - the stock, which the action panel is rendered for
    */
   const renderActionPanel = (stock: ExtendedStock) => {
+
     return (
-      <div>
-        {/* Add stock to portfolio */}
-        <MaterialIcon
-          className="stock-card__action-icon"
-          iconName="add_circle_outline"
-          onClick={ () => onClickAddStockToPortfolioHandler(stock) }
+      <>
+        <div>
+          {/* Add stock to portfolio */}
+          <MaterialIcon
+            className="stock-card__action-icon"
+            iconName="add_circle_outline"
+            id={ getIdAddStock() }
+            onClick={ () => onClickAddStockToPortfolioHandler(stock) }
+          />
+          {/* Remove stock from portfolio */}
+          <MaterialIcon
+            className="stock-card__action-icon"
+            iconName="remove_circle_outline"
+            id={ getIdRemoveStock() }
+            onClick={ () => onClickRemoveStockFromPortfolio(stock) }
+          />
+          {/* Edit stock */}
+          <MaterialIcon
+            className="stock-card__action-icon"
+            iconName="edit"
+            id={ getIdEditStock() }
+            onClick={ () => onClickEditStockHandler(stock) }
+          />
+        </div>
+
+        <Tooltip
+          text="Добавить акцию в портфель"
+          elementId={ getIdAddStock() }
         />
-        {/* Remove stock from portfolio */}
-        <MaterialIcon
-          className="stock-card__action-icon"
-          iconName="remove_circle_outline"
-          onClick={ () => onClickRemoveStockFromPortfolio(stock) }
+        <Tooltip
+          text="Удалить акцию из портфеля"
+          elementId={ getIdRemoveStock() }
         />
-        {/* Edit stock */}
-        <MaterialIcon
-          className="stock-card__action-icon"
-          iconName="edit"
-          onClick={ () => onClickEditStockHandler(stock) }
+        <Tooltip
+          text="Редактировать акцию"
+          elementId={ getIdEditStock() }
         />
-      </div>
+
+      </>
     );
   }
 

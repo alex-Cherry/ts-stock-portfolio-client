@@ -19,6 +19,8 @@ import classNames from 'classnames';
 type MaterialIconProps = {
   // A material icon's name
   iconName: string,
+  // id of the element
+  id?: string,
   // Extra classes, that you can apply to the root element,
   //  when you use this component inside other ones.
   // It's assumed that will be used classes that define
@@ -38,16 +40,17 @@ type MaterialIconProps = {
 ////////////////////////////////////////////////////////////////////////////////
 
 const MaterialIcon = (props: MaterialIconProps) => {
-  // 
+  // Destructure the props
   const {
     iconName,
+    id = '',
     onClick = () => {}
   } = props;
 
 
   // ===< EVENT HANDLERS >===
   // 
-  const onClickHandler = () => {
+  const onClickHandler = (): void => {
     onClick();
   }
 
@@ -57,7 +60,7 @@ const MaterialIcon = (props: MaterialIconProps) => {
   /**
    * Defines classes to apply to the root element
    */
-  const getClasses = () => {
+  const getClasses = (): string => {
     // destructure props
     const { className } = props;
 
@@ -70,12 +73,29 @@ const MaterialIcon = (props: MaterialIconProps) => {
 
     return classes;
   }
+  /**
+   * => getIdAsObject()
+   * 
+   * The function returns the object.
+   * If id in the props is set, this one is added to the returned object.
+   */
+  const getIdAsObject = (): Object => {
 
+    if (id) {
+      return { id };
 
+    } else {
+      return {};
+
+    }
+  }
+
+  
   // ===< RENDER >===
   // 
   return (
     <i
+      { ...getIdAsObject() }
       className={ getClasses() }
       onClick={ onClickHandler }
     >
