@@ -177,11 +177,11 @@ const ActionPanel = (props: ActionPanelProps) => {
         </div>
 
         <Tooltip
-          text="Добавить акцию в портфель"
+          text="Добавить в портфель"
           elementId={ getIdAddStock() }
         />
         <Tooltip
-          text="Удалить акцию из портфеля"
+          text="Удалить из портфеля"
           elementId={ getIdRemoveStock() }
         />
         <Tooltip

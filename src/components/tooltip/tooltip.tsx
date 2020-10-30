@@ -217,14 +217,14 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         className="tooltip"
         ref={ this.divRef }
       >
-        <div className="tooltip-wrapper">
+        <div className="tooltip__wrapper">
 
           {/* arrow */}
-          <div className="tooltip-arrow center">
+          <div className="tooltip__arrow tooltip__arrow--center">
           </div>
 
           {/* text */}
-          <span className="tooltip-text">
+          <span className="tooltip__text">
             { text }
           </span>
             
