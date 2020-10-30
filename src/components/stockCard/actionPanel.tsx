@@ -9,6 +9,7 @@ import Tooltip from '../tooltip';
 // context
 import { StockContext } from './stockCard';
 // store
+import { AppState } from '../../store';
 import { addToast } from '../../store/toasts/actions';
 import { ToastWithoutId } from '../../store/toasts/types';
 // types
@@ -21,6 +22,14 @@ import { ExtendedStock } from '../../types';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP STATE
+const mapState = (state: AppState) => {
+  return {
+    isLoggedIn: !!state.auth.user,
+    isAdmin: !!state.auth.user?.isAdmin
+  }
+}
+
 // MAP DISPATCH
 const mapDispatch = (dispatch: any) => {
   return {
@@ -29,7 +38,7 @@ const mapDispatch = (dispatch: any) => {
 }
 
 // PROPS
-const connector = connect(null, mapDispatch);
+const connector = connect(mapState, mapDispatch);
 type ActionPanelProps = ConnectedProps<typeof connector>
   & RouteComponentProps;
 
@@ -144,52 +153,109 @@ const ActionPanel = (props: ActionPanelProps) => {
     return elementIdEditStock.current;
   }
   /**
-   * Returns the panel with available commands
+   * => renderAddStock()
    * 
-   * @param {ExtendedStock} stock - the stock, which the action panel is rendered for
+   * @param stock
    */
-  const renderActionPanel = (stock: ExtendedStock) => {
-
+  const renderAddStockToPortfolio = (stock: ExtendedStock) => {
+    // Return the MaterialIcon
     return (
       <>
-        <div>
-          {/* Add stock to portfolio */}
-          <MaterialIcon
-            className="stock-card__action-icon"
-            iconName="add_circle_outline"
-            id={ getIdAddStock() }
-            onClick={ () => onClickAddStockToPortfolioHandler(stock) }
-          />
-          {/* Remove stock from portfolio */}
-          <MaterialIcon
-            className="stock-card__action-icon"
-            iconName="remove_circle_outline"
-            id={ getIdRemoveStock() }
-            onClick={ () => onClickRemoveStockFromPortfolio(stock) }
-          />
-          {/* Edit stock */}
-          <MaterialIcon
-            className="stock-card__action-icon"
-            iconName="edit"
-            id={ getIdEditStock() }
-            onClick={ () => onClickEditStockHandler(stock) }
-          />
-        </div>
+        <MaterialIcon
+          className="stock-card__action-icon"
+          iconName="add_circle_outline"
+          id={ getIdAddStock() }
+          onClick={ () => onClickAddStockToPortfolioHandler(stock) }
+        />
 
         <Tooltip
           text="Добавить в портфель"
           elementId={ getIdAddStock() }
         />
+      </>
+    );
+  }
+  /**
+   * => renderRemoveStockFromPortfolio()
+   * 
+   * @param stock 
+   */
+  const renderRemoveStockFromPortfolio = (stock: ExtendedStock) => {
+    // Return the MaterialIcon
+    return (
+      <>
+        <MaterialIcon
+          className="stock-card__action-icon"
+          iconName="remove_circle_outline"
+          id={ getIdRemoveStock() }
+          onClick={ () => onClickRemoveStockFromPortfolio(stock) }
+        />
+
         <Tooltip
           text="Удалить из портфеля"
           elementId={ getIdRemoveStock() }
         />
+      </>
+    );
+  }
+  /**
+   * => renderEditStock()
+   * 
+   * @param stock 
+   */
+  const renderEditStock = (stock: ExtendedStock) => {
+    // 
+    const { isAdmin } = props;
+
+    // Return nothing
+    if (!isAdmin) {
+      return null;
+    }
+
+    // Return the MaterialIcon
+    return (
+      <>
+        <MaterialIcon
+          className="stock-card__action-icon"
+          iconName="edit"
+          id={ getIdEditStock() }
+          onClick={ () => onClickEditStockHandler(stock) }
+        />
+
         <Tooltip
           text="Редактировать акцию"
           elementId={ getIdEditStock() }
         />
-
       </>
+    );
+  }
+  /**
+   * Returns the panel with available commands
+   * 
+   * @param {ExtendedStock} stock - the stock, which the action panel is rendered for
+   */
+  const renderActionPanel = (stock: ExtendedStock) => {
+    // 
+    const { isLoggedIn } = props;
+
+    // Return nothing
+    if (!isLoggedIn) {
+      return null;
+    }
+
+    return (
+      <div>
+
+        {/* Add stock to portfolio */}
+        { renderAddStockToPortfolio(stock) }
+
+        {/* Remove stock from portfolio */}
+        { renderRemoveStockFromPortfolio(stock) }
+
+        {/* Edit stock */}
+        { renderEditStock(stock) }
+
+      </div>
     );
   }
 

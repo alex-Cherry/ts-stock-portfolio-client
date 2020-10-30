@@ -1,7 +1,10 @@
 import React, { useRef } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 // custom components
 import AddFavorite from './addFavorite';
 import ActionPanel from './actionPanel';
+// Store
+import { AppState } from '../../store';
 // third-party libs
 import classNames from 'classnames';
 // utils
@@ -31,16 +34,25 @@ import './stockCard.scss';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP STATE
+const mapState = (state: AppState) => {
+  return {
+    isLoggedIn: !!state.auth.user
+  }
+}
+
 // PROPS
-type StockCardProps = {
-  // The stock to render
-  stock: ExtendedStock,
-  // Extra classes, that you can apply to the root element,
-  //  when you use this component inside other ones.
-  // It's assumed that will be used classes that define
-  //  positioning of the component
-  className?: string
-};
+const connector = connect(mapState);
+type StockCardProps = ConnectedProps<typeof connector>
+  & {
+    // The stock to render
+    stock: ExtendedStock,
+    // Extra classes, that you can apply to the root element,
+    //  when you use this component inside other ones.
+    // It's assumed that will be used classes that define
+    //  positioning of the component
+    className?: string
+  };
 
 // CONTEXT
 export const StockContext = React.createContext(new ExtendedStock());
@@ -95,6 +107,50 @@ const StockCard = (props: StockCardProps) => {
     );
     return classes;
   }
+  /**
+   * => renderActionPanel()
+   */
+  const renderActionPanel = () => {
+    // 
+    const { isLoggedIn } = props;
+
+    // Return nothing
+    if (!isLoggedIn) {
+      return null;
+    }
+
+    // Return the action panel
+    return (
+      <div
+        className="stock-card__action-panel"
+        ref={ divActionRef }
+      >
+        <ActionPanel />
+      </div>
+    );
+  }
+  /**
+   * => renderFavoritePanel()
+   */
+  const renderFavoritePanel = () => {
+    // 
+    const { isLoggedIn } = props;
+
+    // Return nothing
+    if (!isLoggedIn) {
+      return null;
+    }
+
+    // Return the action panel
+    return (
+      <div
+        className="stock-card__favorite"
+        ref={ divFavoriteRef }
+      >
+        <AddFavorite />
+      </div>
+    );
+  }
 
 
   // ===< RENDER >===
@@ -112,20 +168,10 @@ const StockCard = (props: StockCardProps) => {
         <span className="stock-card__price">{ toRubles(stock.price) }</span>
 
         {/* Action Panel - buttons */}
-        <div
-          className="stock-card__action-panel"
-          ref={ divActionRef }
-        >
-          <ActionPanel />
-        </div>
+        { renderActionPanel() }
 
         {/* icon "Favorite" */}
-        <div
-          className="stock-card__favorite"
-          ref={ divFavoriteRef }
-        >
-          <AddFavorite />
-        </div>
+        { renderFavoritePanel() }
 
       </div>
 
@@ -133,4 +179,4 @@ const StockCard = (props: StockCardProps) => {
   );
 }
 
-export default StockCard;
+export default connector(StockCard);

@@ -70,7 +70,8 @@
     right: 0;
     transition: top 0.15s ease-out, right 0.15s ease-out;
   }
-  &__favorite:hover {
+  // element
+  &__favorite-star:hover {
     cursor: pointer;
   }
 }

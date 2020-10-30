@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 // store
 import { setStockFavorite } from '../../store/stocks/action';
+import { AppState } from '../../store';
 // custom components
 import Spinner from '../circleSpinner';
 // context
@@ -19,6 +20,13 @@ import yellowStarSvg from '../../assets/svg/favorite-yellow.svg';
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+// MAP STATE
+const mapState = (state: AppState) => {
+  return {
+    isLoggedIn: !!state.auth.user
+  }
+}
+
 // MAP DISPATCH
 const mapDispatch = (dispatch: any) => {
   return {
@@ -27,7 +35,7 @@ const mapDispatch = (dispatch: any) => {
 }
 
 // PROPS
-const connector = connect(null, mapDispatch);
+const connector = connect(mapState, mapDispatch);
 type AddFavoriteProps = ConnectedProps<typeof connector>;
 
 
@@ -81,16 +89,26 @@ const AddFavorite = (props: AddFavoriteProps) => {
    * @param {ExtendedStock} stock - the stock, which the star is rendered for
    */
   const renderStar = (stock: ExtendedStock) => {
+    // 
+    const { isLoggedIn } = props;
+
+    // Return nothing
+    if (!isLoggedIn) {
+      return null;
+    }
+
     const { isFavorite } = stock;
     // Define, which star to render
     const starSvg = isFavorite ? yellowStarSvg : transparentStarSvg;
     // 
     return (
-      <img
-        src={ starSvg }
-        alt=''
-        onClick={ () => onClickHandler(stock) }
-      />
+      <div className="stock-card__favorite-star">
+        <img
+          src={ starSvg }
+          alt=''
+          onClick={ () => onClickHandler(stock) }
+        />
+      </div>
     );
   }
 
