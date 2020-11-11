@@ -1,6 +1,6 @@
 import { RefObject, MutableRefObject } from 'react';
 
-export type ElementRef<T extends HTMLElement> = RefObject<T> | MutableRefObject<T>;
+export type ElementRef<T extends HTMLElement> = RefObject<T> | MutableRefObject<T> | T;
 
 /**
  * Returns a Boolean value, indicating whether an element has the specified class name.
@@ -8,13 +8,20 @@ export type ElementRef<T extends HTMLElement> = RefObject<T> | MutableRefObject<
  * @param ref - the reference to the element
  * @param {string} name - the class name to check
  */
-export const containsClass = <T extends HTMLElement>(ref: ElementRef<T>, name: string): boolean => {
-  // Check whether the ref is initialized
-  if (!ref.current) {
-    return false;
+export const containsClass = <T extends HTMLElement>(arg: ElementRef<T>, name: string): boolean => {
+
+  let result = false;
+
+  if (arg instanceof HTMLElement) {
+    result = arg.classList.contains(name);
+
+  // Else "arg" contains a ref.
+  //  Check whether the ref is initialized
+  } else if (arg.current) {
+    result = arg.current.classList.contains(name);
+
   }
-  // 
-  return ref.current.classList.contains(name);
+  return result;
 }
 
 /**
@@ -24,14 +31,20 @@ export const containsClass = <T extends HTMLElement>(ref: ElementRef<T>, name: s
  * @param ref - the reference to the element
  * @param name - the class name to add
  */
-export const setClass = <T extends HTMLElement>(ref: ElementRef<T>, name: string): void => {
-  // Check whether the ref is initialized
-  if (!ref.current) {
+export const setClass = <T extends HTMLElement>(arg: ElementRef<T>, name: string): void => {
+
+  if (containsClass(arg, name) || !name.trim()) {
     return;
   }
-  // 
-  if (!containsClass(ref, name)) {
-    ref.current?.classList.add(name);
+
+  if (arg instanceof HTMLElement) {
+    arg.classList.add(name);
+
+  // Else "arg" contains a ref.
+  //  Check whether the ref is initialized
+  } else if (arg.current) {
+    arg.current.classList.add(name);
+
   }
 }
 
@@ -42,13 +55,19 @@ export const setClass = <T extends HTMLElement>(ref: ElementRef<T>, name: string
  * @param ref - the reference to the element
  * @param name - the class name to delete
  */
-export const removeClass = <T extends HTMLElement>(ref: ElementRef<T>, name: string): void => {
-  // Check whether the ref is initialized
-  if (!ref.current) {
+export const removeClass = <T extends HTMLElement>(arg: ElementRef<T>, name: string): void => {
+
+  if (!containsClass(arg, name) || !name.trim()) {
     return;
   }
-  // 
-  if (containsClass(ref, name)) {
-    ref.current?.classList.remove(name);
+
+  if (arg instanceof HTMLElement) {
+    arg.classList.remove(name);
+
+  // Else "arg" contains a ref.
+  //  Check whether the ref is initialized
+  } else if (arg.current) {
+    arg.current.classList.remove(name);
+
   }
 }

@@ -10,8 +10,7 @@ import Tooltip from '../tooltip';
 import { StockContext } from './stockCard';
 // store
 import { AppState } from '../../store';
-import { addToast } from '../../store/toasts/actions';
-import { ToastWithoutId } from '../../store/toasts/types';
+import { toast } from '../toast/';
 // types
 import { ExtendedStock } from '../../types';
 
@@ -30,15 +29,8 @@ const mapState = (state: AppState) => {
   }
 }
 
-// MAP DISPATCH
-const mapDispatch = (dispatch: any) => {
-  return {
-    toast: (newToast: ToastWithoutId) => dispatch(addToast(newToast))
-  }
-}
-
 // PROPS
-const connector = connect(mapState, mapDispatch);
+const connector = connect(mapState);
 type ActionPanelProps = ConnectedProps<typeof connector>
   & RouteComponentProps;
 
@@ -110,20 +102,15 @@ const ActionPanel = (props: ActionPanelProps) => {
    */
   const doToast = (message: string) => {
     // Get the action from the props
-    const { toast } = props;
+    // const { toast } = props;
     
     // Timeout is dummy.
     // Emulate a delay while excuting a network request.
     // 
     const timeId = setTimeout(() => {
       setLoading(false);
-      // When create a new toast, we don't know its id,
-      //  so use the class without id
-      const newToast: ToastWithoutId = {
-        text: message
-      };
       // Push the toast
-      toast(newToast);
+      toast(message, { animation: 'Slide' });
       // 
       clearTimeout(timeId);
     }, 2000);

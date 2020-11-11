@@ -34,7 +34,9 @@ const App = () => {
           <ErrorBoundary>
             <Header />
             <Routes />
-            <ToastContainer />
+            <ToastContainer
+              animation='Zoom'
+            />
           </ErrorBoundary>
         </Router>
       </CurrentUserChecker>
